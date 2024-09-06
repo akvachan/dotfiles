@@ -14,15 +14,9 @@
 # global settings
 yabai -m config                                 \
     external_bar                 off:40:0       \
-<<<<<<< HEAD
-    menubar_opacity              1.0            \
-    mouse_follows_focus          on             \
-    focus_follows_mouse          off            \
-=======
     menubar_opacity              0.5            \
     mouse_follows_focus          on             \
     focus_follows_mouse          on             \
->>>>>>> 3689a6d (Updating dotfiles)
     display_arrangement_order    default        \
     window_origin_display        default        \
     window_placement             second_child   \
@@ -46,15 +40,6 @@ yabai -m config                                 \
 
 # disable specific apps
 yabai -m rule --add app="^System Settings$" manage=off
-<<<<<<< HEAD
-yabai -m rule --add app="^Calculator$" manage=off
-yabai -m rule --add app="^Karabiner-Elements$" manage=off
-yabai -m rule --add app="^QuickTime Player$" manage=off
 yabai -m rule --add app="^Stickies$" manage=off
-yabai -m rule --add app="^Finder$" manage=off
-yabai -m rule --add app="^Mail$" manage=off
-=======
-yabai -m rule --add app="^Stickies$" manage=off
->>>>>>> 3689a6d (Updating dotfiles)
 
 echo "yabai configuration loaded.."
