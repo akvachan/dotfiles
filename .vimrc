@@ -1,213 +1,263 @@
+" Basic settings for better editing experience {{{
+
+" Set leader key early for easy mapping
 let mapleader = ','
+let g:lsp_fold_enabled = 0
+let g:lsp_diagnostics_echo_cursor = 1
+let g:lsp_inlay_hints_enabled = 0
+let g:lsp_diagnostics_virtual_text_enabled = 0
+let g:lsp_diagnostics_virtual_text_align = "right"
+let g:lsp_diagnostics_virtual_text_delay = 10
+
 syntax on
-filetype plugin on
-set autochdir
-set number relativenumber
-set ai
-set tabstop=2
-set ls=2
-set shiftwidth=2
-set expandtab
-set nobackup
-set incsearch
-set smartcase
-set showcmd
-set showmode
-set showmatch
-set hlsearch
-set wildmenu
-set wildmode=list:longest
-set mouse=
-set ttymouse=
-set virtualedit=onemore
-set breakindent
-set formatoptions=l
-set lbr
-  
-highlight LineNr term=bold cterm=NONE ctermfg=DarkGrey ctermbg=NONE gui=NONE guifg=DarkGrey guibg=NONE
+filetype plugin indent on  " Enable filetype detection, plugins, and indent
 
+" " Performance and UI enhancements
+set number relativenumber  " Show line numbers and relative numbers
+set tabstop=2 shiftwidth=2 expandtab  " Use spaces instead of tabs
+set autoindent  " Automatically indent new lines
+set ls=2  " Always show status line
+set showcmd  " Show command in the last line of the screen
+set wildmenu wildmode=list:longest  " Enhanced command-line completion
+set incsearch hlsearch smartcase  " Improved searching
+set nobackup noswapfile  " No backup or swap files
+set virtualedit=onemore  " Allow cursor to move one character past the end of the line
+set lazyredraw  " Redraw screen only when necessary
+set backspace=indent,eol,start
+set scrolloff=8  " Keep 8 lines visible above and below the cursor
+set nowrap
+set ttyfast
+" set termguicolors
 
-" PLUGINS ---------------------------------------------------------------- {{{
-" Pluging manager is https://github.com/junegunn/vim-plug "
-call plug#begin('~/.vim/plugged')
-  
-  Plug 'preservim/nerdtree' 
-  Plug 'prabirshrestha/vim-lsp'
-  Plug 'mattn/vim-lsp-settings'
-  Plug 'prabirshrestha/asyncomplete.vim'
-  Plug 'prabirshrestha/asyncomplete-lsp.vim'
-  Plug 'PhilRunninger/nerdtree-visual-selection'
-  Plug 'triglav/vim-visual-increment'
-  Plug 'mbbill/undotree'
-  Plug 'garbas/vim-snipmate'
-  Plug 'marcweber/vim-addon-mw-utils'
-  Plug 'tomtom/tlib_vim'
-  Plug 'honza/vim-snippets'
-  Plug 'unkiwii/vim-nerdtree-sync'
-  Plug 'doums/darcula'
-  Plug 'vim-scripts/vim-auto-save'
+" Kitty setting
+" Mouse support
+set mouse=a
+set ttymouse=sgr
+set balloonevalterm
+" Styled and colored underline support
+let &t_AU = "\e[58:5:%dm"
+let &t_8u = "\e[58:2:%lu:%lu:%lum"
+let &t_Us = "\e[4:2m"
+let &t_Cs = "\e[4:3m"
+let &t_ds = "\e[4:4m"
+let &t_Ds = "\e[4:5m"
+let &t_Ce = "\e[4:0m"
+" Strikethrough
+let &t_Ts = "\e[9m"
+let &t_Te = "\e[29m"
+" Truecolor support
+let &t_8f = "\e[38:2:%lu:%lu:%lum"
+let &t_8b = "\e[48:2:%lu:%lu:%lum"
+let &t_RF = "\e]10;?\e\\"
+let &t_RB = "\e]11;?\e\\"
+" Bracketed paste
+let &t_BE = "\e[?2004h"
+let &t_BD = "\e[?2004l"
+let &t_PS = "\e[200~"
+let &t_PE = "\e[201~"
+" Cursor control
+let &t_RC = "\e[?12$p"
+let &t_SH = "\e[%d q"
+let &t_RS = "\eP$q q\e\\"
+let &t_SI = "\e[5 q"
+let &t_SR = "\e[3 q"
+let &t_EI = "\e[1 q"
+let &t_VS = "\e[?12l"
+" Focus tracking
+let &t_fe = "\e[?1004h"
+let &t_fd = "\e[?1004l"
+execute "set <FocusGained>=\<Esc>[I"
+execute "set <FocusLost>=\<Esc>[O"
+" Window title
+let &t_ST = "\e[22;2t"
+let &t_RT = "\e[23;2t"
 
-call plug#end()
+" vim hardcodes background color erase even if the terminfo file does
+" not contain bce. This causes incorrect background rendering when
+" using a color theme with a background color in terminals such as
+" kitty that do not support background color erase.
+let &t_ut=''
 
 " }}}
 
+" Plugins settings {{{
 
-"  MAPPINGS --------------------------------------------------------------- {{{
+" }}}
 
-noremap <up> <C-w><up>
-noremap <down> <C-w><down>
-noremap <left> <C-w><left>
-noremap <right> <C-w><right>
-noremap <leader>n :bnext<cr>
-noremap <leader>d :bdelete<cr>
-noremap <leader>m :bprevious<cr>
-noremap <leader>s :vertical ball<cr>
-noremap <C-/> :norm ^i//
-noremap <C-x> :norm ^xx
-noremap <C-q> :q<CR>
-noremap <C-s> :w<CR>
-noremap <C-;> :%y*<CR>
-noremap <C-n> :%s///g<Left><Left><Left>
-noremap <C-y> :-y<Left>
-noremap <C-h> :LspHover<CR>
+" Colorscheme settings {{{
+colorscheme habamax " Choose a minimal colorscheme
+highlight Normal ctermfg=None ctermbg=None
+" }}}
 
-inoremap <c-j> <Esc>:m .+1<CR>==gi
-inoremap <c-k> <Esc>:m .-2<CR>==gi
-inoremap { {}<Esc>ha
-inoremap ( ()<Esc>ha
-inoremap [ []<Esc>ha
-inoremap " ""<Esc>ha
-inoremap ' ''<Esc>ha
-inoremap ` ``<Esc>ha
+" Folding settings {{{
+set foldmethod=marker  " Use 'marker' for folding based on markers ({{{ and }}})
+set foldlevel=0        " Start with all folds closed
+set foldenable         " Enable folding
+" }}}
 
-vnoremap <c-j> :m '>+1<CR>gv=gv
-vnoremap <c-k> :m '<-2<CR>gv=gv
-vnoremap <C-x> :norm ^xx
+" PLUGINS {{{
+call plug#begin('~/.vim/plugged')
+Plug 'preservim/nerdtree'
+Plug 'PhilRunninger/nerdtree-visual-selection'
+Plug 'prabirshrestha/vim-lsp'
+Plug 'mattn/vim-lsp-settings'
+Plug 'prabirshrestha/asyncomplete.vim'
+Plug 'prabirshrestha/asyncomplete-lsp.vim'
+Plug 'garbas/vim-snipmate'
+Plug 'honza/vim-snippets'
+Plug 'yggdroot/indentline'
+Plug 'MarcWeber/vim-addon-mw-utils'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+call plug#end()
+" }}}
 
-nnoremap <leader>h :noh<CR>
-nnoremap n nzzzv
-nnoremap N Nzzzv
-nnoremap <c-u> <c-u>zz
-nnoremap <c-d> <c-d>zz
+" MAPPINGS {{{
+" Essential mappings for better navigation and editing
+noremap ; :
+noremap <leader>h :noh<CR>  " Clear search highlighting
+noremap <leader>q :q<CR>  " Quick quit
+noremap <leader>w :w<CR>  " Quick save
+
+" Copy and paste using system clipboard
+noremap <leader>y "+y  " Copy to system clipboard
+noremap <leader>Y "+Y  " Copy line to system clipboard
+noremap <leader>p "+p  " Paste from system clipboard
+noremap <leader>P "+P  " Paste before cursor from system clipboard
+
+" Navigating splits with arrow keys
+noremap <up> <c-w>k
+noremap <down> <c-w>j
+noremap <left> <c-w>h
+noremap <right> <c-w>l
+
+" Move line up and down
 nnoremap <c-j> :m .+1<CR>==
 nnoremap <c-k> :m .-2<CR>==
-nnoremap <c-c> ggdG
-nnoremap <leader>w :set nowrap
-nnoremap k kzz
-nnoremap j jzz
-nnoremap <leader>f va{Voky<CR>
-nnoremap <leader>t :UndotreeToggle<CR>
-nnoremap <leader>s :!
-nnoremap Y y$
-nnoremap { {zz
-nnoremap } }zz
 
+" Move selected lines up and down
+vnoremap <c-j> :m '>+1<CR>gv=gv
+vnoremap <c-k> :m '<-2<CR>gv=gv
+
+" Indent selected lines left and right
+vnoremap < <gv
+vnoremap > >gv
+
+" Center the cursor 
+nnoremap G Gzz 
+nnoremap gg ggzz
+nnoremap <c-d> <C-d>zz
+nnoremap <c-u> <C-u>zz
+nnoremap j jzz
+nnoremap k kzz
+nnoremap n nzzzv
+nnoremap N Nzzzv
+nnoremap * *zz
+nnoremap # #zz
+nnoremap } }zz
+nnoremap { {zz
+
+" Easier indenting in visual mode
+vnoremap < <gv
+vnoremap > >gv
+
+" NERDTree toggle
+nnoremap <silent> <c-f> :NERDTreeToggleInCurDir<CR>
+
+" SnipMate mappings for snippets
 imap <tab> <Plug>snipMateNextOrTrigger
 smap <tab> <Plug>snipMateNextOrTrigger
 
+" Folding commands
+nnoremap <leader>o za  " Toggle fold
+nnoremap <leader>O zM  " Close all folds
+nnoremap <leader>c zR  " Open all folds
+
+" Open and close quickfix list
+nnoremap <leader>co :copen<CR>
+nnoremap <leader>cc :cclose<CR>
+
+" Navigate quickfix list
+nnoremap <leader>cn :cnext<CR>
+nnoremap <leader>cp :cprevious<CR>
+nnoremap <c-o> <c-o>zz
+
+" fzf mappings
+nnoremap <leader>bu :w<CR>:Buffers<CR>
+nnoremap <leader>fi :w<CR>:Files<CR>
+nnoremap <leader>fr :w<CR>:Files ~<CR>
+nnoremap <leader>cl :w<CR>:Colors<CR>
+nnoremap <leader>ag :w<CR>:Ag<CR> 
+nnoremap <leader>rg :w<CR>:Rg<CR>
+nnoremap <leader>fs :w<CR>:GFiles?<CR>
+nnoremap <leader>bl :w<CR>:BLines<CR> 
+nnoremap <leader>ma :w<CR>:Maps<CR>
+
+" Toggle line numbers mode
+nnoremap <leader>n :set relativenumber!<CR>
 
 " }}}
 
+" LSP SHORTCUTS {{{
+" LSP-related shortcuts for better code navigation and manipulation
+nnoremap <leader>gd :LspDefinition<CR>        " Go to definition
+nnoremap <leader>gr :LspReferences<CR>        " Find references
+nnoremap <leader>gi :LspImplementation<CR>    " Go to implementation
+nnoremap <leader>gt :LspTypeDefinition<CR>    " Go to type definition
+nnoremap <leader>rn :LspRename<CR>            " Rename symbol
+nnoremap <leader>ca :LspCodeAction<CR>        " Show code actions
+nnoremap <leader>df :LspDocumentFormat<CR>    " Format the document
+nnoremap <leader>dj :LspNextDiagnostic<CR>    " Go to next diagnostic
+nnoremap <leader>dk :LspPreviousDiagnostic<CR> " Go to previous diagnostic
+nnoremap <leader>dh :LspHover<CR>             " Show hover information
+nnoremap <leader>ds :LspSignatureHelp<CR>     " Show signature help
+nnoremap <leader>dp :LspPeekDefinition<CR>    " Peek definition (if supported)
+nnoremap <leader><leader> :MyToggleLSPDiagnostics<CR>
+" }}}
 
-" VIMSCRIPT -------------------------------------------------------------- {{{
-let g:netrw_banner = 0
-let g:netrw_liststyle = 3
-let g:ale_python_flake8_args="--ignore=E501"
-
-" This will enable code folding.
-augroup filetype_vim
-    autocmd!
-    autocmd FileType vim setlocal foldmethod=marker
-augroup END
-
-" Add vimspector
-" :packadd! vimspector
-
-" Open terminal at the bottom
-:command T botright terminal
-
-" Set the background tone.
-set background=dark
-
-" Set the color scheme.
-colorscheme NorthernLights
-
-" Hide the toolbar.
-set guioptions-=T
-
-" Hide the the left-side scroll bar.
-set guioptions-=L
-
-" Hide the the right-side scroll bar.
-set guioptions-=r
-
-" Hide the the menu bar.
-set guioptions-=m
-
-" Hide the the bottom scroll bar.
-set guioptions-=b
-
-let &t_SI = "\e[6 q" 
-let &t_EI = "\e[2 q"
-let g:nerdtree_sync_cursorline = 1
-let g:auto_save = 1
-
-" Open NERDTree in the directory of the current file (or /home if no file is open)
-nmap <silent> <C-f> :call NERDTreeToggleInCurDir()<cr>
-function! NERDTreeToggleInCurDir()
-  " If NERDTree is open in the current buffer
+" VIMSCRIPT {{{
+" NERDTree: Open in the directory of the current file
+function! s:NERDTreeToggleInCurDir()
   if (exists("t:NERDTreeBufName") && bufwinnr(t:NERDTreeBufName) != -1)
     exe ":NERDTreeClose"
   else
     exe ":NERDTreeFind"
   endif
 endfunction
+command! NERDTreeToggleInCurDir call s:NERDTreeToggleInCurDir()
 
-command FORMAT :LspDocumentFormat
-command FIND :LspReferences  
-command RENAME :LspRename  
-command DEF :LspDefinition                  
-
-" Toggling diagnostics and virtual text {{{
-autocmd BufEnter * let b:my_lsp_diagnostics_enabled = 1
+" Toggling diagnostics and virtual text
 function! s:MyToggleLSPDiagnostics()
-	" source: https://github.com/prabirshrestha/vim-lsp/issues/1312
     if !exists('b:my_lsp_diagnostics_enabled')
-		" Ensure the buffer variable is defined
         let b:my_lsp_diagnostics_enabled = 1
     endif
     if b:my_lsp_diagnostics_enabled == 1
         call lsp#disable_diagnostics_for_buffer()
         let b:my_lsp_diagnostics_enabled = 0
-        echo "LSP Diagnostics : OFF"
+        echo "LSP Diagnostics: OFF"
     else
         call lsp#enable_diagnostics_for_buffer()
         let b:my_lsp_diagnostics_enabled = 1
-        echo "LSP Diagnostics : ON"
+        echo "LSP Diagnostics: ON"
     endif
 endfunction
-command MyToggleLSPDiagnostics call s:MyToggleLSPDiagnostics()
-nnoremap <leader><leader> :MyToggleLSPDiagnostics<CR>zz
+command! MyToggleLSPDiagnostics call s:MyToggleLSPDiagnostics()
 
-
+function! TwiddleCase(str)
+  if a:str ==# toupper(a:str)
+    let result = tolower(a:str)
+  elseif a:str ==# tolower(a:str)
+    let result = substitute(a:str,'\(\<\w\+\>\)', '\u\1', 'g')
+  else
+    let result = toupper(a:str)
+  endif
+  return result
+endfunction
+vnoremap ~ y:call setreg('', TwiddleCase(@"), getregtype(''))<CR>gv""Pgv
 " }}}
 
-
-" STATUS LINE ------------------------------------------------------------ {{{
-
-" Clear status line when vimrc is reloaded.
-set statusline=
-
-" Status line left side.
-set statusline+=\ %F\ %M\ %Y\ %R
-
-" Use a divider to separate the left side from the right side.
-set statusline+=%=
-
-" Status line right side.
-set statusline+=\ ascii:\ %b\ hex:\ 0x%B\ row:\ %l\ col:\ %c\ percent:\ %p%%
-
-" Show the status on the second to last line.
+" STATUS LINE {{{
+" Minimal status line for performance
+set statusline=%{getcwd()}\ %f\ %y\ %r\ %m\ %=%l:%c
 set laststatus=2
-
 " }}}
