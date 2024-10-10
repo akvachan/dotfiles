@@ -14,9 +14,9 @@
 # global settings
 yabai -m config                                 \
     external_bar                 off:40:0       \
-    menubar_opacity              0.5            \
+    menubar_opacity              0.75           \
     mouse_follows_focus          on             \
-    focus_follows_mouse          on             \
+    focus_follows_mouse          off            \
     display_arrangement_order    default        \
     window_origin_display        default        \
     window_placement             second_child   \
@@ -31,7 +31,7 @@ yabai -m config                                 \
     insert_feedback_color        0xffd75f5f     \
     split_ratio                  0.50           \
     split_type                   auto           \
-    auto_balance                 off            \
+    auto_balance                 on             \
     layout                       bsp            \
     mouse_modifier               alt            \
     mouse_action1                move           \
@@ -41,5 +41,4 @@ yabai -m config                                 \
 # disable specific apps
 yabai -m rule --add app="^System Settings$" manage=off
 yabai -m rule --add app="^Stickies$" manage=off
-
-echo "yabai configuration loaded.."
+yabai -m rule --add app="^kitty$" manage=off

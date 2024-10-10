@@ -2,17 +2,10 @@
 
 " Set leader key early for easy mapping
 let mapleader = ','
-let g:lsp_fold_enabled = 0
-let g:lsp_diagnostics_echo_cursor = 1
-let g:lsp_inlay_hints_enabled = 0
-let g:lsp_diagnostics_virtual_text_enabled = 0
-let g:lsp_diagnostics_virtual_text_align = "right"
-let g:lsp_diagnostics_virtual_text_delay = 10
-
 syntax on
 filetype plugin indent on  " Enable filetype detection, plugins, and indent
 
-" " Performance and UI enhancements
+" Performance and UI enhancements
 set number relativenumber  " Show line numbers and relative numbers
 set tabstop=2 shiftwidth=2 expandtab  " Use spaces instead of tabs
 set autoindent  " Automatically indent new lines
@@ -81,6 +74,13 @@ let &t_ut=''
 " }}}
 
 " Plugins settings {{{
+let g:lsp_fold_enabled = 0
+let g:lsp_diagnostics_echo_cursor = 1
+let g:lsp_inlay_hints_enabled = 0
+let g:lsp_diagnostics_virtual_text_enabled = 0
+let g:lsp_diagnostics_virtual_text_align = "right"
+let g:lsp_diagnostics_virtual_text_delay = 10
+let g:lsp_diagnostics_highlights_enabled = 0
 
 " }}}
 
@@ -196,23 +196,25 @@ nnoremap <leader>ma :w<CR>:Maps<CR>
 " Toggle line numbers mode
 nnoremap <leader>n :set relativenumber!<CR>
 
+" Map the toggle function to a key combination, e.g., <F5>
+nnoremap <leader>cd :call ToggleAutoChdir()<CR>
 " }}}
 
 " LSP SHORTCUTS {{{
 " LSP-related shortcuts for better code navigation and manipulation
-nnoremap <leader>gd :LspDefinition<CR>        " Go to definition
-nnoremap <leader>gr :LspReferences<CR>        " Find references
-nnoremap <leader>gi :LspImplementation<CR>    " Go to implementation
-nnoremap <leader>gt :LspTypeDefinition<CR>    " Go to type definition
-nnoremap <leader>rn :LspRename<CR>            " Rename symbol
-nnoremap <leader>ca :LspCodeAction<CR>        " Show code actions
-nnoremap <leader>df :LspDocumentFormat<CR>    " Format the document
-nnoremap <leader>dj :LspNextDiagnostic<CR>    " Go to next diagnostic
-nnoremap <leader>dk :LspPreviousDiagnostic<CR> " Go to previous diagnostic
-nnoremap <leader>dh :LspHover<CR>             " Show hover information
-nnoremap <leader>ds :LspSignatureHelp<CR>     " Show signature help
-nnoremap <leader>dp :LspPeekDefinition<CR>    " Peek definition (if supported)
-nnoremap <leader><leader> :MyToggleLSPDiagnostics<CR>
+nnoremap <silent><leader>gd :LspDefinition<CR>        " Go to definition
+nnoremap <silent><leader>gr :LspReferences<CR>        " Find references
+nnoremap <silent><leader>gi :LspImplementation<CR>    " Go to implementation
+nnoremap <silent><leader>gt :LspTypeDefinition<CR>    " Go to type definition
+nnoremap <silent><leader>rn :LspRename<CR>            " Rename symbol
+nnoremap <silent><leader>ca :LspCodeAction<CR>        " Show code actions
+nnoremap <silent><leader>df :LspDocumentFormat<CR>    " Format the document
+nnoremap <silent><leader>dj :LspNextDiagnostic<CR>    " Go to next diagnostic
+nnoremap <silent><leader>dk :LspPreviousDiagnostic<CR> " Go to previous diagnostic
+nnoremap <silent><leader>dh :LspHover<CR>             " Show hover information
+nnoremap <silent><leader>ds :LspSignatureHelp<CR>     " Show signature help
+nnoremap <silent><leader>dp :LspPeekDefinition<CR>    " Peek definition (if supported)
+nnoremap <silent><leader><leader> :MyToggleLSPDiagnostics<CR>
 " }}}
 
 " VIMSCRIPT {{{
@@ -254,6 +256,16 @@ function! TwiddleCase(str)
   return result
 endfunction
 vnoremap ~ y:call setreg('', TwiddleCase(@"), getregtype(''))<CR>gv""Pgv
+
+function! ToggleAutoChdir()
+    if &autochdir
+        set noautochdir
+        echo "Autochdir OFF"
+    else
+        set autochdir
+        echo "Autochdir ON"
+    endif
+endfunction
 " }}}
 
 " STATUS LINE {{{
