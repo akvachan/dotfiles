@@ -109,15 +109,21 @@ Plug 'yggdroot/indentline'
 Plug 'MarcWeber/vim-addon-mw-utils'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
+Plug 'tpope/vim-surround'
+Plug 'triglav/vim-visual-increment'
 call plug#end()
 " }}}
 
 " MAPPINGS {{{
 " Essential mappings for better navigation and editing
 noremap ; :
+noremap <leader>C :e $MYVIMRC<CR>
+noremap <leader>S :source $MYVIMRC<CR>
 noremap <leader>h :noh<CR>  " Clear search highlighting
+noremap <leader>Q :q!<CR>  " Quick quit
 noremap <leader>q :q<CR>  " Quick quit
-noremap <leader>w :w<CR>  " Quick save
+noremap <leader>w :w<CR>  " Quick quit
+noremap <leader>W :wq<CR>  " Quick save
 
 " Copy and paste using system clipboard
 noremap <leader>y "+y  " Copy to system clipboard
@@ -135,6 +141,11 @@ noremap <right> <c-w>l
 nnoremap <c-j> :m .+1<CR>==
 nnoremap <c-k> :m .-2<CR>==
 
+" New line commands
+nnoremap <silent> zj o<esc>0"_D
+nnoremap <silent> zk O<esc>0"_D
+nnoremap <CR> i<CR><esc>k$
+
 " Move selected lines up and down
 vnoremap <c-j> :m '>+1<CR>gv=gv
 vnoremap <c-k> :m '<-2<CR>gv=gv
@@ -148,8 +159,8 @@ nnoremap G Gzz
 nnoremap gg ggzz
 nnoremap <c-d> <C-d>zz
 nnoremap <c-u> <C-u>zz
-nnoremap j jzz
-nnoremap k kzz
+nnoremap j gjzz
+nnoremap k gkzz
 nnoremap n nzzzv
 nnoremap N Nzzzv
 nnoremap * *zz
@@ -189,9 +200,12 @@ nnoremap <leader>fr :w<CR>:Files ~<CR>
 nnoremap <leader>cl :w<CR>:Colors<CR>
 nnoremap <leader>ag :w<CR>:Ag<CR> 
 nnoremap <leader>rg :w<CR>:Rg<CR>
-nnoremap <leader>fs :w<CR>:GFiles?<CR>
+nnoremap <leader>gf :w<CR>:GFiles?<CR>
 nnoremap <leader>bl :w<CR>:BLines<CR> 
+nnoremap <leader>li :w<CR>:Lines<CR> 
 nnoremap <leader>ma :w<CR>:Maps<CR>
+nnoremap <leader>wi :w<CR>:Windows<CR>
+nnoremap <leader>hi :w<CR>:History<CR>
 
 " Toggle line numbers mode
 nnoremap <leader>n :set relativenumber!<CR>
@@ -206,10 +220,11 @@ nnoremap <silent><leader>gd :LspDefinition<CR>        " Go to definition
 nnoremap <silent><leader>gr :LspReferences<CR>        " Find references
 nnoremap <silent><leader>gi :LspImplementation<CR>    " Go to implementation
 nnoremap <silent><leader>gt :LspTypeDefinition<CR>    " Go to type definition
-nnoremap <silent><leader>rn :LspRename<CR>            " Rename symbol
+nnoremap <silent><leader>rn :LspRename<CR>            
 nnoremap <silent><leader>ca :LspCodeAction<CR>        " Show code actions
 nnoremap <silent><leader>df :LspDocumentFormat<CR>    " Format the document
 nnoremap <silent><leader>dj :LspNextDiagnostic<CR>    " Go to next diagnostic
+nnoremap <silent><leader>da :LspDocumentDiagnostics<CR>    " Go to diagnostics list
 nnoremap <silent><leader>dk :LspPreviousDiagnostic<CR> " Go to previous diagnostic
 nnoremap <silent><leader>dh :LspHover<CR>             " Show hover information
 nnoremap <silent><leader>ds :LspSignatureHelp<CR>     " Show signature help
@@ -270,6 +285,6 @@ endfunction
 
 " STATUS LINE {{{
 " Minimal status line for performance
-set statusline=%{getcwd()}\ %f\ %y\ %r\ %m\ %=%l:%c
+set statusline=%{getcwd()}\ \|\ %f\ %y\ %r\ %m\ %p%%
 set laststatus=2
 " }}}
