@@ -61,3 +61,4 @@ alt - p : yabai -m window --space 5;
 
 # app shortcuts
 cmd + alt - s : open -n -a "System Settings.app"
+cmd + alt - f : open -n -a "Firefox Developer Edition"

@@ -1,7 +1,8 @@
 " Basic settings for better editing experience {{{
 
 " Set leader key early for easy mapping
-let mapleader = ','
+let mapleader="\<space>"
+nnoremap <space> <nop>
 syntax on
 filetype plugin indent on  " Enable filetype detection, plugins, and indent
 
@@ -10,6 +11,7 @@ set number relativenumber  " Show line numbers and relative numbers
 set tabstop=2 shiftwidth=2 expandtab  " Use spaces instead of tabs
 set autoindent  " Automatically indent new lines
 set ls=2  " Always show status line
+set re=2
 set showcmd  " Show command in the last line of the screen
 set wildmenu wildmode=list:longest  " Enhanced command-line completion
 set incsearch hlsearch smartcase  " Improved searching
@@ -18,9 +20,13 @@ set virtualedit=onemore  " Allow cursor to move one character past the end of th
 set lazyredraw  " Redraw screen only when necessary
 set backspace=indent,eol,start
 set scrolloff=8  " Keep 8 lines visible above and below the cursor
+set t_ut=
 set nowrap
 set ttyfast
 " set termguicolors
+
+" fzf
+set rtp+=/opt/homebrew/opt/fzf
 
 " Kitty setting
 " Mouse support
@@ -81,12 +87,16 @@ let g:lsp_diagnostics_virtual_text_enabled = 0
 let g:lsp_diagnostics_virtual_text_align = "right"
 let g:lsp_diagnostics_virtual_text_delay = 10
 let g:lsp_diagnostics_highlights_enabled = 0
-
+let g:lsp_settings_filetype_javascript = ['typescript-language-server']
+let g:vim_json_syntax_conceal = 0
+let g:indentLine_setConceal = 1
+let g:auto_save = 1
+let g:auto_save_no_updatetime = 1
+let g:auto_save_silent = 1
 " }}}
 
 " Colorscheme settings {{{
 colorscheme habamax " Choose a minimal colorscheme
-highlight Normal ctermfg=None ctermbg=None
 " }}}
 
 " Folding settings {{{
@@ -111,6 +121,7 @@ Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-surround'
 Plug 'triglav/vim-visual-increment'
+Plug 'vim-scripts/vim-auto-save'
 call plug#end()
 " }}}
 
@@ -240,6 +251,7 @@ function! s:NERDTreeToggleInCurDir()
   else
     exe ":NERDTreeFind"
   endif
+  exe ":NERDTreeRefreshRoot"
 endfunction
 command! NERDTreeToggleInCurDir call s:NERDTreeToggleInCurDir()
 

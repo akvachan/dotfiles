@@ -14,7 +14,7 @@
 # global settings
 yabai -m config                                 \
     external_bar                 off:40:0       \
-    menubar_opacity              0.75           \
+    menubar_opacity              0              \
     mouse_follows_focus          on             \
     focus_follows_mouse          off            \
     display_arrangement_order    default        \
@@ -41,4 +41,3 @@ yabai -m config                                 \
 # disable specific apps
 yabai -m rule --add app="^System Settings$" manage=off
 yabai -m rule --add app="^Stickies$" manage=off
-yabai -m rule --add app="^kitty$" manage=off
