@@ -2,44 +2,39 @@
 -- Neovim Configuration - init.lua
 -- =====================================
 
--- ------------------------------
--- 1. Leader Key Setup
--- ------------------------------
--- Set leader key to space and disable its default mapping
+-- {{{ Basic Settings
+-- {{{ Leader key 
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 vim.keymap.set('n', '<Space>', '<NOP>', { noremap = true, silent = true })
-
--- ------------------------------
--- 2. Basic Settings
--- ------------------------------
+-- }}}
+-- {{{ General 
 local opt = vim.opt
-
-opt.number = true                -- Show absolute line numbers
-opt.relativenumber = true        -- Show relative line numbers
-opt.tabstop = 2                  -- Number of spaces tabs count for
-opt.shiftwidth = 2               -- Number of spaces for autoindent
-opt.expandtab = true             -- Use spaces instead of tabs
-opt.autoindent = true            -- Auto-indent new lines
-opt.scrolloff = 8                -- Keep cursor 8 lines away from screen edge
-opt.mouse = 'a'                  -- Enable mouse support
-opt.wrap = false                 -- Disable line wrapping
-opt.hlsearch = true              -- Highlight search results
-opt.incsearch = true             -- Incremental search
-opt.smartcase = true             -- Smart case sensitivity for search
-opt.termguicolors = true         -- Enable 24-bit color
-opt.foldmethod = 'marker'        -- Use markers for folding
-opt.foldenable = true            -- Enable folding
-opt.foldlevel = 0                -- Start with all folds closed
-opt.updatetime = 250             -- Faster update time
-opt.splitbelow = true            -- Horizontal splits open below
-opt.splitright = true            -- Vertical splits open to the right
-opt.termguicolors = true         -- Enable true color support
-opt.signcolumn = 'yes'           -- Always show the sign column
-
--- ------------------------------
--- 3. Bootstrap Lazy.nvim
--- ------------------------------
+opt.number = true         -- Show absolute line numbers
+opt.relativenumber = true -- Show relative line numbers
+opt.tabstop = 2           -- Number of spaces tabs count for
+opt.shiftwidth = 2        -- Number of spaces for autoindent
+opt.expandtab = true      -- Use spaces instead of tabs
+opt.autoindent = true     -- Auto-indent new lines
+opt.scrolloff = 8         -- Keep cursor 8 lines away from screen edge
+opt.mouse = 'a'           -- Enable mouse support
+opt.wrap = false          -- Disable line wrapping
+opt.hlsearch = true       -- Highlight search results
+opt.incsearch = true      -- Incremental search
+opt.smartcase = true      -- Smart case sensitivity for search
+opt.termguicolors = true  -- Enable 24-bit color
+opt.foldmethod = 'marker' -- Use markers for folding
+opt.foldenable = true     -- Enable folding
+opt.foldlevel = 0         -- Start with all folds closed
+opt.updatetime = 250      -- Faster update time
+opt.splitbelow = true     -- Horizontal splits open below
+opt.splitright = true     -- Vertical splits open to the right
+opt.termguicolors = true  -- Enable true color support
+opt.signcolumn = 'yes'    -- Always show the sign column
+-- }}}
+-- }}}
+-- {{{ Plugins
+-- {{{ Lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
@@ -49,44 +44,33 @@ if not vim.loop.fs_stat(lazypath) then
   })
 end
 vim.opt.rtp:prepend(lazypath)
-
--- ------------------------------
--- 4. Plugin Setup with Lazy.nvim
--- ------------------------------
 require("lazy").setup({
-  -- File explorer
-  { 'nvim-tree/nvim-tree.lua', dependencies = 'nvim-tree/nvim-web-devicons' },
-
-  -- Fuzzy finder
-  { 'nvim-telescope/telescope.nvim', dependencies = { 'nvim-lua/plenary.nvim' } },
-
-  -- LSP configurations
-  { 'neovim/nvim-lspconfig' },
-
-  -- Autocompletion
-  { 'hrsh7th/nvim-cmp', dependencies = { 'hrsh7th/cmp-nvim-lsp', 'L3MON4D3/LuaSnip' } },
-
-  -- Git signs
-  { 'lewis6991/gitsigns.nvim' },
-
-  -- Status line
-  { 'nvim-lualine/lualine.nvim', dependencies = { 'nvim-tree/nvim-web-devicons' } },
-
-  -- Surround text objects
-  { 'tpope/vim-surround' },
-
-  -- Colors
+  -- }}} 
+  -- {{{ File explorer
+  { 'PhilRunninger/nerdtree-visual-selection' },
+  { 'preservim/nerdtree' },
+  -- }}}
+  -- {{{ Fuzzy finder
   {
-    "xiantang/darcula-dark.nvim",
-    dependencies = { "nvim-treesitter/nvim-treesitter" },
-    priority = 1000, -- Ensure it loads first
-    config = function()
-      vim.cmd([[colorscheme darcula-dark]]) -- Apply the theme
+    "nvim-telescope/telescope.nvim",
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'jonarrien/telescope-cmdline.nvim',
+    },
+    config = function(_, opts)
+      require("telescope").setup(opts)
+      require("telescope").load_extension('cmdline')
     end,
   },
 
   -- Path utility etc
   { 'nvim-lua/plenary.nvim' },
+
+  -- Command Line Enhancements
+  { 'jonarrien/telescope-cmdline.nvim' },
+  -- }}}
+  -- {{{ LSP
+  { 'neovim/nvim-lspconfig' },
 
   -- Mason for managing LSP servers
   {
@@ -103,62 +87,101 @@ require("lazy").setup({
     dependencies = { "williamboman/mason.nvim", "neovim/nvim-lspconfig" },
     config = function()
       require("mason-lspconfig").setup({
-        ensure_installed = { "lua_ls", "pyright"}, -- Add more servers as needed
+        ensure_installed = { "lua_ls", "pyright" }, -- Add more servers as needed
         automatic_installation = true,
       })
     end,
   },
-
+  -- }}}
+  -- {{{ Autocompletion
+  { 'hrsh7th/nvim-cmp',          dependencies = { 'hrsh7th/cmp-nvim-lsp', 'L3MON4D3/LuaSnip' } },
+  -- }}}
+  -- {{{ Git signs
+  { 'lewis6991/gitsigns.nvim' },
+  -- }}}
+  -- {{{ Status line
+  { 'nvim-lualine/lualine.nvim', dependencies = { 'nvim-tree/nvim-web-devicons' } },
+  -- }}}
+  -- {{{ Surround text objects
+  { 'tpope/vim-surround' },
+  -- }}}
+  -- {{{ Color Theme
+  {
+    "xiantang/darcula-dark.nvim",
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
+    priority = 1000,                        -- Ensure it loads first
+    config = function()
+      vim.cmd([[colorscheme darcula-dark]]) -- Apply the theme
+    end,
+  },
 }, {})
+-- }}}
+-- }}}
+-- {{{ Plugins Settings 
+-- {{{ NERDTree
+vim.keymap.set('n', '<C-f>', ':NERDTreeToggleInCurDir<CR>', { noremap = true, silent = true })
 
--- ------------------------------
--- 5. Plugin Configurations
--- ------------------------------
+-- Function to toggle NERDTree in the current directory
+local function toggle_nerdtree_in_cur_dir()
+  local nerdtree_win_id = nil
+  for _, win in ipairs(vim.api.nvim_list_wins()) do
+    local bufname = vim.api.nvim_buf_get_name(vim.api.nvim_win_get_buf(win))
+    if bufname:match("NERD_tree_") then
+      nerdtree_win_id = win
+      break
+    end
+  end
 
--- --- nvim-tree ---
-require('nvim-tree').setup {}
-vim.keymap.set('n', '<C-f>', ':NvimTreeToggle<CR>', { noremap = true, silent = true })
-
--- --- Telescope ---
+  if nerdtree_win_id then
+    vim.cmd("NERDTreeClose")
+  else
+    vim.cmd("NERDTreeFind")
+  end
+end
+-- Create a command to toggle NERDTree
+vim.api.nvim_create_user_command(
+  'NERDTreeToggleInCurDir',
+  toggle_nerdtree_in_cur_dir,
+  {}
+)
+--- }}}
+-- {{{ Telescope
 local telescope = require('telescope')
 telescope.setup {}
-vim.keymap.set('n', '<leader>ff', '<cmd>Telescope find_files<CR>', { noremap = true, silent = true })
-vim.keymap.set('n', '<leader>fg', '<cmd>Telescope live_grep<CR>', { noremap = true, silent = true })
-vim.keymap.set('n', '<leader>fb', '<cmd>Telescope buffers<CR>', { noremap = true, silent = true })
-vim.keymap.set('n', '<leader>fh', '<cmd>Telescope help_tags<CR>', { noremap = true, silent = true })
-vim.keymap.set('n', '<leader>fl', '<cmd>Telescope current_buffer_fuzzy_find<CR>', { noremap = true, silent = true })
-
--- --- Gitsigns ---
+-- }}}
+-- {{{ Gitsigns
 require('gitsigns').setup {}
-
--- --- Lualine ---
+-- }}}
+-- {{{ Lualine
 require('lualine').setup {}
-
--- --- Colorscheme ---
--- Already set in Lazy.nvim setup above
-
--- ------------------------------
--- 6. LSP Configuration
--- ------------------------------
+-- }}}
+-- {{{ LSP
 local lspconfig = require('lspconfig')
 local mason_lspconfig = require('mason-lspconfig')
+
+-- Enable diagnostics globally
+vim.diagnostic.config({
+  virtual_text = true,
+  signs = true,
+  underline = true,
+  update_in_insert = true,
+})
 
 -- Common on_attach function for LSP servers
 local on_attach = function(_, bufnr)
   local opts = { buffer = bufnr, noremap = true, silent = true }
 
   -- LSP Keybindings
-  vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
-  vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
-  vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
-  vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
-  vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
+  vim.keymap.set('n', '<leader>d', vim.lsp.buf.definition, opts)
+  vim.keymap.set('n', '<leader>dd', vim.diagnostic.setqflist, opts)
+  vim.keymap.set('n', '<leader>dc', vim.lsp.buf.declaration, opts)
+  vim.keymap.set('n', '<leader>i', vim.lsp.buf.implementation, opts)
+  vim.keymap.set('n', '<leader>r', vim.lsp.buf.references, opts)
+  vim.keymap.set('n', '<leader>m', vim.lsp.buf.rename, opts)
   vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
-  vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, opts)
+  vim.keymap.set('n', '<leader>a', vim.lsp.buf.code_action, opts)
   vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
   vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
-  vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, opts)
-  vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, opts)
   vim.keymap.set('n', '<leader>df', function()
     vim.lsp.buf.format { async = true }
   end, opts)
@@ -186,9 +209,9 @@ mason_lspconfig.setup_handlers({
           },
           workspace = {
             library = vim.api.nvim_get_runtime_file("", true), -- Make the server aware of Neovim runtime files
-            checkThirdParty = false, -- Disable annoying third-party notifications
+            checkThirdParty = false,                           -- Disable annoying third-party notifications
           },
-          telemetry = { enable = false }, -- Disable telemetry for performance
+          telemetry = { enable = false },                      -- Disable telemetry for performance
         },
       }
     end
@@ -196,10 +219,9 @@ mason_lspconfig.setup_handlers({
     lspconfig[server_name].setup(opts)
   end,
 })
+-- }}}
+-- Autocompletion {{{
 
--- ------------------------------
--- 7. Autocompletion (nvim-cmp)
--- ------------------------------
 local cmp = require('cmp')
 local luasnip = require('luasnip')
 
@@ -240,42 +262,48 @@ cmp.setup({
     { name = 'luasnip' }, -- For LuaSnip users
   },
 })
-
--- ------------------------------
--- 8. Additional Keybindings
--- ------------------------------
-
--- --- Command Mode Shortcut ---
+--- }}}
+-- }}}
+-- {{{ Keybindings
+-- {{{ Telescope
+vim.keymap.set('n', '<leader>f', '<cmd>Telescope find_files<CR>', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>g', '<cmd>Telescope live_grep<CR>', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>b', '<cmd>Telescope buffers<CR>', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>l', '<cmd>Telescope current_buffer_fuzzy_find<CR>', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>km', '<cmd>Telescope keymaps<CR>', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>;', '<cmd>Telescope cmdline<CR>', { noremap = true, silent = true })
+-- }}}
+-- {{{ Command Mode 
 vim.keymap.set('n', ';', ':', { noremap = true, silent = true })
-
--- --- Quick Saves and Quits ---
+-- }}}
+-- {{{ Quick Saves and Quits
 vim.keymap.set('n', '<leader>w', ':w<CR>', { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>W', ':wq<CR>', { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>q', ':q<CR>', { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>Q', ':q!<CR>', { noremap = true, silent = true })
-
--- --- Clipboard Integration ---
-vim.keymap.set('n', '<leader>y', '"+y', { noremap = true, silent = true })    -- Copy to clipboard
-vim.keymap.set('n', '<leader>p', '"+p', { noremap = true, silent = true })    -- Paste from clipboard
+-- }}}
+-- {{{ Clipboard Integration
+vim.keymap.set('n', '<leader>y', '"+y', { noremap = true, silent = true }) -- Copy to clipboard
+vim.keymap.set('n', '<leader>p', '"+p', { noremap = true, silent = true }) -- Paste from clipboard
 vim.keymap.set('v', '<leader>y', '"+y', { noremap = true, silent = true })
 vim.keymap.set('v', '<leader>p', '"+p', { noremap = true, silent = true })
-
--- --- Search ---
+-- }}}
+-- {{{ Search
 vim.keymap.set('n', '<leader>h', ':noh<CR>', { noremap = true, silent = true }) -- Clear search highlight
-
--- --- Navigation Between Splits ---
+-- }}}
+-- {{{ Navigation Between Splits
 vim.keymap.set('n', '<up>', '<C-w>k', { noremap = true, silent = true })
 vim.keymap.set('n', '<down>', '<C-w>j', { noremap = true, silent = true })
 vim.keymap.set('n', '<left>', '<C-w>h', { noremap = true, silent = true })
 vim.keymap.set('n', '<right>', '<C-w>l', { noremap = true, silent = true })
-
--- --- Moving Lines Up and Down ---
+-- }}}
+-- {{{ Moving Lines Up and Down
 vim.keymap.set('n', '<C-j>', ':m .+1<CR>==', { noremap = true, silent = true })
 vim.keymap.set('n', '<C-k>', ':m .-2<CR>==', { noremap = true, silent = true })
 vim.keymap.set('v', '<C-j>', ":m '>+1<CR>gv=gv", { noremap = true, silent = true })
 vim.keymap.set('v', '<C-k>', ":m '<-2<CR>gv=gv", { noremap = true, silent = true })
-
--- --- Center Cursor While Moving ---
+-- }}}
+-- {{{ Center Cursor While Moving
 vim.keymap.set('n', 'n', 'nzzzv', { noremap = true, silent = true })
 vim.keymap.set('n', 'N', 'Nzzzv', { noremap = true, silent = true })
 vim.keymap.set('n', 'j', 'gjzz', { noremap = true, silent = true })
@@ -284,30 +312,121 @@ vim.keymap.set('n', '<C-d>', '<C-d>zz', { noremap = true, silent = true })
 vim.keymap.set('n', '<C-u>', '<C-u>zz', { noremap = true, silent = true })
 vim.keymap.set('n', '}', '}zz', { noremap = true, silent = true })
 vim.keymap.set('n', '{', '{zz', { noremap = true, silent = true })
-
--- --- Folding ---
+-- }}}
+-- {{{ Folding
 vim.keymap.set('n', '<leader>o', 'za', { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>O', 'zM', { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>c', 'zR', { noremap = true, silent = true })
-
--- --- Quickfix List ---
+-- }}}
+-- {{{ Quickfix List
 vim.keymap.set('n', '<leader>co', ':copen<CR>', { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>cc', ':cclose<CR>', { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>cn', ':cnext<CR>', { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>cp', ':cprevious<CR>', { noremap = true, silent = true })
-
--- --- Toggle Relative Line Numbers ---
+-- }}}
+-- {{{ Search and Replace with Current Word
+vim.keymap.set('n', '<leader>s', function()
+  local current_word = vim.fn.expand("<cword>")
+  vim.cmd('s/' .. current_word .. '/')
+end, { noremap = true, silent = true })
+-- }}}
+-- {{{ Toggle Relative Line Numbers 
 vim.keymap.set('n', '<leader>n', ':set relativenumber!<CR>', { noremap = true, silent = true })
+-- }}}
+-- }}}
+-- {{{ Lua Scripts
+-- Gathering Files {{{
+-- Function to gather files with multiple extensions and exclude specific directories
+local function gather_files_with_extensions(dir, extensions, exclude_dirs)
+  local files = {}
 
--- ------------------------------
--- 9. Additional Configurations
--- ------------------------------
+  -- Recursive function to scan directories
+  local function scan_dir(path)
+    local fd = vim.loop.fs_scandir(path)
+    if not fd then return end
 
--- Enable diagnostics globally
-vim.diagnostic.config({
-  virtual_text = true,
-  signs = true,
-  underline = true,
-  update_in_insert = false,
-})
+    while true do
+      local name, type = vim.loop.fs_scandir_next(fd)
+      if not name then break end
 
+      local full_path = path .. "/" .. name
+      local excluded = false
+
+      -- Check if the directory should be excluded
+      for _, exclude in ipairs(exclude_dirs) do
+        if full_path:match(vim.pesc(exclude)) then
+          excluded = true
+          break
+        end
+      end
+
+      if excluded then
+        goto continue
+      end
+
+      if type == "directory" then
+        scan_dir(full_path) -- Recursively scan subdirectories
+      elseif type == "file" then
+        for _, ext in ipairs(extensions) do
+          if name:match("%." .. ext .. "$") then
+            table.insert(files, full_path)
+            break
+          end
+        end
+      end
+      ::continue::
+    end
+  end
+
+  scan_dir(dir)
+  return files
+end
+
+local function write_files_to_buffer(files)
+  -- Create a new buffer
+  local buf = vim.api.nvim_create_buf(false, true)
+  vim.api.nvim_set_current_buf(buf)
+
+  -- Write file content to the buffer
+  for _, file_path in ipairs(files) do
+    local file = io.open(file_path, "r")
+    if file then
+      local content = file:read("*all")
+      file:close()
+
+      vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "===" .. file_path .. "===" })
+      vim.api.nvim_buf_set_lines(buf, -1, -1, false, vim.split(content, "\n"))
+      vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "" }) -- Add a blank line
+    end
+  end
+end
+
+local function gather_and_write_files(extensions, exclude_dirs)
+  local project_dir = vim.fn.getcwd() -- Current working directory
+  local files = gather_files_with_extensions(project_dir, extensions, exclude_dirs)
+  if #files > 0 then
+    write_files_to_buffer(files)
+  else
+    print("No files with specified extensions found.")
+  end
+end
+
+-- Create a user command
+vim.api.nvim_create_user_command("GatherFiles", function(opts)
+  local args = vim.split(opts.args, " ")
+  local extensions = vim.split(args[1], ",") -- First argument is comma-separated extensions
+  local exclude_dirs = {}
+
+  if #args > 1 then
+    exclude_dirs = vim.split(args[2], ",") -- Second argument is comma-separated directories
+  end
+
+  gather_and_write_files(extensions, exclude_dirs)
+end, { nargs = "*" })
+
+-- Usage:
+-- :GatherFiles <extensions> <exclude_dirs>
+-- Example:
+-- :GatherFiles lua,txt .git,node_modules
+-- }}}
+-- }}}
