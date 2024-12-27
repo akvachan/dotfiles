@@ -3,12 +3,12 @@
 -- =====================================
 
 -- {{{ Basic Settings
--- {{{ Leader key 
+-- {{{ Leader key
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 vim.keymap.set('n', '<Space>', '<NOP>', { noremap = true, silent = true })
 -- }}}
--- {{{ General 
+-- {{{ General
 local opt = vim.opt
 opt.number = true         -- Show absolute line numbers
 opt.relativenumber = true -- Show relative line numbers
@@ -45,7 +45,7 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
-  -- }}} 
+  -- }}}
   -- {{{ File explorer
   { 'PhilRunninger/nerdtree-visual-selection' },
   { 'preservim/nerdtree' },
@@ -105,6 +105,15 @@ require("lazy").setup({
   -- {{{ Surround text objects
   { 'tpope/vim-surround' },
   -- }}}
+  -- {{{ Auto pairing for brackets etc
+  {
+    'windwp/nvim-autopairs',
+    event = "InsertEnter",
+    config = true
+    -- use opts = {} for passing setup options
+    -- this is equivalent to setup({}) function
+  },
+  -- }}}
   -- {{{ Color Theme
   {
     "xiantang/darcula-dark.nvim",
@@ -117,13 +126,16 @@ require("lazy").setup({
 }, {})
 -- }}}
 -- }}}
--- {{{ Plugins Settings 
+-- {{{ Plugins Settings
 -- {{{ NERDTree
 vim.keymap.set('n', '<C-f>', ':NERDTreeToggleInCurDir<CR>', { noremap = true, silent = true })
 
 -- Function to toggle NERDTree in the current directory
 local function toggle_nerdtree_in_cur_dir()
   local nerdtree_win_id = nil
+  local total_windows = #vim.api.nvim_list_wins()
+
+  -- Iterate through all open windows to find NERDTree
   for _, win in ipairs(vim.api.nvim_list_wins()) do
     local bufname = vim.api.nvim_buf_get_name(vim.api.nvim_win_get_buf(win))
     if bufname:match("NERD_tree_") then
@@ -133,11 +145,16 @@ local function toggle_nerdtree_in_cur_dir()
   end
 
   if nerdtree_win_id then
-    vim.cmd("NERDTreeClose")
+    if total_windows > 1 then
+      vim.cmd("NERDTreeClose")
+    else
+      vim.notify("Cannot close NERDTree, when it is a single buffer open.", vim.log.levels.ERROR)
+    end
   else
     vim.cmd("NERDTreeFind")
   end
 end
+
 -- Create a command to toggle NERDTree
 vim.api.nvim_create_user_command(
   'NERDTreeToggleInCurDir',
@@ -172,16 +189,18 @@ local on_attach = function(_, bufnr)
   local opts = { buffer = bufnr, noremap = true, silent = true }
 
   -- LSP Keybindings
-  vim.keymap.set('n', '<leader>d', vim.lsp.buf.definition, opts)
+  vim.keymap.set('n', '<leader>cd', vim.diagnostic.open_float, opts)
+  vim.keymap.set('n', '<leader>gd', vim.lsp.buf.definition, opts)
   vim.keymap.set('n', '<leader>dd', vim.diagnostic.setqflist, opts)
-  vim.keymap.set('n', '<leader>dc', vim.lsp.buf.declaration, opts)
-  vim.keymap.set('n', '<leader>i', vim.lsp.buf.implementation, opts)
-  vim.keymap.set('n', '<leader>r', vim.lsp.buf.references, opts)
-  vim.keymap.set('n', '<leader>m', vim.lsp.buf.rename, opts)
+  vim.keymap.set('n', '<leader>gc', vim.lsp.buf.declaration, opts)
+  vim.keymap.set('n', '<leader>gi', vim.lsp.buf.implementation, opts)
+  vim.keymap.set('n', '<leader>gr', vim.lsp.buf.references, opts)
+  vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
   vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
-  vim.keymap.set('n', '<leader>a', vim.lsp.buf.code_action, opts)
-  vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
-  vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
+  vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, opts)
+  vim.keymap.set('n', '<leader>gh', vim.diagnostic.goto_prev, opts)
+  vim.keymap.set('n', '<leader>gl', vim.diagnostic.goto_next, opts)
+  vim.keymap.set('n', '<leader>re', ':LspRestart<cr>')
   vim.keymap.set('n', '<leader>df', function()
     vim.lsp.buf.format { async = true }
   end, opts)
@@ -266,14 +285,14 @@ cmp.setup({
 -- }}}
 -- {{{ Keybindings
 -- {{{ Telescope
-vim.keymap.set('n', '<leader>f', '<cmd>Telescope find_files<CR>', { noremap = true, silent = true })
-vim.keymap.set('n', '<leader>g', '<cmd>Telescope live_grep<CR>', { noremap = true, silent = true })
-vim.keymap.set('n', '<leader>b', '<cmd>Telescope buffers<CR>', { noremap = true, silent = true })
-vim.keymap.set('n', '<leader>l', '<cmd>Telescope current_buffer_fuzzy_find<CR>', { noremap = true, silent = true })
-vim.keymap.set('n', '<leader>km', '<cmd>Telescope keymaps<CR>', { noremap = true, silent = true })
-vim.keymap.set('n', '<leader>;', '<cmd>Telescope cmdline<CR>', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>ff', '<cmd>Telescope find_files<CR>', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>lg', '<cmd>Telescope live_grep<CR>', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>bu', '<cmd>Telescope buffers<CR>', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>bf', '<cmd>Telescope current_buffer_fuzzy_find<CR>', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>mm', '<cmd>Telescope keymaps<CR>', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>cm', '<cmd>Telescope cmdline<CR>', { noremap = true, silent = true })
 -- }}}
--- {{{ Command Mode 
+-- {{{ Command Mode
 vim.keymap.set('n', ';', ':', { noremap = true, silent = true })
 -- }}}
 -- {{{ Quick Saves and Quits
@@ -316,7 +335,6 @@ vim.keymap.set('n', '{', '{zz', { noremap = true, silent = true })
 -- {{{ Folding
 vim.keymap.set('n', '<leader>o', 'za', { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>O', 'zM', { noremap = true, silent = true })
-vim.keymap.set('n', '<leader>c', 'zR', { noremap = true, silent = true })
 -- }}}
 -- {{{ Quickfix List
 vim.keymap.set('n', '<leader>co', ':copen<CR>', { noremap = true, silent = true })
@@ -330,8 +348,12 @@ vim.keymap.set('n', '<leader>s', function()
   vim.cmd('s/' .. current_word .. '/')
 end, { noremap = true, silent = true })
 -- }}}
--- {{{ Toggle Relative Line Numbers 
+-- {{{ Toggle Relative Line Numbers
 vim.keymap.set('n', '<leader>n', ':set relativenumber!<CR>', { noremap = true, silent = true })
+-- }}}
+-- {{{ Vertical Movement
+vim.keymap.set('n', '<leader>j', 'jS', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>k', 'kS', { noremap = true, silent = true })
 -- }}}
 -- }}}
 -- {{{ Lua Scripts
@@ -428,5 +450,85 @@ end, { nargs = "*" })
 -- :GatherFiles <extensions> <exclude_dirs>
 -- Example:
 -- :GatherFiles lua,txt .git,node_modules
+-- }}}
+-- Find and Replace in Files with Buffer Reload {{{
+local function find_and_replace_in_files(pattern, replacement, extensions, exclude_dirs)
+  local files = gather_files_with_extensions(vim.fn.getcwd(), extensions, exclude_dirs)
+
+  if not files or #files == 0 then
+    print("No matching files found.")
+    return
+  end
+
+  for _, file_path in ipairs(files) do
+    local file = io.open(file_path, "r")
+    if file then
+      local content = file:read("*all")
+      file:close()
+
+      if content then
+        local new_content, substitutions = content:gsub(pattern, replacement)
+        if substitutions > 0 then
+          local write_file = io.open(file_path, "w")
+          if write_file then
+            write_file:write(new_content)
+            write_file:close()
+            print("Updated " .. file_path .. " (" .. substitutions .. " substitutions)")
+
+            -- Reload buffer using checktime
+            for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+              if vim.api.nvim_buf_get_name(buf) == file_path then
+                vim.api.nvim_buf_call(buf, function()
+                  vim.cmd("checktime")
+                end)
+                break
+              end
+            end
+          else
+            print("Error: Could not write to " .. file_path)
+          end
+        end
+      else
+        print("Error: Could not read content from " .. file_path)
+      end
+    else
+      print("Error: Could not open file " .. file_path)
+    end
+  end
+end
+
+vim.api.nvim_create_user_command("FindReplace", function(opts)
+  local args = vim.split(opts.args, " ")
+  if #args < 3 then
+    print("Usage: :FindReplace <pattern> <replacement> <extensions> [<exclude_dirs>]")
+    return
+  end
+
+  local pattern = args[1]
+  local replacement = args[2]
+  local extensions = vim.split(args[3], ",")
+  local exclude_dirs = #args > 3 and vim.split(args[4], ",") or {}
+
+  find_and_replace_in_files(pattern, replacement, extensions, exclude_dirs)
+end, { nargs = "*" })
+
+-- Usage:
+-- :FindReplace <pattern> <replacement> <extensions> [<exclude_dirs>]
+-- Example:
+-- :FindReplace "oldText" "newText" lua,txt .git,node_modules
+-- }}}
+-- Word Count {{{
+local function count_words()
+  local buf = vim.api.nvim_get_current_buf()
+  local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+  local text = table.concat(lines, " ")
+  local word_count = select(2, text:gsub("%S+", ""))
+  print("Word Count: " .. word_count)
+end
+
+vim.api.nvim_create_user_command("WordCount", count_words, {})
+
+-- Usage:
+-- :WordCount
 -- }}}
 -- }}}
