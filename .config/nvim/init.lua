@@ -1,14 +1,15 @@
--- =====================================
--- Neovim Configuration - init.lua
--- =====================================
+--: {{{ Basic Settings
 
--- {{{ Basic Settings
--- {{{ Leader key
+--: {{{ Leader Key
+
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 vim.keymap.set('n', '<Space>', '<NOP>', { noremap = true, silent = true })
+
 -- }}}
--- {{{ General
+
+--: {{{ General
+
 local opt = vim.opt
 opt.number = true         -- Show absolute line numbers
 opt.relativenumber = true -- Show relative line numbers
@@ -32,9 +33,12 @@ opt.splitright = true     -- Vertical splits open to the right
 opt.termguicolors = true  -- Enable true color support
 opt.signcolumn = 'yes'    -- Always show the sign column
 -- }}}
+
 -- }}}
--- {{{ Plugins
--- {{{ Lazy.nvim
+
+--: {{{ Plugins
+
+--: {{{ Lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
@@ -46,11 +50,16 @@ end
 vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
   -- }}}
-  -- {{{ File explorer
+
+--: {{{ File explorer
+
   { 'PhilRunninger/nerdtree-visual-selection' },
   { 'preservim/nerdtree' },
-  -- }}}
-  -- {{{ Fuzzy finder
+
+-- }}}
+
+--: {{{ Fuzzy finder
+
   {
     "nvim-telescope/telescope.nvim",
     dependencies = {
@@ -68,8 +77,20 @@ require("lazy").setup({
 
   -- Command Line Enhancements
   { 'jonarrien/telescope-cmdline.nvim' },
-  -- }}}
-  -- {{{ LSP
+
+-- }}}
+
+--: {{{ Snippets
+
+  {
+    "L3MON4D3/LuaSnip",
+    dependencies = { "rafamadriz/friendly-snippets" },
+  },
+
+-- }}}
+
+--: {{{ LSP
+
   { 'neovim/nvim-lspconfig' },
 
   -- Mason for managing LSP servers
@@ -92,20 +113,35 @@ require("lazy").setup({
       })
     end,
   },
-  -- }}}
-  -- {{{ Autocompletion
+
+-- }}}
+
+--: {{{ Autocompletion
+
   { 'hrsh7th/nvim-cmp',          dependencies = { 'hrsh7th/cmp-nvim-lsp', 'L3MON4D3/LuaSnip' } },
-  -- }}}
-  -- {{{ Git signs
+
+-- }}}
+
+--: {{{ Git signs
+
   { 'lewis6991/gitsigns.nvim' },
-  -- }}}
-  -- {{{ Status line
+
+-- }}}
+
+--: {{{ Status line
+
   { 'nvim-lualine/lualine.nvim', dependencies = { 'nvim-tree/nvim-web-devicons' } },
-  -- }}}
-  -- {{{ Surround text objects
+
+--: }}}
+
+--: {{{ Surround text objects
+
   { 'tpope/vim-surround' },
-  -- }}}
-  -- {{{ Auto pairing for brackets etc
+
+-- }}}
+
+--: {{{ Auto pairing for brackets etc
+
   {
     'windwp/nvim-autopairs',
     event = "InsertEnter",
@@ -113,8 +149,11 @@ require("lazy").setup({
     -- use opts = {} for passing setup options
     -- this is equivalent to setup({}) function
   },
-  -- }}}
-  -- {{{ Color Theme
+
+-- }}}
+
+--: {{{ Color Theme
+
   {
     "xiantang/darcula-dark.nvim",
     dependencies = { "nvim-treesitter/nvim-treesitter" },
@@ -124,10 +163,15 @@ require("lazy").setup({
     end,
   },
 }, {})
+
 -- }}}
+
 -- }}}
--- {{{ Plugins Settings
--- {{{ NERDTree
+
+--: {{{ Plugins Settings
+
+--: {{{ NERDTree
+
 vim.keymap.set('n', '<C-f>', ':NERDTreeToggleInCurDir<CR>', { noremap = true, silent = true })
 
 -- Function to toggle NERDTree in the current directory
@@ -161,18 +205,36 @@ vim.api.nvim_create_user_command(
   toggle_nerdtree_in_cur_dir,
   {}
 )
---- }}}
--- {{{ Telescope
+
+-- }}}
+
+--: {{{ LuaSnip
+
+require("luasnip.loaders.from_vscode").lazy_load()
+
+-- }}}
+
+--: {{{ Fuzzy finder
+
 local telescope = require('telescope')
 telescope.setup {}
+
 -- }}}
--- {{{ Gitsigns
+
+--: {{{ Gitsigns
+
 require('gitsigns').setup {}
+
 -- }}}
--- {{{ Lualine
+
+--: {{{ Lualine
+
 require('lualine').setup {}
+
 -- }}}
--- {{{ LSP
+
+--: {{{ LSP
+
 local lspconfig = require('lspconfig')
 local mason_lspconfig = require('mason-lspconfig')
 
@@ -238,8 +300,10 @@ mason_lspconfig.setup_handlers({
     lspconfig[server_name].setup(opts)
   end,
 })
+
 -- }}}
--- Autocompletion {{{
+
+--: Autocompletion {{{
 
 local cmp = require('cmp')
 local luasnip = require('luasnip')
@@ -281,48 +345,74 @@ cmp.setup({
     { name = 'luasnip' }, -- For LuaSnip users
   },
 })
---- }}}
+
 -- }}}
--- {{{ Keybindings
--- {{{ Telescope
+
+-- }}}
+
+--: {{{ Keybindings
+
+--: {{{ Telescope
+
 vim.keymap.set('n', '<leader>ff', '<cmd>Telescope find_files<CR>', { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>lg', '<cmd>Telescope live_grep<CR>', { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>bu', '<cmd>Telescope buffers<CR>', { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>bf', '<cmd>Telescope current_buffer_fuzzy_find<CR>', { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>mm', '<cmd>Telescope keymaps<CR>', { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>cm', '<cmd>Telescope cmdline<CR>', { noremap = true, silent = true })
+
 -- }}}
--- {{{ Command Mode
+
+--: {{{ Command Mode
+
 vim.keymap.set('n', ';', ':', { noremap = true, silent = true })
+
 -- }}}
--- {{{ Quick Saves and Quits
+
+--: {{{ Quick Saves and Quits
+
 vim.keymap.set('n', '<leader>w', ':w<CR>', { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>W', ':wq<CR>', { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>q', ':q<CR>', { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>Q', ':q!<CR>', { noremap = true, silent = true })
+
 -- }}}
--- {{{ Clipboard Integration
+
+--: {{{ Clipboard Integration
+
 vim.keymap.set('n', '<leader>y', '"+y', { noremap = true, silent = true }) -- Copy to clipboard
 vim.keymap.set('n', '<leader>p', '"+p', { noremap = true, silent = true }) -- Paste from clipboard
 vim.keymap.set('v', '<leader>y', '"+y', { noremap = true, silent = true })
 vim.keymap.set('v', '<leader>p', '"+p', { noremap = true, silent = true })
+
 -- }}}
--- {{{ Search
+
+--: {{{ Search
+
 vim.keymap.set('n', '<leader>h', ':noh<CR>', { noremap = true, silent = true }) -- Clear search highlight
+
 -- }}}
--- {{{ Navigation Between Splits
+
+--: {{{ Navigation Between Splits
+
 vim.keymap.set('n', '<up>', '<C-w>k', { noremap = true, silent = true })
 vim.keymap.set('n', '<down>', '<C-w>j', { noremap = true, silent = true })
 vim.keymap.set('n', '<left>', '<C-w>h', { noremap = true, silent = true })
 vim.keymap.set('n', '<right>', '<C-w>l', { noremap = true, silent = true })
+
 -- }}}
--- {{{ Moving Lines Up and Down
+
+--: {{{ Moving Lines Up and Down
+
 vim.keymap.set('n', '<C-j>', ':m .+1<CR>==', { noremap = true, silent = true })
 vim.keymap.set('n', '<C-k>', ':m .-2<CR>==', { noremap = true, silent = true })
 vim.keymap.set('v', '<C-j>', ":m '>+1<CR>gv=gv", { noremap = true, silent = true })
 vim.keymap.set('v', '<C-k>', ":m '<-2<CR>gv=gv", { noremap = true, silent = true })
+
 -- }}}
--- {{{ Center Cursor While Moving
+
+--: {{{ Center Cursor While Moving
+
 vim.keymap.set('n', 'n', 'nzzzv', { noremap = true, silent = true })
 vim.keymap.set('n', 'N', 'Nzzzv', { noremap = true, silent = true })
 vim.keymap.set('n', 'j', 'gjzz', { noremap = true, silent = true })
@@ -331,33 +421,60 @@ vim.keymap.set('n', '<C-d>', '<C-d>zz', { noremap = true, silent = true })
 vim.keymap.set('n', '<C-u>', '<C-u>zz', { noremap = true, silent = true })
 vim.keymap.set('n', '}', '}zz', { noremap = true, silent = true })
 vim.keymap.set('n', '{', '{zz', { noremap = true, silent = true })
+
 -- }}}
--- {{{ Folding
+
+--: {{{ Folding
+
 vim.keymap.set('n', '<leader>o', 'za', { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>O', 'zM', { noremap = true, silent = true })
+
 -- }}}
--- {{{ Quickfix List
+
+--: {{{ Quickfix List
+
 vim.keymap.set('n', '<leader>co', ':copen<CR>', { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>cc', ':cclose<CR>', { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>cn', ':cnext<CR>', { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>cp', ':cprevious<CR>', { noremap = true, silent = true })
+
 -- }}}
--- {{{ Search and Replace with Current Word
+
+--: {{{ Search and Replace with Current Word
+
 vim.keymap.set('n', '<leader>s', function()
   local current_word = vim.fn.expand("<cword>")
   vim.cmd('s/' .. current_word .. '/')
 end, { noremap = true, silent = true })
+
 -- }}}
--- {{{ Toggle Relative Line Numbers
+
+--: {{{ Toggle Relative Line Numbers
+
 vim.keymap.set('n', '<leader>n', ':set relativenumber!<CR>', { noremap = true, silent = true })
+
 -- }}}
--- {{{ Vertical Movement
+
+--: {{{ Vertical Movement
+
 vim.keymap.set('n', '<leader>j', 'jS', { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>k', 'kS', { noremap = true, silent = true })
+
 -- }}}
+
+--: Indent Lines Left and Right {{{
+
+vim.keymap.set('v', '<', '<gv', { noremap = true, silent = true })
+vim.keymap.set('v', '<', '>gv', { noremap = true, silent = true })
+
 -- }}}
--- {{{ Lua Scripts
--- Gathering Files {{{
+
+-- }}}
+
+--: {{{ Lua Scripts
+
+--: Gathering Files {{{
+
 -- Function to gather files with multiple extensions and exclude specific directories
 local function gather_files_with_extensions(dir, extensions, exclude_dirs)
   local files = {}
@@ -450,8 +567,11 @@ end, { nargs = "*" })
 -- :GatherFiles <extensions> <exclude_dirs>
 -- Example:
 -- :GatherFiles lua,txt .git,node_modules
+
 -- }}}
--- Find and Replace in Files with Buffer Reload {{{
+
+--: Find and Replace in Files with Buffer Reload {{{
+
 local function find_and_replace_in_files(pattern, replacement, extensions, exclude_dirs)
   local files = gather_files_with_extensions(vim.fn.getcwd(), extensions, exclude_dirs)
 
@@ -516,8 +636,11 @@ end, { nargs = "*" })
 -- :FindReplace <pattern> <replacement> <extensions> [<exclude_dirs>]
 -- Example:
 -- :FindReplace "oldText" "newText" lua,txt .git,node_modules
+
 -- }}}
--- Word Count {{{
+
+--: Word Count {{{
+
 local function count_words()
   local buf = vim.api.nvim_get_current_buf()
   local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
@@ -530,5 +653,7 @@ vim.api.nvim_create_user_command("WordCount", count_words, {})
 
 -- Usage:
 -- :WordCount
+
 -- }}}
+
 -- }}}

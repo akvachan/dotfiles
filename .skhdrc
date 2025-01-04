@@ -1,4 +1,4 @@
-# -- Changing Window Focus --
+#: Changing Window Focus {{{
 
 # change window focus within space
 alt - j : yabai -m window --focus south
@@ -10,7 +10,9 @@ alt - l : yabai -m window --focus east
 alt - s : yabai -m display --focus west
 alt - g : yabai -m display --focus east
 
-# -- Modifying the Layout --
+# }}}
+
+#: Modifying the Layout {{{
 
 # rotate layout clockwise
 shift + alt - r : yabai -m space --rotate 270
@@ -24,25 +26,21 @@ shift + alt - x : yabai -m space --mirror x-axis
 # toggle window float
 shift + alt - t : yabai -m window --toggle float --grid 4:4:1:1:2:2
 
-# -- Modifying Window Size --
+# toggle maximize window 
 alt - m : yabai -m window --toggle zoom-fullscreen
 
 # balance out tree of windows (resize to occupy same area)
 alt - b : yabai -m space --balance
 
-# -- Moving Windows Around --
+# }}}
+
+#: Moving Windows Around {{{ 
 
 # swap windows
 shift + alt - j : yabai -m window --swap south
 shift + alt - k : yabai -m window --swap north
 shift + alt - h : yabai -m window --swap west
 shift + alt - l : yabai -m window --swap east
-
-# move window and split
-ctrl + alt - j : yabai -m window --warp south
-ctrl + alt - k : yabai -m window --warp north
-ctrl + alt - h : yabai -m window --warp west
-ctrl + alt - l : yabai -m window --warp east
 
 # move window to display left and right
 shift + alt - s : yabai -m window --display west; yabai -m display --focus west;
@@ -59,6 +57,12 @@ alt - i : yabai -m window --space 3;
 alt - o : yabai -m window --space 4;
 alt - p : yabai -m window --space 5;
 
-# app shortcuts
+# }}}
+
+#: App shortcuts {{{
+
 cmd + alt - s : open -n -a "System Settings.app"
 cmd + alt - f : open -n -a "Firefox Developer Edition"
+cmd + alt - k : open -n -a "kitty"
+
+# }}}
