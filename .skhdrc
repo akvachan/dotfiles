@@ -51,11 +51,11 @@ shift + alt - p : yabai -m window --space prev;
 shift + alt - n : yabai -m window --space next;
 
 # move window to space #
-alt - y : yabai -m window --space 1;
-alt - u : yabai -m window --space 2;
-alt - i : yabai -m window --space 3;
-alt - o : yabai -m window --space 4;
-alt - p : yabai -m window --space 5;
+shift + alt - 1 : yabai -m window --space 1;
+shift + alt - 2 : yabai -m window --space 2;
+shift + alt - 3 : yabai -m window --space 3;
+shift + alt - 4 : yabai -m window --space 4;
+shift + alt - 5 : yabai -m window --space 5;
 
 # }}}
 

@@ -32,6 +32,7 @@ opt.splitbelow = true     -- Horizontal splits open below
 opt.splitright = true     -- Vertical splits open to the right
 opt.termguicolors = true  -- Enable true color support
 opt.signcolumn = 'yes'    -- Always show the sign column
+
 -- }}}
 
 -- }}}
@@ -39,6 +40,7 @@ opt.signcolumn = 'yes'    -- Always show the sign column
 --: {{{ Plugins
 
 --: {{{ Lazy.nvim
+
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
@@ -49,7 +51,8 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
-  -- }}}
+
+-- }}}
 
 --: {{{ File explorer
 
@@ -152,6 +155,14 @@ require("lazy").setup({
 
 -- }}}
 
+--: {{{ Visual Increment
+
+  {
+    "https://github.com/triglav/vim-visual-increment"
+  },
+
+-- }}}
+
 --: {{{ Color Theme
 
   {
@@ -166,13 +177,12 @@ require("lazy").setup({
 
 -- }}}
 
+
 -- }}}
 
 --: {{{ Plugins Settings
 
 --: {{{ NERDTree
-
-vim.keymap.set('n', '<C-f>', ':NERDTreeToggleInCurDir<CR>', { noremap = true, silent = true })
 
 -- Function to toggle NERDTree in the current directory
 local function toggle_nerdtree_in_cur_dir()
@@ -352,6 +362,12 @@ cmp.setup({
 
 --: {{{ Keybindings
 
+--: {{{ NERDTree
+
+vim.keymap.set('n', '<leader>nt', ':NERDTreeToggleInCurDir<CR>', { noremap = true, silent = true })
+
+-- }}}
+
 --: {{{ Telescope
 
 vim.keymap.set('n', '<leader>ff', '<cmd>Telescope find_files<CR>', { noremap = true, silent = true })
@@ -440,15 +456,6 @@ vim.keymap.set('n', '<leader>cp', ':cprevious<CR>', { noremap = true, silent = t
 
 -- }}}
 
---: {{{ Search and Replace with Current Word
-
-vim.keymap.set('n', '<leader>s', function()
-  local current_word = vim.fn.expand("<cword>")
-  vim.cmd('s/' .. current_word .. '/')
-end, { noremap = true, silent = true })
-
--- }}}
-
 --: {{{ Toggle Relative Line Numbers
 
 vim.keymap.set('n', '<leader>n', ':set relativenumber!<CR>', { noremap = true, silent = true })
@@ -464,8 +471,12 @@ vim.keymap.set('n', '<leader>k', 'kS', { noremap = true, silent = true })
 
 --: Indent Lines Left and Right {{{
 
+vim.keymap.set('n', '>', '>gv', { noremap = true, silent = true })
+vim.keymap.set('v', '>', '>gv', { noremap = true, silent = true })
+
+-- Decrease indentation with '<'
+vim.keymap.set('n', '<', '<gv', { noremap = true, silent = true })
 vim.keymap.set('v', '<', '<gv', { noremap = true, silent = true })
-vim.keymap.set('v', '<', '>gv', { noremap = true, silent = true })
 
 -- }}}
 

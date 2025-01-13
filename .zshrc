@@ -82,4 +82,11 @@ export VULKAN_SDK=/Users/arseniikvachan/VulkanSDK/1.3.290.0
 
 # }}}
 
+#: z {{{
+
+# If installed via Homebrew
+echo ". /opt/homebrew/etc/profile.d/z.sh" >> ~/.bashrc
+
+# }}}
+
 # }}}
