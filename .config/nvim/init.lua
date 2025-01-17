@@ -364,7 +364,7 @@ cmp.setup({
 
 --: {{{ NERDTree
 
-vim.keymap.set('n', '<leader>nt', ':NERDTreeToggleInCurDir<CR>', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>.', ':NERDTreeToggleInCurDir<CR>', { noremap = true, silent = true })
 
 -- }}}
 
@@ -471,12 +471,10 @@ vim.keymap.set('n', '<leader>k', 'kS', { noremap = true, silent = true })
 
 --: Indent Lines Left and Right {{{
 
-vim.keymap.set('n', '>', '>gv', { noremap = true, silent = true })
-vim.keymap.set('v', '>', '>gv', { noremap = true, silent = true })
-
--- Decrease indentation with '<'
-vim.keymap.set('n', '<', '<gv', { noremap = true, silent = true })
+vim.keymap.set('n', '<', '<<', { noremap = true, silent = true })
+vim.keymap.set('n', '>', '>>', { noremap = true, silent = true })
 vim.keymap.set('v', '<', '<gv', { noremap = true, silent = true })
+vim.keymap.set('v', '>', '>gv', { noremap = true, silent = true })
 
 -- }}}
 
