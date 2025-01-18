@@ -94,17 +94,17 @@ map('n', 'gi', vim.lsp.buf.implementation, opts)        -- Go to implementation
 map('n', '<leader>rn', vim.lsp.buf.rename, opts)        -- Rename symbol
 map('n', '<leader>ca', vim.lsp.buf.code_action, opts)   -- Code actions
 map('n', '<leader>f', vim.lsp.buf.format, opts)         -- Format code
-map('n', 'K', vim.lsp.buf.hover, opts)                 -- Hover documentation
+map('n', 'K', vim.lsp.buf.hover, opts)                  -- Hover documentation
 map('n', '<C-k>', vim.lsp.buf.signature_help, opts)     -- Signature help
 map('n', '<leader>cd', vim.diagnostic.open_float, opts) -- Show detailed diagnostics in a floating window
 map('n', '<leader>dd', vim.diagnostic.setqflist, opts)  -- Send all diagnostics to the quickfix list
 
 -- Telescope Keymaps
-map('n', '<leader>ff', '<cmd>Telescope find_files<CR>', opts)  -- Find files
-map('n', '<leader>fg', '<cmd>Telescope live_grep<CR>', opts)   -- Live grep
-map('n', '<leader>fb', '<cmd>Telescope buffers<CR>', opts)     -- List open buffers
-map('n', '<leader>fh', '<cmd>Telescope help_tags<CR>', opts)   -- Help tags
-map('n', '<leader>fo', '<cmd>Telescope oldfiles<CR>', opts)    -- Recently opened files
+map('n', '<leader>ff', '<cmd>Telescope find_files<CR>', opts) -- Find files
+map('n', '<leader>fg', '<cmd>Telescope live_grep<CR>', opts)  -- Live grep
+map('n', '<leader>fb', '<cmd>Telescope buffers<CR>', opts)    -- List open buffers
+map('n', '<leader>fh', '<cmd>Telescope help_tags<CR>', opts)  -- Help tags
+map('n', '<leader>fo', '<cmd>Telescope oldfiles<CR>', opts)   -- Recently opened files
 
 -- }}}
 
@@ -126,10 +126,35 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup({
   -- LSP Plugins
   { 'neovim/nvim-lspconfig' },
-  { 'williamboman/mason.nvim', config = true },
+  { 'williamboman/mason.nvim',           config = true },
   { 'williamboman/mason-lspconfig.nvim', config = true },
+
   -- Telescope
-  { 'nvim-telescope/telescope.nvim', tag = '0.1.1', dependencies = { 'nvim-lua/plenary.nvim' } },
+  { 'nvim-telescope/telescope.nvim',     tag = '0.1.1', dependencies = { 'nvim-lua/plenary.nvim' } },
+
+  -- File manager
+  {
+    "https://github.com/stevearc/oil.nvim",
+    config = function()
+      require("oil").setup()
+    end,
+    keys = {
+      { "-", "<cmd>Oil<CR>", desc = "Browse files from here" },
+    },
+  },
+
+  -- Git integration
+  {
+    "NeogitOrg/neogit",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "sindrets/diffview.nvim",
+      "nvim-telescope/telescope.nvim",
+    },
+    config = true
+  }
+
+
 })
 
 -- }}}
