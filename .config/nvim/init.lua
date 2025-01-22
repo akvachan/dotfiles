@@ -26,6 +26,7 @@ opt.updatetime = 100      -- Reduce update time for responsiveness
 opt.splitbelow = true     -- Horizontal splits open below
 opt.splitright = true     -- Vertical splits open to the right
 opt.signcolumn = 'yes'    -- Always show the sign column
+vim.opt.swapfile = false  -- Disable swap files
 opt.backup = false        -- Disable backup files
 opt.writebackup = false   -- Disable backup before overwriting files
 opt.undofile = true       -- Enable persistent undo
@@ -77,8 +78,8 @@ map('n', '{', '{zz', opts)
 -- Quickfix
 map('n', '<leader>co', ':copen<CR>', opts)
 map('n', '<leader>cc', ':cclose<CR>', opts)
-map('n', '<leader>cn', ':cnext<CR>', opts)
-map('n', '<leader>cp', ':cprevious<CR>', opts)
+map('n', '<leader>cn', ':cnext<CR>zz', opts)
+map('n', '<leader>cp', ':cprevious<CR>zz', opts)
 
 -- Indentation
 map('n', '<', '<<', opts)
@@ -93,18 +94,41 @@ map('n', 'gr', vim.lsp.buf.references, opts)            -- List references
 map('n', 'gi', vim.lsp.buf.implementation, opts)        -- Go to implementation
 map('n', '<leader>rn', vim.lsp.buf.rename, opts)        -- Rename symbol
 map('n', '<leader>ca', vim.lsp.buf.code_action, opts)   -- Code actions
-map('n', '<leader>f', vim.lsp.buf.format, opts)         -- Format code
+map('n', '<leader>bf', vim.lsp.buf.format, opts)        -- Format code
 map('n', 'K', vim.lsp.buf.hover, opts)                  -- Hover documentation
-map('n', '<C-k>', vim.lsp.buf.signature_help, opts)     -- Signature help
+map('n', '<leader>sh', vim.lsp.buf.signature_help, opts)     -- Signature help
 map('n', '<leader>cd', vim.diagnostic.open_float, opts) -- Show detailed diagnostics in a floating window
-map('n', '<leader>dd', vim.diagnostic.setqflist, opts)  -- Send all diagnostics to the quickfix list
+map('n', '<leader>gf', vim.diagnostic.setqflist, opts)  -- Send all diagnostics to the quickfix list
 
 -- Telescope Keymaps
-map('n', '<leader>ff', '<cmd>Telescope find_files<CR>', opts) -- Find files
+map('n', '<leader>ff', '<cmd>Telescope find_files hidden=true no_ignore=true<CR>', opts) -- Find files
 map('n', '<leader>fg', '<cmd>Telescope live_grep<CR>', opts)  -- Live grep
 map('n', '<leader>fb', '<cmd>Telescope buffers<CR>', opts)    -- List open buffers
 map('n', '<leader>fh', '<cmd>Telescope help_tags<CR>', opts)  -- Help tags
 map('n', '<leader>fo', '<cmd>Telescope oldfiles<CR>', opts)   -- Recently opened files
+
+-- Clipboard
+map({'n', 'v'}, '<leader>y', '"+y', opts)
+map({'n', 'v'}, '<leader>p', '"+p', opts)
+
+-- Removal
+map({"n", "v"}, "<leader>d", "\"_d") -- Remove without overwriting register content
+
+--- Search and replace
+map('n', ';;', ':%s:::g<Left><Left><Left>', {noremap = true, silent = false})
+map('n', ";'", ':%s:::cg<Left><Left><Left><Left>', {noremap = true,
+silent = false})
+map('c', ";\\", '\\(\\)<Left><Left>', {noremap = true, silent = false})
+
+-- Command mode navigation
+map('c', '<C-a>', '<Home>', {noremap = true, silent = false})
+map('c', '<C-e>', '<End>', {noremap = true, silent = false})
+map('c', '<C-p>', '<Up>', {noremap = true, silent = false})
+map('c', '<C-n>', '<Down>', {noremap = true, silent = false})
+map('c', '<C-b>', '<Left>', {noremap = true, silent = false})
+map('c', '<C-f>', '<Right>', {noremap = true, silent = false})
+map('c', '<M-b>', '<S-Left>', {noremap = true, silent = false})
+map('c', '<M-f>', '<S-Right>', {noremap = true, silent = false})
 
 -- }}}
 
@@ -164,26 +188,42 @@ require('lazy').setup({
 local lspconfig = require('lspconfig')
 require('mason').setup()
 require('mason-lspconfig').setup({
-  ensure_installed = { 'lua_ls', 'ts_ls', 'pyright', 'clangd' },
+ ensure_installed = { 'lua_ls', 'ts_ls', 'pylsp', 'clangd' },
 })
 
 -- Lua
 lspconfig.lua_ls.setup({
-  settings = {
-    Lua = {
-      diagnostics = { globals = { 'vim' } },
-    },
-  },
+ settings = {
+   Lua = {
+     diagnostics = { globals = { 'vim' } },
+   },
+ },
 })
 
 -- TypeScript
-lspconfig.ts_ls.setup({})
+lspconfig.ts_ls.setup({
+ root_dir = lspconfig.util.root_pattern('.git'),
+})
 
 -- Python
-lspconfig.pyright.setup({})
+lspconfig.pylsp.setup({
+ settings = {
+   pylsp = {
+     plugins = {
+       pycodestyle = {
+         ignore = { "E501" },
+         maxLineLength = 120,
+       },
+     },
+   },
+ },
+ root_dir = lspconfig.util.root_pattern('.git'),
+})
 
 -- C++
-lspconfig.clangd.setup({})
+lspconfig.clangd.setup({
+ root_dir = lspconfig.util.root_pattern('.git'),
+})
 
 -- Disable inline diagnostics
 vim.diagnostic.config({
