@@ -87,10 +87,10 @@ map('n', 'gd', vim.lsp.buf.definition, opts)            -- Go to definition
 map('n', 'gD', vim.lsp.buf.declaration, opts)           -- Go to declaration
 map('n', 'gr', vim.lsp.buf.references, opts)            -- List references
 map('n', 'gi', vim.lsp.buf.implementation, opts)        -- Go to implementation
+map('n', 'K', vim.lsp.buf.hover, opts)                  -- Hover documentation
 map('n', '<leader>rn', vim.lsp.buf.rename, opts)        -- Rename symbol
 map('n', '<leader>ca', vim.lsp.buf.code_action, opts)   -- Code actions
-map('n', '<leader>bf', vim.lsp.buf.format, opts)        -- Format code
-map('n', 'K', vim.lsp.buf.hover, opts)                  -- Hover documentation
+map('n', '<leader>fo', vim.lsp.buf.format, opts)        -- Format code
 map('n', '<leader>cd', vim.diagnostic.open_float, opts) -- Show diagnostics in a float
 map('n', '<leader>gf', vim.diagnostic.setqflist, opts)  -- List diagnostics
 
@@ -100,6 +100,21 @@ map({ 'n', 'v' }, '<leader>p', '"+p', opts)
 
 -- Removal (delete without yanking)
 map({ "n", "v" }, "<leader>d", "\"_d", opts)
+
+-- Oil
+map({ "n", "v" }, "-", ":Oil<CR>", opts)
+
+-- Quickfix
+map('n', '<leader>co', ':copen<CR>', opts)
+map('n', '<leader>cc', ':cclose<CR>', opts)
+map('n', '<leader>cn', ':cnext<CR>', opts)
+map('n', '<leader>ce', ':cend<CR>', opts)
+map('n', '<leader>cp', ':cprev<CR>', opts)
+map('n', '<leader>cb', ':cbegin<CR>', opts)
+
+-- Init.lua
+map('n', '<C-,>', ':e $MYVIMRC<CR>', opts)
+map('n', '<C-.>', ':so%<CR>', opts)
 
 -- }}}
 
@@ -127,8 +142,6 @@ require('lazy').setup({
       'hrsh7th/cmp-buffer',
       'hrsh7th/cmp-path',
       'hrsh7th/cmp-cmdline',
-      'L3MON4D3/LuaSnip',
-      'saadparwaiz1/cmp_luasnip'
     },
     config = function()
       require('cmp').setup({
@@ -138,9 +151,9 @@ require('lazy').setup({
           end,
         },
         mapping = {
-          ['<Tab>'] = require('cmp').mapping.select_next_item(),
-          ['<S-Tab>'] = require('cmp').mapping.select_prev_item(),
-          ['<CR>'] = require('cmp').mapping.confirm({ select = true }),
+          ['<down>'] = require('cmp').mapping.select_next_item(),
+          ['<up>'] = require('cmp').mapping.select_prev_item(),
+          ['<TAB>'] = require('cmp').mapping.confirm({ select = true }),
         },
         sources = {
           { name = 'nvim_lsp' },
