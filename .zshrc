@@ -66,7 +66,7 @@ export EDITOR='nvim'
 
 source <(fzf --zsh)
 export FZF_BASE="/opt/homebrew/Cellar/fzf/0.56.3"
-export DISABLE_FZF_AUTO_COMPLETION="true"
+export DISABLE_FZF_AUTO_COMPLETION="false"
 export DISABLE_FZF_KEY_BINDINGS="false"
 
 # }}}

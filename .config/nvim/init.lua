@@ -163,6 +163,7 @@ require('lazy').setup({
       })
     end
   },
+
   {
     'ibhagwan/fzf-lua',
     keys = {
@@ -200,13 +201,18 @@ require('lazy').setup({
       })
     end
   },
+
   { 'williamboman/mason.nvim',           event = 'BufReadPre' },
+
   { 'williamboman/mason-lspconfig.nvim', event = 'BufReadPre' },
+
   {
     'neovim/nvim-lspconfig',
     ft = { 'lua', 'typescript', 'python', 'cpp' }
   },
+
   { 'stevearc/oil.nvim', cmd = 'Oil' },
+
 }, {
   performance = {
     rtp = {
