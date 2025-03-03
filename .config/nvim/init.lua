@@ -67,7 +67,6 @@ local map = vim.keymap.set
 local opts = { noremap = true, silent = true }
 
 -- General Keymaps
-map('n', ';', ':', { noremap = true, silent = false })
 map('n', '<leader>w', ':w<CR>', opts)
 map('n', '<leader>q', ':q!<CR>', opts)
 map('n', '<leader>h', ':noh<CR>', opts)
@@ -112,10 +111,6 @@ map('n', '<leader>ce', ':cend<CR>', opts)
 map('n', '<leader>cp', ':cprev<CR>', opts)
 map('n', '<leader>cb', ':cbegin<CR>', opts)
 
--- Init.lua
-map('n', '<C-,>', ':e $MYVIMRC<CR>', opts)
-map('n', '<C-.>', ':so%<CR>', opts)
-
 -- }}}
 
 --: {{{ Plugin Manager (Lazy)
@@ -142,6 +137,10 @@ require('lazy').setup({
       'hrsh7th/cmp-buffer',
       'hrsh7th/cmp-path',
       'hrsh7th/cmp-cmdline',
+      {
+        "L3MON4D3/LuaSnip",
+        build = "make install_jsregexp"
+      }
     },
     config = function()
       require('cmp').setup({
@@ -151,9 +150,9 @@ require('lazy').setup({
           end,
         },
         mapping = {
-          ['<down>'] = require('cmp').mapping.select_next_item(),
-          ['<up>'] = require('cmp').mapping.select_prev_item(),
-          ['<TAB>'] = require('cmp').mapping.confirm({ select = true }),
+          ['<TAB>'] = require('cmp').mapping.select_next_item(),
+          ['<S-TAB>'] = require('cmp').mapping.select_prev_item(),
+          ['<CR>'] = require('cmp').mapping.confirm({ select = true }),
         },
         sources = {
           { name = 'nvim_lsp' },
