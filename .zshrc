@@ -17,6 +17,8 @@ zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 plugins=(
   git
   fzf
+  zsh-syntax-highlighting
+  fancy-ctrl-z
 )
 
 # }}}
@@ -91,3 +93,7 @@ echo ". /opt/homebrew/etc/profile.d/z.sh" >> ~/.bashrc
 # }}}
 
 # }}}
+
+export STM32CubeMX_PATH=/Applications/STMicroelectronics/STM32CubeMX.app/Contents/Resources
+
+export STM32_PRG_PATH=/Applications/STMicroelectronics/STM32Cube/STM32CubeProgrammer/STM32CubeProgrammer.app/Contents/MacOs/bin

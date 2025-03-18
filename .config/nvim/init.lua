@@ -10,7 +10,6 @@ opt.number = true                    -- Show absolute line numbers
 opt.relativenumber = true            -- Show relative line numbers
 opt.tabstop = 2                      -- Number of spaces tabs count for
 opt.shiftwidth = 2                   -- Number of spaces for autoindent
-opt.synmaxcol = 200
 opt.expandtab = true                 -- Use spaces instead of tabs
 opt.autoindent = true                -- Auto-indent new lines
 opt.wrap = false                     -- Disable line wrapping
@@ -21,7 +20,7 @@ opt.ignorecase = true                -- Ignore case
 opt.termguicolors = true             -- Enable 24-bit color
 opt.foldmethod = 'marker'            -- Use markers for folding
 opt.foldenable = true                -- Enable folding
-opt.foldlevel = 99                   -- Open all folds by default
+opt.foldlevel = 0                    -- Always fold
 opt.updatetime = 50                  -- Reduce update time for responsiveness
 opt.splitbelow = true                -- Horizontal splits open below
 opt.splitright = true                -- Vertical splits open to the right
@@ -68,18 +67,16 @@ local opts = { noremap = true, silent = true }
 
 -- General Keymaps
 map('n', '<leader>w', ':w<CR>', opts)
+map('n', '<leader>l', ':Lazy<CR>', opts)
 map('n', '<leader>q', ':q!<CR>', opts)
 map('n', '<leader>h', ':noh<CR>', opts)
+map('n', '\\', ':term <Right><Right><Right><Right><Right>', { noremap = true, silent = false })
 
 -- Window Navigation
 map('n', '<up>', '<C-w>k', opts)
 map('n', '<down>', '<C-w>j', opts)
 map('n', '<left>', '<C-w>h', opts)
 map('n', '<right>', '<C-w>l', opts)
-
--- Moving Lines
-map('n', '<C-j>', ':m .+1<CR>==', opts)
-map('n', '<C-k>', ':m .-2<CR>==', opts)
 
 -- LSP Keymaps
 map('n', 'gd', vim.lsp.buf.definition, opts)            -- Go to definition
@@ -113,7 +110,7 @@ map('n', '<leader>cb', ':cbegin<CR>', opts)
 
 -- }}}
 
---: {{{ Plugin Manager (Lazy)
+--: {{{ Plugins
 
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
 if not vim.loop.fs_stat(lazypath) then
@@ -143,16 +140,18 @@ require('lazy').setup({
       }
     },
     config = function()
-      require('cmp').setup({
+      local cmp = require('cmp')
+      cmp.setup({
         snippet = {
           expand = function(args)
             require('luasnip').lsp_expand(args.body)
           end,
         },
         mapping = {
-          ['<TAB>'] = require('cmp').mapping.select_next_item(),
-          ['<S-TAB>'] = require('cmp').mapping.select_prev_item(),
-          ['<CR>'] = require('cmp').mapping.confirm({ select = true }),
+          ['<C-j>'] = require('cmp').mapping.select_next_item(),
+          ['<C-k>'] = require('cmp').mapping.select_prev_item(),
+          ['<C-c>'] = require('cmp').mapping.close(),
+          ['<Tab>'] = require('cmp').mapping.confirm({ select = true }),
         },
         sources = {
           { name = 'nvim_lsp' },
@@ -212,6 +211,14 @@ require('lazy').setup({
 
   { 'stevearc/oil.nvim', cmd = 'Oil' },
 
+  {
+    "kylechui/nvim-surround",
+    event = "VeryLazy",
+    config = function()
+      require("nvim-surround").setup({
+      })
+    end
+  }
 }, {
   performance = {
     rtp = {
@@ -236,7 +243,7 @@ require("oil").setup()
 
 -- }}}
 
---: {{{ LSP Configuration
+--: {{{ LSP
 
 local lspconfig = require('lspconfig')
 
