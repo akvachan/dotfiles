@@ -67,7 +67,7 @@ alt - o : yabai --stop-service
 #: App shortcuts {{{
 
 cmd + alt - s : open -n -a "System Settings.app"
-cmd + alt - f : open -n -a "Firefox Developer Edition"
-cmd + alt - k : open -n -a "kitty"
+cmd + alt - b : open -n -a "Safari"
+cmd + alt - t : open -n -a "Ghostty"
 
 # }}}

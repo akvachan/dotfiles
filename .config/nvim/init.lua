@@ -218,7 +218,8 @@ require('lazy').setup({
       require("nvim-surround").setup({
       })
     end
-  }
+  },
+
 }, {
   performance = {
     rtp = {
@@ -238,8 +239,7 @@ require('lazy').setup({
   checker = { enabled = false },
 })
 
-require("oil").setup()
-
+require('oil').setup()
 
 -- }}}
 
