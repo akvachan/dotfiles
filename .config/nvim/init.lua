@@ -60,6 +60,21 @@ vim.api.nvim_create_autocmd("VimResized", {
 
 -- }}}
 
+--: {{{ Custom Functions
+
+function RemoveTerminalBuffers()
+  local buffers = vim.api.nvim_list_bufs()
+  for _, buf in ipairs(buffers) do
+    if vim.api.nvim_buf_get_option(buf, 'buftype') == 'terminal' then
+      vim.api.nvim_buf_delete(buf, { force = true })
+    end
+  end
+end
+
+vim.api.nvim_create_user_command('RmTerms', RemoveTerminalBuffers, {})
+
+-- }}}
+
 --: {{{ Keymaps
 
 local map = vim.keymap.set

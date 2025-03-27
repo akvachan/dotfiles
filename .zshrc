@@ -50,6 +50,10 @@ alias ohmyzsh="nvim ~/.oh-my-zsh"
 alias config="/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME"
 alias dev="cd ~/Development"
 alias dow="cd ~/Downloads"
+alias sleep="sudo shutdown -s now"
+alias restart="sudo shutdown -r now"
+alias out="sudo pkill loginwindow"
+alias shutdown="sudo shutdown -h now"
 
 # }}}
 
@@ -70,6 +74,7 @@ source <(fzf --zsh)
 export FZF_BASE="/opt/homebrew/Cellar/fzf/0.56.3"
 export DISABLE_FZF_AUTO_COMPLETION="false"
 export DISABLE_FZF_KEY_BINDINGS="false"
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
 
 # }}}
 
@@ -92,8 +97,13 @@ echo ". /opt/homebrew/etc/profile.d/z.sh" >> ~/.bashrc
 
 # }}}
 
-# }}}
+#: STM32CubeMX {{{
 
 export STM32CubeMX_PATH=/Applications/STMicroelectronics/STM32CubeMX.app/Contents/Resources
-
 export STM32_PRG_PATH=/Applications/STMicroelectronics/STM32Cube/STM32CubeProgrammer/STM32CubeProgrammer.app/Contents/MacOs/bin
+
+# }}}
+
+
+# }}}
+
