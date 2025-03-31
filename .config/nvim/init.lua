@@ -1,45 +1,58 @@
 --: {{{ Basic Settings
 
 -- Leader Key
-vim.g.mapleader = ' '
-vim.g.maplocalleader = ' '
+vim.g.mapleader                 = ' '
+vim.g.maplocalleader            = ' '
 
--- General Settings
-local opt = vim.opt
-opt.number = true                    -- Show absolute line numbers
-opt.relativenumber = true            -- Show relative line numbers
-opt.tabstop = 2                      -- Number of spaces tabs count for
-opt.shiftwidth = 2                   -- Number of spaces for autoindent
-opt.expandtab = true                 -- Use spaces instead of tabs
-opt.autoindent = true                -- Auto-indent new lines
-opt.wrap = false                     -- Disable line wrapping
-opt.hlsearch = true                  -- Highlight search results
-opt.incsearch = true                 -- Incremental search
-opt.smartcase = true                 -- Smart case sensitivity for search
-opt.ignorecase = true                -- Ignore case
-opt.termguicolors = true             -- Enable 24-bit color
-opt.foldmethod = 'marker'            -- Use markers for folding
-opt.foldenable = true                -- Enable folding
-opt.foldlevel = 0                    -- Always fold
-opt.updatetime = 50                  -- Reduce update time for responsiveness
-opt.splitbelow = true                -- Horizontal splits open below
-opt.splitright = true                -- Vertical splits open to the right
-opt.signcolumn = 'yes'               -- Always show the sign column
-opt.swapfile = false                 -- Disable swap files
-opt.backup = false                   -- Disable backup files
-opt.writebackup = false              -- Disable backup before overwriting files
-opt.background = 'dark'              -- Set background to dark
-opt.equalalways = true               -- Always auto-balance splits
-vim.g.matchparen_timeout = 20        -- Set timeout for parenthesis matching
-vim.g.matchparen_insert_timeout = 20 -- Set timeout for parenthesis insertion
+-- Disable unused built-in plugins for performance
+vim.g.loaded_netrw              = 1
+vim.g.loaded_netrwPlugin        = 1
+vim.g.loaded_tar                = 1
+vim.g.loaded_tarPlugin          = 1
+vim.g.loaded_zip                = 1
+vim.g.loaded_zipPlugin          = 1
+vim.g.loaded_gzip               = 1
+vim.g.loaded_matchparen         = 1
 
-if vim.fn.executable("rg") then
-  -- if ripgrep installed, use that as a grepper
-  vim.opt.grepprg = "rg --vimgrep --no-heading --smart-case"
-  vim.opt.grepformat = "%f:%l:%c:%m,%f:%l:%m"
+-- General Editor Options
+local opt                       = vim.opt
+opt.number                      = true     -- Show absolute line numbers
+opt.relativenumber              = true     -- Show relative line numbers
+opt.tabstop                     = 2        -- Number of spaces tabs count for
+opt.shiftwidth                  = 2        -- Spaces for auto-indent
+opt.expandtab                   = true     -- Use spaces instead of tabs
+opt.autoindent                  = true     -- Auto-indent new lines
+opt.wrap                        = false    -- Disable line wrapping
+opt.hlsearch                    = true     -- Highlight search results
+opt.incsearch                   = true     -- Incremental search
+opt.smartcase                   = true     -- Smart case sensitivity for search
+opt.ignorecase                  = true     -- Ignore case
+opt.termguicolors               = true     -- Enable 24-bit color
+opt.foldmethod                  = 'marker' -- Use markers for folding
+opt.foldenable                  = true     -- Enable folding
+opt.foldlevel                   = 0        -- Always fold
+opt.updatetime                  = 50       -- Faster responsiveness
+opt.splitbelow                  = true     -- Horizontal splits open below
+opt.splitright                  = true     -- Vertical splits open to the right
+opt.signcolumn                  = 'yes'    -- Always show the sign column
+opt.swapfile                    = false    -- Disable swap files
+opt.backup                      = false    -- Disable backup files
+opt.writebackup                 = false    -- Disable backup before overwriting files
+opt.background                  = 'dark'   -- Set background to dark
+opt.equalalways                 = true     -- Always auto-balance splits
+opt.lazyredraw                  = true     -- Optimize screen redraw during macros
+
+-- Parenthesis matching timeouts
+vim.g.matchparen_timeout        = 20
+vim.g.matchparen_insert_timeout = 20
+
+-- Use ripgrep if installed
+if vim.fn.executable("rg") == 1 then
+  opt.grepprg = "rg --vimgrep --no-heading --smart-case"
+  opt.grepformat = "%f:%l:%c:%m,%f:%l:%m"
 end
 
--- }}}
+--: }}}
 
 --: {{{ Plugins
 
@@ -79,10 +92,10 @@ require('lazy').setup({
           end,
         },
         mapping = {
-          ['<C-j>'] = require('cmp').mapping.select_next_item(),
-          ['<C-k>'] = require('cmp').mapping.select_prev_item(),
-          ['<C-c>'] = require('cmp').mapping.close(),
-          ['<Tab>'] = require('cmp').mapping.confirm({ select = true }),
+          ['<C-j>'] = cmp.mapping.select_next_item(),
+          ['<C-k>'] = cmp.mapping.select_prev_item(),
+          ['<C-c>'] = cmp.mapping.close(),
+          ['<Tab>'] = cmp.mapping.confirm({ select = true }),
         },
         sources = {
           { name = 'nvim_lsp' },
@@ -132,25 +145,16 @@ require('lazy').setup({
   },
 
   { 'williamboman/mason.nvim',           event = 'BufReadPre' },
-
   { 'williamboman/mason-lspconfig.nvim', event = 'BufReadPre' },
-
-  {
-    'neovim/nvim-lspconfig',
-    ft = { 'lua', 'typescript', 'python', 'cpp' }
-  },
-
-  { 'stevearc/oil.nvim', cmd = 'Oil' },
-
+  { 'neovim/nvim-lspconfig',             ft = { 'lua', 'typescript', 'python', 'cpp' } },
+  { 'stevearc/oil.nvim',                 cmd = 'Oil' },
   {
     "kylechui/nvim-surround",
     event = "VeryLazy",
     config = function()
-      require("nvim-surround").setup({
-      })
+      require("nvim-surround").setup()
     end
   },
-
 }, {
   performance = {
     rtp = {
@@ -166,47 +170,40 @@ require('lazy').setup({
       },
     },
   },
-}, {
   checker = { enabled = false },
 })
 
 require('oil').setup()
 
--- }}}
+--: }}}
 
 --: {{{ Autocommands
 
--- Cursor moved: center the screen
-vim.api.nvim_create_autocmd("CursorMoved", {
-  callback = function()
-    vim.cmd("normal! zz")
+-- Combined autocmd for performance: minimize callbacks during cursor and window events.
+vim.api.nvim_create_autocmd({ "CursorMoved", "VimResized" }, {
+  callback = function(event)
+    if event.event == "CursorMoved" then
+      vim.cmd("normal! zz")
+    else
+      vim.cmd("wincmd =")
+    end
   end,
 })
 
--- Window resized: rebalance splits
-vim.api.nvim_create_autocmd("VimResized", {
-  pattern = "*",
-  callback = function()
-    vim.cmd("wincmd =")
-  end,
-})
-
--- }}}
+--: }}}
 
 --: {{{ Custom Functions
 
-function RemoveTerminalBuffers()
-  local buffers = vim.api.nvim_list_bufs()
-  for _, buf in ipairs(buffers) do
+local function RemoveTerminalBuffers()
+  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
     if vim.api.nvim_buf_get_option(buf, 'buftype') == 'terminal' then
       vim.api.nvim_buf_delete(buf, { force = true })
     end
   end
 end
-
 vim.api.nvim_create_user_command('RmTerms', RemoveTerminalBuffers, {})
 
--- }}}
+--: }}}
 
 --: {{{ Keymaps
 
@@ -227,16 +224,16 @@ map('n', '<left>', '<C-w>h', opts)
 map('n', '<right>', '<C-w>l', opts)
 
 -- LSP Keymaps
-map('n', 'gd', vim.lsp.buf.definition, opts)            -- Go to definition
-map('n', 'gD', vim.lsp.buf.declaration, opts)           -- Go to declaration
-map('n', 'gr', vim.lsp.buf.references, opts)            -- List references
-map('n', 'gi', vim.lsp.buf.implementation, opts)        -- Go to implementation
-map('n', 'K', vim.lsp.buf.hover, opts)                  -- Hover documentation
-map('n', '<leader>rn', vim.lsp.buf.rename, opts)        -- Rename symbol
-map('n', '<leader>ca', vim.lsp.buf.code_action, opts)   -- Code actions
-map('n', '<leader>fo', vim.lsp.buf.format, opts)        -- Format code
-map('n', '<leader>cd', vim.diagnostic.open_float, opts) -- Show diagnostics in a float
-map('n', '<leader>gf', vim.diagnostic.setqflist, opts)  -- List diagnostics
+map('n', 'gd', vim.lsp.buf.definition, opts)
+map('n', 'gD', vim.lsp.buf.declaration, opts)
+map('n', 'gr', vim.lsp.buf.references, opts)
+map('n', 'gi', vim.lsp.buf.implementation, opts)
+map('n', 'K', vim.lsp.buf.hover, opts)
+map('n', '<leader>rn', vim.lsp.buf.rename, opts)
+map('n', '<leader>ca', vim.lsp.buf.code_action, opts)
+map('n', '<leader>fo', vim.lsp.buf.format, opts)
+map('n', '<leader>cd', vim.diagnostic.open_float, opts)
+map('n', '<leader>gf', vim.diagnostic.setqflist, opts)
 
 -- Clipboard
 map({ 'n', 'v' }, '<leader>y', '"+y', opts)
@@ -245,10 +242,10 @@ map({ 'n', 'v' }, '<leader>p', '"+p', opts)
 -- Removal (delete without yanking)
 map({ "n", "v" }, "<leader>d", "\"_d", opts)
 
--- Oil
+-- Oil Explorer
 map({ "n", "v" }, "-", ":Oil<CR>", opts)
 
--- Quickfix
+-- Quickfix Navigation
 map('n', '<leader>co', ':copen<CR>', opts)
 map('n', '<leader>cc', ':cclose<CR>', opts)
 map('n', '<leader>cn', ':cnext<CR>', opts)
@@ -256,7 +253,7 @@ map('n', '<leader>ce', ':cend<CR>', opts)
 map('n', '<leader>cp', ':cprev<CR>', opts)
 map('n', '<leader>cb', ':cbegin<CR>', opts)
 
--- }}}
+--: }}}
 
 --: {{{ LSP
 
@@ -268,7 +265,6 @@ require('mason-lspconfig').setup({
   automatic_installation = true,
 })
 
--- Lua LSP
 lspconfig.lua_ls.setup({
   settings = {
     Lua = {
@@ -277,10 +273,8 @@ lspconfig.lua_ls.setup({
   },
 })
 
--- TypeScript LSP
 lspconfig.ts_ls.setup({})
 
--- Python LSP
 lspconfig.pylsp.setup({
   settings = {
     pylsp = {
@@ -294,10 +288,8 @@ lspconfig.pylsp.setup({
   },
 })
 
--- C++ LSP
 lspconfig.clangd.setup({})
 
--- Disable inline diagnostics
 vim.diagnostic.config({
   virtual_text = false,
   signs = true,
@@ -306,10 +298,10 @@ vim.diagnostic.config({
   severity_sort = true,
 })
 
--- }}}
+--: }}}
 
 --: {{{ Colorscheme
 
 vim.cmd('colorscheme habamax')
 
--- }}}
+--: }}}
