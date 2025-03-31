@@ -41,90 +41,6 @@ end
 
 -- }}}
 
---: {{{ Autocommands
-
--- Cursor moved: center the screen
-vim.api.nvim_create_autocmd("CursorMoved", {
-  callback = function()
-    vim.cmd("normal! zz")
-  end,
-})
-
--- Window resized: rebalance splits
-vim.api.nvim_create_autocmd("VimResized", {
-  pattern = "*",
-  callback = function()
-    vim.cmd("wincmd =")
-  end,
-})
-
--- }}}
-
---: {{{ Custom Functions
-
-function RemoveTerminalBuffers()
-  local buffers = vim.api.nvim_list_bufs()
-  for _, buf in ipairs(buffers) do
-    if vim.api.nvim_buf_get_option(buf, 'buftype') == 'terminal' then
-      vim.api.nvim_buf_delete(buf, { force = true })
-    end
-  end
-end
-
-vim.api.nvim_create_user_command('RmTerms', RemoveTerminalBuffers, {})
-
--- }}}
-
---: {{{ Keymaps
-
-local map = vim.keymap.set
-local opts = { noremap = true, silent = true }
-
--- General Keymaps
-map('n', '<leader>w', ':w<CR>', opts)
-map('n', '<leader>l', ':Lazy<CR>', opts)
-map('n', '<leader>q', ':q!<CR>', opts)
-map('n', '<leader>h', ':noh<CR>', opts)
-map('n', '\\', ':term <Right><Right><Right><Right><Right>', { noremap = true, silent = false })
-
--- Window Navigation
-map('n', '<up>', '<C-w>k', opts)
-map('n', '<down>', '<C-w>j', opts)
-map('n', '<left>', '<C-w>h', opts)
-map('n', '<right>', '<C-w>l', opts)
-
--- LSP Keymaps
-map('n', 'gd', vim.lsp.buf.definition, opts)            -- Go to definition
-map('n', 'gD', vim.lsp.buf.declaration, opts)           -- Go to declaration
-map('n', 'gr', vim.lsp.buf.references, opts)            -- List references
-map('n', 'gi', vim.lsp.buf.implementation, opts)        -- Go to implementation
-map('n', 'K', vim.lsp.buf.hover, opts)                  -- Hover documentation
-map('n', '<leader>rn', vim.lsp.buf.rename, opts)        -- Rename symbol
-map('n', '<leader>ca', vim.lsp.buf.code_action, opts)   -- Code actions
-map('n', '<leader>fo', vim.lsp.buf.format, opts)        -- Format code
-map('n', '<leader>cd', vim.diagnostic.open_float, opts) -- Show diagnostics in a float
-map('n', '<leader>gf', vim.diagnostic.setqflist, opts)  -- List diagnostics
-
--- Clipboard
-map({ 'n', 'v' }, '<leader>y', '"+y', opts)
-map({ 'n', 'v' }, '<leader>p', '"+p', opts)
-
--- Removal (delete without yanking)
-map({ "n", "v" }, "<leader>d", "\"_d", opts)
-
--- Oil
-map({ "n", "v" }, "-", ":Oil<CR>", opts)
-
--- Quickfix
-map('n', '<leader>co', ':copen<CR>', opts)
-map('n', '<leader>cc', ':cclose<CR>', opts)
-map('n', '<leader>cn', ':cnext<CR>', opts)
-map('n', '<leader>ce', ':cend<CR>', opts)
-map('n', '<leader>cp', ':cprev<CR>', opts)
-map('n', '<leader>cb', ':cbegin<CR>', opts)
-
--- }}}
-
 --: {{{ Plugins
 
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
@@ -255,6 +171,90 @@ require('lazy').setup({
 })
 
 require('oil').setup()
+
+-- }}}
+
+--: {{{ Autocommands
+
+-- Cursor moved: center the screen
+vim.api.nvim_create_autocmd("CursorMoved", {
+  callback = function()
+    vim.cmd("normal! zz")
+  end,
+})
+
+-- Window resized: rebalance splits
+vim.api.nvim_create_autocmd("VimResized", {
+  pattern = "*",
+  callback = function()
+    vim.cmd("wincmd =")
+  end,
+})
+
+-- }}}
+
+--: {{{ Custom Functions
+
+function RemoveTerminalBuffers()
+  local buffers = vim.api.nvim_list_bufs()
+  for _, buf in ipairs(buffers) do
+    if vim.api.nvim_buf_get_option(buf, 'buftype') == 'terminal' then
+      vim.api.nvim_buf_delete(buf, { force = true })
+    end
+  end
+end
+
+vim.api.nvim_create_user_command('RmTerms', RemoveTerminalBuffers, {})
+
+-- }}}
+
+--: {{{ Keymaps
+
+local map = vim.keymap.set
+local opts = { noremap = true, silent = true }
+
+-- General Keymaps
+map('n', '<leader>w', ':w<CR>', opts)
+map('n', '<leader>l', ':Lazy<CR>', opts)
+map('n', '<leader>q', ':q!<CR>', opts)
+map('n', '<leader>h', ':noh<CR>', opts)
+map('n', '\\', ':term <Right><Right><Right><Right><Right>', { noremap = true, silent = false })
+
+-- Window Navigation
+map('n', '<up>', '<C-w>k', opts)
+map('n', '<down>', '<C-w>j', opts)
+map('n', '<left>', '<C-w>h', opts)
+map('n', '<right>', '<C-w>l', opts)
+
+-- LSP Keymaps
+map('n', 'gd', vim.lsp.buf.definition, opts)            -- Go to definition
+map('n', 'gD', vim.lsp.buf.declaration, opts)           -- Go to declaration
+map('n', 'gr', vim.lsp.buf.references, opts)            -- List references
+map('n', 'gi', vim.lsp.buf.implementation, opts)        -- Go to implementation
+map('n', 'K', vim.lsp.buf.hover, opts)                  -- Hover documentation
+map('n', '<leader>rn', vim.lsp.buf.rename, opts)        -- Rename symbol
+map('n', '<leader>ca', vim.lsp.buf.code_action, opts)   -- Code actions
+map('n', '<leader>fo', vim.lsp.buf.format, opts)        -- Format code
+map('n', '<leader>cd', vim.diagnostic.open_float, opts) -- Show diagnostics in a float
+map('n', '<leader>gf', vim.diagnostic.setqflist, opts)  -- List diagnostics
+
+-- Clipboard
+map({ 'n', 'v' }, '<leader>y', '"+y', opts)
+map({ 'n', 'v' }, '<leader>p', '"+p', opts)
+
+-- Removal (delete without yanking)
+map({ "n", "v" }, "<leader>d", "\"_d", opts)
+
+-- Oil
+map({ "n", "v" }, "-", ":Oil<CR>", opts)
+
+-- Quickfix
+map('n', '<leader>co', ':copen<CR>', opts)
+map('n', '<leader>cc', ':cclose<CR>', opts)
+map('n', '<leader>cn', ':cnext<CR>', opts)
+map('n', '<leader>ce', ':cend<CR>', opts)
+map('n', '<leader>cp', ':cprev<CR>', opts)
+map('n', '<leader>cb', ':cbegin<CR>', opts)
 
 -- }}}
 
