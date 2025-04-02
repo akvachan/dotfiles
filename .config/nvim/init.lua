@@ -155,6 +155,17 @@ require('lazy').setup({
       require("nvim-surround").setup()
     end
   },
+  {
+    'mikesmithgh/kitty-scrollback.nvim',
+    enabled = true,
+    lazy = true,
+    cmd = { 'KittyScrollbackGenerateKittens', 'KittyScrollbackCheckHealth', 'KittyScrollbackGenerateCommandLineEditing' },
+    event = { 'User KittyScrollbackLaunch' },
+    version = '^6.0.0',
+    config = function()
+      require('kitty-scrollback').setup()
+    end,
+  }
 }, {
   performance = {
     rtp = {
@@ -252,6 +263,9 @@ map('n', '<leader>cn', ':cnext<CR>', opts)
 map('n', '<leader>ce', ':cend<CR>', opts)
 map('n', '<leader>cp', ':cprev<CR>', opts)
 map('n', '<leader>cb', ':cbegin<CR>', opts)
+
+-- Custom functions, methods and tools
+map('n', '<leader>rm', ':RmTerms<CR>', opts)
 
 --: }}}
 
