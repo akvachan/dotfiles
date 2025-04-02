@@ -37,15 +37,10 @@ source $ZSH/oh-my-zsh.sh
  
 #: Functions {{{
  
-# Function to change directory using fzf
-fzf_cd() {
+# Function to open project in nvim fia fzf 
+fzf_nvim() {
   local dir
-  dir=$(find ~ -type d | fzf) && cd "$dir"
-}
- 
-fzf_vi() {
-  local dir
-  dir=$(find ~ -type d | fzf) && cd "$dir" && nvim .
+  dir=$(find ~/Development -type d | fzf) && nvim "$dir"
 }
  
 # }}}
@@ -66,8 +61,7 @@ alias sleep="sudo shutdown -s now"
 alias restart="sudo shutdown -r now"
 alias out="sudo pkill loginwindow"
 alias shutdown="sudo shutdown -h now"
-alias fcd='fzf_cd'
-alias fvi='fzf_vi'
+alias f='fzf_nvim'
  
 # }}}
  
