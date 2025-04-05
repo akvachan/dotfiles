@@ -40,7 +40,7 @@ source $ZSH/oh-my-zsh.sh
 # Function to open project in nvim fia fzf 
 fzf_nvim() {
   local dir
-  dir=$(find ~/Development -type d | fzf) && nvim "$dir"
+  dir=$(find ~/Development -type d | fzf) && nvim --cmd "cd $dir" "$dir"
 }
  
 # }}}
