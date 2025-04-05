@@ -256,6 +256,9 @@ map('n', '<leader>cb', ':cbegin<CR>', opts)
 -- Custom functions, methods and tools
 map('n', '<leader>rm', ':RmTerms<CR>', opts)
 
+-- Quick git shortcuts
+map('n', '<leader>gg', ':!git <Right><Right><Right><Right><Right>')
+
 --: }}}
 
 --: {{{ LSP
