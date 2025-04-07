@@ -133,7 +133,10 @@ require('lazy').setup({
     config = function()
       require('fzf-lua').setup({
         files = {
-          cmd = 'ag --hidden --ignore .git -l -g ""'
+          cmd = 'fd --type f --hidden --follow --exclude .git',
+        },
+        grep = {
+          cmd = 'rg --column --color=never --no-heading --line-number --hidden --smart-case'
         },
         keymap = {
           fzf = {
@@ -238,6 +241,7 @@ map('n', '<leader>gf', vim.diagnostic.setqflist, opts)
 -- Clipboard
 map({ 'n', 'v' }, '<leader>y', '"+y', opts)
 map({ 'n', 'v' }, '<leader>p', '"+p', opts)
+map({ 'n', 'v' }, '<leader>m', ":let @*=trim(execute(\'1messages\'))<cr>", opts)
 
 -- Removal (delete without yanking)
 map({ "n", "v" }, "<leader>d", "\"_d", opts)

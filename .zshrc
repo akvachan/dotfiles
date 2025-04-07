@@ -18,7 +18,6 @@ plugins=(
   git
   fzf
   zsh-syntax-highlighting
-  fancy-ctrl-z
 )
  
 # }}}
@@ -85,22 +84,9 @@ export DISABLE_FZF_KEY_BINDINGS="false"
  
 # }}}
  
-#: Node {{{
- 
-export NODE_OPTIONS='--disable-warning=ExperimentalWarning'
- 
-# }}}
- 
 #: VulkanSDK {{{
  
 export VULKAN_SDK=/Users/arseniikvachan/VulkanSDK/1.3.290.0
- 
-# }}}
- 
-#: z {{{
- 
-# If installed via Homebrew
-echo ". /opt/homebrew/etc/profile.d/z.sh" >> ~/.bashrc
  
 # }}}
  
