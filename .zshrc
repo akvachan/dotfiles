@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/bin/sh
  
 #: Oh My Zsh Settings {{{
  
@@ -40,6 +40,11 @@ source $ZSH/oh-my-zsh.sh
 fzf_nvim() {
   local dir
   dir=$(find ~/Development -type d | fzf) && nvim --cmd "cd $dir" "$dir"
+}
+
+fzf_cd() {
+  local dir
+  dir=$(find ~/Development -type d | fzf) && cd $dir
 }
  
 # }}}
@@ -97,4 +102,4 @@ export STM32_PRG_PATH=/Applications/STMicroelectronics/STM32Cube/STM32CubeProgra
  
 # }}}
 
-#}}} 
+# }}} 

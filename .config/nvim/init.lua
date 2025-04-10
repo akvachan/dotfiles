@@ -132,6 +132,7 @@ require('lazy').setup({
     },
     config = function()
       require('fzf-lua').setup({
+        "border-fused",
         files = {
           cmd = 'fd --type f --hidden --follow --exclude .git',
         },
@@ -176,7 +177,16 @@ require('lazy').setup({
   checker = { enabled = false },
 })
 
-require('oil').setup()
+oil = require("oil")
+oil.setup({
+  watch_for_changes = true,
+  keymaps = {
+    ["<leader>oc"] = oil.discard_all_changes,
+  },
+  view_options = {
+    show_hidden = true,
+  },
+})
 
 --: }}}
 
@@ -214,9 +224,12 @@ local map = vim.keymap.set
 local opts = { noremap = true, silent = true }
 
 -- General Keymaps
+vim.keymap.set('n', '<leader>q', function()
+  oil.discard_all_changes()
+  vim.cmd('q!')
+end, { noremap = true, silent = true })
 map('n', '<leader>w', ':w<CR>', opts)
 map('n', '<leader>l', ':Lazy<CR>', opts)
-map('n', '<leader>q', ':q!<CR>', opts)
 map('n', '<leader>h', ':noh<CR>', opts)
 map('n', '\\', ':term <Right><Right><Right><Right><Right>', { noremap = true, silent = false })
 
@@ -225,6 +238,10 @@ map('n', '<up>', '<C-w>k', opts)
 map('n', '<down>', '<C-w>j', opts)
 map('n', '<left>', '<C-w>h', opts)
 map('n', '<right>', '<C-w>l', opts)
+
+-- Navigation
+map('n', 'j', 'gj', opts)
+map('n', 'k', 'gk', opts)
 
 -- LSP Keymaps
 map('n', 'gd', vim.lsp.buf.definition, opts)
