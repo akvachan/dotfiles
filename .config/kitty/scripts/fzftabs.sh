@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/zsh
  
 # Get all tabs, including their ids and focused status
 tab_info=$(kitty @ ls | /opt/homebrew/bin/jq -r '.[].tabs[] | "\(.id)|\(.is_focused)|\(.title)"')
@@ -24,4 +24,7 @@ selected=$(echo "$tab_titles" | /opt/homebrew/bin/fzf --prompt="Select tab: " \
 if [ -n "$selected" ]; then
     tab_id=$(echo "$selected" | awk -F' \\| ' '{print $3}')
     kitty @ focus-tab --match id:"$tab_id"
+    kitty @ close-window --self
+else
+    kitty @ close-window 
 fi

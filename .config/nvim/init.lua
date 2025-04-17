@@ -177,7 +177,7 @@ require('lazy').setup({
   checker = { enabled = false },
 })
 
-oil = require("oil")
+local oil = require("oil")
 oil.setup({
   watch_for_changes = true,
   keymaps = {
@@ -231,7 +231,8 @@ end, { noremap = true, silent = true })
 map('n', '<leader>w', ':w<CR>', opts)
 map('n', '<leader>l', ':Lazy<CR>', opts)
 map('n', '<leader>h', ':noh<CR>', opts)
-map('n', '\\', ':term <Right><Right><Right><Right><Right>', { noremap = true, silent = false })
+map('n', '<leader>t', ':term <Right><Right><Right><Right><Right>', { noremap = true, silent = false })
+map('n', '<leader>rr', ':@:<CR>', { noremap = true, silent = false })
 
 -- Window Navigation
 map('n', '<up>', '<C-w>k', opts)

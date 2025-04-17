@@ -1,5 +1,3 @@
-# {{{ Window Management
- 
 # focus window
 alt - h : yabai -m window --focus west
 alt - j : yabai -m window --focus south
@@ -7,36 +5,20 @@ alt - k : yabai -m window --focus north
 alt - l : yabai -m window --focus east
  
 # swap window
+alt - w : yabai -m window --swap north
 alt - a : yabai -m window --swap west
 alt - s : yabai -m window --swap south
-alt - d : yabai -m window --swap north
-alt - f : yabai -m window --swap east
+alt - d : yabai -m window --swap east
  
 # balance size of windows
 alt - b : yabai -m space --balance
  
-# fullscreen
+# toggle fullscreen
 alt - m : yabai -m window --toggle zoom-fullscreen
- 
-# }}}
- 
-# {{{ Desktop Management
- 
-# send window to desktop and follow focus
-alt - 1 : yabai -m window --space  1 
-alt - 2 : yabai -m window --space  2 
-alt - 3 : yabai -m window --space  3 
-alt - 4 : yabai -m window --space  4 
-alt - 5 : yabai -m window --space  5 
-alt - 6 : yabai -m window --space  6 
-alt - 7 : yabai -m window --space  7 
-alt - 8 : yabai -m window --space  8 
-alt - 9 : yabai -m window --space  9 
-alt - 0 : yabai -m window --space 10 
- 
-# }}}
- 
-# {{{ Desktop Layout
+
+# toggle float
+alt - t : yabai -m window --toggle float;\
+          yabai -m window --grid 4:4:1:1:2:2
  
 # rotate tree
 alt - r : yabai -m space --rotate 90
@@ -47,4 +29,11 @@ alt - y : yabai -m space --mirror y-axis
 # mirror tree x-axis
 alt - x : yabai -m space --mirror x-axis
  
-# }}}
+# turn on yabai
+alt - i : yabai --start-service
+
+# turn off yabai
+alt - o : yabai --stop-service
+
+# close window
+alt - q : yabai -m window --close
