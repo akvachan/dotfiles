@@ -41,8 +41,8 @@ opt.writebackup             = false
 opt.background              = 'dark'
 opt.equalalways             = true
 opt.lazyredraw              = true
-opt.grepprg                 = "rg --vimgrep --no-heading --smart-case"
-opt.grepformat              = "%f:%l:%c:%m,%f:%l:%m"
+opt.grepprg                 = 'rg --vimgrep --no-heading --smart-case'
+opt.grepformat              = '%f:%l:%c:%m,%f:%l:%m'
 
 cmd('colorscheme habamax')
 
@@ -72,8 +72,8 @@ require('lazy').setup({
       'hrsh7th/cmp-path',
       'hrsh7th/cmp-cmdline',
       {
-        "L3MON4D3/LuaSnip",
-        build = "make install_jsregexp"
+        'L3MON4D3/LuaSnip',
+        build = 'make install_jsregexp'
       }
     },
     config = function()
@@ -120,12 +120,12 @@ require('lazy').setup({
       {
         '<leader>fl',
         function() require('fzf-lua').blines() end,
-        desc = "Current buffer lines"
+        desc = 'Current buffer lines'
       },
     },
     config = function()
       require('fzf-lua').setup({
-        "border-fused",
+        'border-fused',
         files = {
           cmd = 'fd --type f --hidden --follow --exclude .git',
         },
@@ -134,7 +134,7 @@ require('lazy').setup({
         },
         keymap = {
           fzf = {
-            ["ctrl-q"] = "select-all+accept",
+            ['ctrl-q'] = 'select-all+accept',
           },
         },
       })
@@ -146,10 +146,10 @@ require('lazy').setup({
   { 'neovim/nvim-lspconfig',             ft = { 'lua', 'typescript', 'python', 'cpp' } },
   { 'stevearc/oil.nvim',                 cmd = 'Oil' },
   {
-    "kylechui/nvim-surround",
-    event = "VeryLazy",
+    'kylechui/nvim-surround',
+    event = 'VeryLazy',
     config = function()
-      require("nvim-surround").setup()
+      require('nvim-surround').setup()
     end
   }
 
@@ -157,14 +157,14 @@ require('lazy').setup({
   performance = {
     rtp = {
       disabled_plugins = {
-        "gzip",
-        "netrwPlugin",
-        "tarPlugin",
-        "tohtml",
-        "tutor",
-        "zipPlugin",
-        "osc52",
-        "spellfile",
+        'gzip',
+        'netrwPlugin',
+        'tarPlugin',
+        'tohtml',
+        'tutor',
+        'zipPlugin',
+        'osc52',
+        'spellfile',
       },
     },
   },
@@ -172,11 +172,11 @@ require('lazy').setup({
 
 })
 
-local oil = require("oil")
+local oil = require('oil')
 oil.setup({
   watch_for_changes = true,
   keymaps = {
-    ["<leader>oc"] = oil.discard_all_changes,
+    ['<leader>oc'] = oil.discard_all_changes,
   },
   view_options = {
     show_hidden = true,
@@ -202,7 +202,7 @@ lspconfig.pylsp.setup({
     pylsp = {
       plugins = {
         pycodestyle = {
-          ignore = { "E501" },
+          ignore = { 'E501' },
           maxLineLength = 120,
         },
       },
@@ -222,12 +222,12 @@ lsp_diag.config({
 
 --: {{{ Custom functions
 
-api.nvim_create_autocmd({ "CursorMoved", "VimResized" }, {
+api.nvim_create_autocmd({ 'CursorMoved', 'VimResized' }, {
   callback = function(event)
-    if event.event == "CursorMoved" then
-      cmd("normal! zz")
+    if event.event == 'CursorMoved' then
+      cmd('normal! zz')
     else
-      cmd("wincmd =")
+      cmd('wincmd =')
     end
   end,
 })
@@ -282,6 +282,6 @@ map('n', '-', ':Oil<CR>', opts)
 map({ 'n', 'v' }, '<leader>y', '"+y', opts)
 map({ 'n', 'v' }, '<leader>p', '"+p', opts)
 map({ 'n', 'v' }, '<leader>m', ':let @*=trim(execute(\"1messages\"))<cr>', opts)
-map({ 'n', 'v' }, '<leader>d', '\'_d', opts)
+map({ 'n', 'v' }, '<leader>d', "\'_d", opts)
 
 --: }}}
