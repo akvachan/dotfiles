@@ -4,10 +4,7 @@
  
 #: Color Theme {{{
  
-# Disable the theme if setting PROMPT manually
 ZSH_THEME="apple"
- 
-# Ensure directory highlighting matches your selection background
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
  
 # }}}
@@ -36,13 +33,12 @@ source $ZSH/oh-my-zsh.sh
  
 #: Functions {{{
  
-# Function to open project in nvim fia fzf 
-fzf_nvim() {
+fzf-nvim() {
   local dir
   dir=$(find ~/Development -type d | fzf) && nvim --cmd "cd $dir" "$dir"
 }
 
-fzf_cd() {
+fzf-cd() {
   local dir
   dir=$(find ~/Development -type d | fzf) && cd $dir
 }
@@ -65,7 +61,8 @@ alias sleep="sudo shutdown -s now"
 alias restart="sudo shutdown -r now"
 alias out="sudo pkill loginwindow"
 alias shutdown="sudo shutdown -h now"
-alias f='fzf_nvim'
+alias f='fzf-nvim'
+alias fcd='fzf-cd'
  
 # }}}
  
@@ -79,15 +76,6 @@ export EDITOR='nvim'
 # }}}
  
 #: Extra {{{
- 
-#: fzf {{{
- 
-# source <(fzf --zsh)
-# export FZF_BASE="/opt/homebrew/Cellar/fzf/0.56.3"
-# export DISABLE_FZF_AUTO_COMPLETION="false"
-# export DISABLE_FZF_KEY_BINDINGS="false"
- 
-# }}}
  
 #: VulkanSDK {{{
  

@@ -1,73 +1,66 @@
 --: {{{ Basic Settings
 
--- Leader Key
-vim.g.mapleader                 = ' '
-vim.g.maplocalleader            = ' '
+local g                     = vim.g
+local opt                   = vim.opt
+local cmd                   = vim.cmd
+local fn                    = vim.fn
+local api                   = vim.api
+local lsp_buf               = vim.lsp.buf
+local lsp_diag              = vim.diagnostic
+local map                   = vim.keymap.set
+local opts                  = { noremap = true, silent = true }
+local lazypath              = fn.stdpath('data') .. '/lazy/lazy.nvim'
 
--- Disable unused built-in plugins for performance
-vim.g.loaded_netrw              = 1
-vim.g.loaded_netrwPlugin        = 1
-vim.g.loaded_tar                = 1
-vim.g.loaded_tarPlugin          = 1
-vim.g.loaded_zip                = 1
-vim.g.loaded_zipPlugin          = 1
-vim.g.loaded_gzip               = 1
-vim.g.loaded_matchparen         = 1
+g.mapleader                 = ' '
+g.maplocalleader            = ' '
+g.matchparen_timeout        = 20
+g.matchparen_insert_timeout = 20
 
--- General Editor Options
-local opt                       = vim.opt
-opt.number                      = true     -- Show absolute line numbers
-opt.relativenumber              = true     -- Show relative line numbers
-opt.tabstop                     = 2        -- Number of spaces tabs count for
-opt.shiftwidth                  = 2        -- Spaces for auto-indent
-opt.expandtab                   = true     -- Use spaces instead of tabs
-opt.autoindent                  = true     -- Auto-indent new lines
-opt.wrap                        = false    -- Disable line wrapping
-opt.hlsearch                    = true     -- Highlight search results
-opt.incsearch                   = true     -- Incremental search
-opt.smartcase                   = true     -- Smart case sensitivity for search
-opt.ignorecase                  = true     -- Ignore case
-opt.termguicolors               = true     -- Enable 24-bit color
-opt.foldmethod                  = 'marker' -- Use markers for folding
-opt.foldenable                  = true     -- Enable folding
-opt.foldlevel                   = 0        -- Always fold
-opt.updatetime                  = 50       -- Faster responsiveness
-opt.splitbelow                  = true     -- Horizontal splits open below
-opt.splitright                  = true     -- Vertical splits open to the right
-opt.signcolumn                  = 'yes'    -- Always show the sign column
-opt.swapfile                    = false    -- Disable swap files
-opt.backup                      = false    -- Disable backup files
-opt.writebackup                 = false    -- Disable backup before overwriting files
-opt.background                  = 'dark'   -- Set background to dark
-opt.equalalways                 = true     -- Always auto-balance splits
-opt.lazyredraw                  = true     -- Optimize screen redraw during macros
+opt.number                  = true
+opt.relativenumber          = true
+opt.tabstop                 = 2
+opt.shiftwidth              = 2
+opt.expandtab               = true
+opt.autoindent              = true
+opt.wrap                    = false
+opt.hlsearch                = true
+opt.incsearch               = true
+opt.smartcase               = true
+opt.ignorecase              = true
+opt.termguicolors           = true
+opt.foldmethod              = 'marker'
+opt.foldenable              = true
+opt.foldlevel               = 0
+opt.updatetime              = 50
+opt.splitbelow              = true
+opt.splitright              = true
+opt.signcolumn              = 'yes'
+opt.swapfile                = false
+opt.backup                  = false
+opt.writebackup             = false
+opt.background              = 'dark'
+opt.equalalways             = true
+opt.lazyredraw              = true
+opt.grepprg                 = "rg --vimgrep --no-heading --smart-case"
+opt.grepformat              = "%f:%l:%c:%m,%f:%l:%m"
 
--- Parenthesis matching timeouts
-vim.g.matchparen_timeout        = 20
-vim.g.matchparen_insert_timeout = 20
-
--- Use ripgrep if installed
-if vim.fn.executable("rg") == 1 then
-  opt.grepprg = "rg --vimgrep --no-heading --smart-case"
-  opt.grepformat = "%f:%l:%c:%m,%f:%l:%m"
-end
+cmd('colorscheme habamax')
 
 --: }}}
 
 --: {{{ Plugins
 
-local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
 if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system({
+  fn.system({
     'git',
     'clone',
     '--filter=blob:none',
-    'https://github.com/folke/lazy.nvim.git',
+    'https://github.com/folke/lazy.ngit',
     '--branch=stable',
     lazypath,
   })
 end
-vim.opt.rtp:prepend(lazypath)
+opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
   {
@@ -159,6 +152,7 @@ require('lazy').setup({
       require("nvim-surround").setup()
     end
   }
+
 }, {
   performance = {
     rtp = {
@@ -175,6 +169,7 @@ require('lazy').setup({
     },
   },
   checker = { enabled = false },
+
 })
 
 local oil = require("oil")
@@ -188,111 +183,12 @@ oil.setup({
   },
 })
 
---: }}}
-
---: {{{ Autocommands
-
--- Combined autocmd for performance: minimize callbacks during cursor and window events.
-vim.api.nvim_create_autocmd({ "CursorMoved", "VimResized" }, {
-  callback = function(event)
-    if event.event == "CursorMoved" then
-      vim.cmd("normal! zz")
-    else
-      vim.cmd("wincmd =")
-    end
-  end,
-})
-
---: }}}
-
---: {{{ Custom Functions
-
-local function RemoveTerminalBuffers()
-  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-    if vim.api.nvim_buf_get_option(buf, 'buftype') == 'terminal' then
-      vim.api.nvim_buf_delete(buf, { force = true })
-    end
-  end
-end
-vim.api.nvim_create_user_command('RmTerms', RemoveTerminalBuffers, {})
-
---: }}}
-
---: {{{ Keymaps
-
-local map = vim.keymap.set
-local opts = { noremap = true, silent = true }
-
--- General Keymaps
-vim.keymap.set('n', '<leader>q', function()
-  oil.discard_all_changes()
-  vim.cmd('q!')
-end, { noremap = true, silent = true })
-map('n', '<leader>w', ':w<CR>', opts)
-map('n', '<leader>l', ':Lazy<CR>', opts)
-map('n', '<leader>h', ':noh<CR>', opts)
-map('n', '<leader>t', ':term <Right><Right><Right><Right><Right>', { noremap = true, silent = false })
-map('n', '<leader>rr', ':@:<CR>', { noremap = true, silent = false })
-
--- Window Navigation
-map('n', '<up>', '<C-w>k', opts)
-map('n', '<down>', '<C-w>j', opts)
-map('n', '<left>', '<C-w>h', opts)
-map('n', '<right>', '<C-w>l', opts)
-
--- Navigation
-map('n', 'j', 'gj', opts)
-map('n', 'k', 'gk', opts)
-
--- LSP Keymaps
-map('n', 'gd', vim.lsp.buf.definition, opts)
-map('n', 'gD', vim.lsp.buf.declaration, opts)
-map('n', 'gr', vim.lsp.buf.references, opts)
-map('n', 'gi', vim.lsp.buf.implementation, opts)
-map('n', 'K', vim.lsp.buf.hover, opts)
-map('n', '<leader>rn', vim.lsp.buf.rename, opts)
-map('n', '<leader>ca', vim.lsp.buf.code_action, opts)
-map('n', '<leader>fo', vim.lsp.buf.format, opts)
-map('n', '<leader>cd', vim.diagnostic.open_float, opts)
-map('n', '<leader>gf', vim.diagnostic.setqflist, opts)
-
--- Clipboard
-map({ 'n', 'v' }, '<leader>y', '"+y', opts)
-map({ 'n', 'v' }, '<leader>p', '"+p', opts)
-map({ 'n', 'v' }, '<leader>m', ":let @*=trim(execute(\'1messages\'))<cr>", opts)
-
--- Removal (delete without yanking)
-map({ "n", "v" }, "<leader>d", "\"_d", opts)
-
--- Oil Explorer
-map({ "n", "v" }, "-", ":Oil<CR>", opts)
-
--- Quickfix Navigation
-map('n', '<leader>co', ':copen<CR>', opts)
-map('n', '<leader>cc', ':cclose<CR>', opts)
-map('n', '<leader>cn', ':cnext<CR>', opts)
-map('n', '<leader>ce', ':cend<CR>', opts)
-map('n', '<leader>cp', ':cprev<CR>', opts)
-map('n', '<leader>cb', ':cbegin<CR>', opts)
-
--- Custom functions, methods and tools
-map('n', '<leader>rm', ':RmTerms<CR>', opts)
-
--- Quick git shortcuts
-map('n', '<leader>gg', ':!git <Right><Right><Right><Right><Right>')
-
---: }}}
-
---: {{{ LSP
-
 local lspconfig = require('lspconfig')
-
 require('mason').setup()
 require('mason-lspconfig').setup({
   ensure_installed = { 'lua_ls', 'ts_ls', 'pylsp', 'clangd' },
   automatic_installation = true,
 })
-
 lspconfig.lua_ls.setup({
   settings = {
     Lua = {
@@ -300,9 +196,7 @@ lspconfig.lua_ls.setup({
     },
   },
 })
-
 lspconfig.ts_ls.setup({})
-
 lspconfig.pylsp.setup({
   settings = {
     pylsp = {
@@ -315,10 +209,8 @@ lspconfig.pylsp.setup({
     },
   },
 })
-
 lspconfig.clangd.setup({})
-
-vim.diagnostic.config({
+lsp_diag.config({
   virtual_text = false,
   signs = true,
   underline = false,
@@ -328,8 +220,68 @@ vim.diagnostic.config({
 
 --: }}}
 
---: {{{ Colorscheme
+--: {{{ Custom functions
 
-vim.cmd('colorscheme habamax')
+api.nvim_create_autocmd({ "CursorMoved", "VimResized" }, {
+  callback = function(event)
+    if event.event == "CursorMoved" then
+      cmd("normal! zz")
+    else
+      cmd("wincmd =")
+    end
+  end,
+})
+
+local function RemoveTerminalBuffers()
+  for _, buf in ipairs(api.nvim_list_bufs()) do
+    if api.nvim_buf_get_option(buf, 'buftype') == 'terminal' then
+      api.nvim_buf_delete(buf, { force = true })
+    end
+  end
+end
+api.nvim_create_user_command('RmTerms', RemoveTerminalBuffers, {})
+
+local function Quit()
+  oil.discard_all_changes()
+  cmd('q!')
+end
+api.nvim_create_user_command('Quit', Quit, {})
+
+--: }}}
+
+--: {{{ Keymaps
+
+map('n', 'j', 'gj', opts)
+map('n', 'k', 'gk', opts)
+map('n', '<leader>cn', ':copen<CR>', opts)
+map('n', '<leader>cc', ':cclose<CR>', opts)
+map('n', '<leader>cn', ':cnext<CR>', opts)
+map('n', '<leader>ce', ':cend<CR>', opts)
+map('n', '<leader>cp', ':cprev<CR>', opts)
+map('n', '<leader>cb', ':cbegin<CR>', opts)
+map('n', '<leader>rm', ':RmTerms<CR>', opts)
+map('n', '<leader>gg', ':!git <Right><Right><Right><Right><Right>')
+map('n', '<leader>gd', lsp_buf.definition, opts)
+map('n', '<leader>gl', lsp_buf.declaration, opts)
+map('n', '<leader>gr', lsp_buf.references, opts)
+map('n', '<leader>gi', lsp_buf.implementation, opts)
+map('n', '<leader>gh', lsp_buf.hover, opts)
+map('n', '<leader>rn', lsp_buf.rename, opts)
+map('n', '<leader>ca', lsp_buf.code_action, opts)
+map('n', '<leader>fo', lsp_buf.format, opts)
+map('n', '<leader>go', lsp_buf.document_symbol, opts)
+map('n', '<leader>cd', lsp_diag.open_float, opts)
+map('n', '<leader>gf', lsp_diag.setqflist, opts)
+map('n', '<leader>q', ':Quit<CR>', opts)
+map('n', '<leader>w', ':w<CR>', opts)
+map('n', '<leader>l', ':Lazy<CR>', opts)
+map('n', '<leader>h', ':noh<CR>', opts)
+map('n', '<leader>t', ':term <Right><Right><Right><Right><Right>', { noremap = true, silent = false })
+map('n', '<leader>rr', ':@:<CR>', { noremap = true, silent = false })
+map('n', '-', ':Oil<CR>', opts)
+map({ 'n', 'v' }, '<leader>y', '"+y', opts)
+map({ 'n', 'v' }, '<leader>p', '"+p', opts)
+map({ 'n', 'v' }, '<leader>m', ':let @*=trim(execute(\"1messages\"))<cr>', opts)
+map({ 'n', 'v' }, '<leader>d', '\'_d', opts)
 
 --: }}}
