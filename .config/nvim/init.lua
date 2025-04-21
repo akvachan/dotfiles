@@ -117,7 +117,7 @@ require('lazy').setup({
   -- File explorer
   {
     'stevearc/oil.nvim',
-    lazy = false, 
+    lazy = false,
     config = function()
       local oil = require('oil')
       oil.setup({
@@ -156,6 +156,10 @@ require('lazy').setup({
   },
   {
     'williamboman/mason-lspconfig.nvim',
+    event = { "BufReadPre", "BufNewFile" },
+    dependencies = {
+      'williamboman/mason.nvim'
+    },
     config = function()
       require('mason-lspconfig').setup({
         ensure_installed = {},
@@ -166,7 +170,12 @@ require('lazy').setup({
   -- LSP
   {
     'neovim/nvim-lspconfig',
+    event = { 'BufReadPre', 'BufNewFile' },
     ft = { 'lua', 'typescript', 'python', 'cpp' },
+    {
+      'williamboman/mason-lspconfig.nvim',
+      dependencies = { 'williamboman/mason.nvim' },
+    },
     config = function()
       local lspconfig = require('lspconfig')
       local lsp_diag = vim.diagnostic
