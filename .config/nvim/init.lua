@@ -1,68 +1,55 @@
 --: {{{ Basic Settings
 
-local g                     = vim.g
-local opt                   = vim.opt
-local cmd                   = vim.cmd
-local fn                    = vim.fn
-local api                   = vim.api
-local lsp_buf               = vim.lsp.buf
-local lsp_diag              = vim.diagnostic
-local map                   = vim.keymap.set
-local opts                  = { noremap = true, silent = true }
-local lazypath              = fn.stdpath('data') .. '/lazy/lazy.nvim'
+local g, opt, cmd, fn, api = vim.g, vim.opt, vim.cmd, vim.fn, vim.api
 
-g.mapleader                 = ' '
-g.maplocalleader            = ' '
-g.matchparen_timeout        = 20
+g.mapleader = ' '
+g.maplocalleader = ' '
+g.matchparen_timeout = 20
 g.matchparen_insert_timeout = 20
 
-opt.number                  = true
-opt.relativenumber          = true
-opt.tabstop                 = 2
-opt.shiftwidth              = 2
-opt.expandtab               = true
-opt.autoindent              = true
-opt.wrap                    = false
-opt.hlsearch                = true
-opt.incsearch               = true
-opt.smartcase               = true
-opt.ignorecase              = true
-opt.termguicolors           = true
-opt.foldmethod              = 'marker'
-opt.foldenable              = true
-opt.foldlevel               = 0
-opt.updatetime              = 50
-opt.splitbelow              = true
-opt.splitright              = true
-opt.signcolumn              = 'yes'
-opt.swapfile                = false
-opt.backup                  = false
-opt.writebackup             = false
-opt.background              = 'dark'
-opt.equalalways             = true
-opt.lazyredraw              = true
-opt.grepprg                 = 'rg --vimgrep --no-heading --smart-case'
-opt.grepformat              = '%f:%l:%c:%m,%f:%l:%m'
+opt.number = true
+opt.relativenumber = true
+opt.tabstop = 2
+opt.shiftwidth = 2
+opt.expandtab = true
+opt.autoindent = true
+opt.wrap = false
+opt.hlsearch = true
+opt.incsearch = true
+opt.smartcase = true
+opt.ignorecase = true
+opt.termguicolors = true
+opt.foldmethod = 'marker'
+opt.foldenable = true
+opt.foldlevel = 20
+opt.updatetime = 100
+opt.splitbelow = true
+opt.splitright = true
+opt.signcolumn = 'yes'
+opt.swapfile = false
+opt.backup = false
+opt.writebackup = false
+opt.background = 'dark'
+opt.equalalways = true
+opt.lazyredraw = true
+opt.grepprg = 'rg --vimgrep --no-heading --smart-case'
+opt.grepformat = '%f:%l:%c:%m,%f:%l:%m'
 
 cmd('colorscheme habamax')
 
 --: }}}
 
---: {{{ Plugins
+--: {{{ Lazy Plugin Setup
 
+local lazypath = fn.stdpath('data') .. '/lazy/lazy.nvim'
 if not vim.loop.fs_stat(lazypath) then
-  fn.system({
-    'git',
-    'clone',
-    '--filter=blob:none',
-    'https://github.com/folke/lazy.ngit',
-    '--branch=stable',
-    lazypath,
-  })
+  fn.system({ 'git', 'clone', '--filter=blob:none', 'https://github.com/folke/lazy.nvim', '--branch=stable', lazypath })
 end
 opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
+
+  -- Completion
   {
     'hrsh7th/nvim-cmp',
     event = "InsertEnter",
@@ -73,8 +60,9 @@ require('lazy').setup({
       'hrsh7th/cmp-cmdline',
       {
         'L3MON4D3/LuaSnip',
-        build = 'make install_jsregexp'
-      }
+        build = 'make install_jsregexp',
+        event = "InsertEnter",
+      },
     },
     config = function()
       local cmp = require('cmp')
@@ -99,29 +87,14 @@ require('lazy').setup({
     end
   },
 
+  -- Fuzzy finder
   {
     'ibhagwan/fzf-lua',
     keys = {
-      {
-        '<leader>ff',
-        function() require('fzf-lua').files() end,
-        desc = "Find files"
-      },
-      {
-        '<leader>fg',
-        function() require('fzf-lua').live_grep() end,
-        desc = "Live grep"
-      },
-      {
-        '<leader>fb',
-        function() require('fzf-lua').buffers() end,
-        desc = "Buffers"
-      },
-      {
-        '<leader>fl',
-        function() require('fzf-lua').blines() end,
-        desc = 'Current buffer lines'
-      },
+      { '<leader>ff', function() require('fzf-lua').files() end,     desc = "Find files" },
+      { '<leader>fg', function() require('fzf-lua').live_grep() end, desc = "Live grep" },
+      { '<leader>fb', function() require('fzf-lua').buffers() end,   desc = "Buffers" },
+      { '<leader>fl', function() require('fzf-lua').blines() end,    desc = 'Current buffer lines' },
     },
     config = function()
       require('fzf-lua').setup({
@@ -141,137 +114,172 @@ require('lazy').setup({
     end
   },
 
-  { 'williamboman/mason.nvim',           event = 'BufReadPre' },
-  { 'williamboman/mason-lspconfig.nvim', event = 'BufReadPre' },
-  { 'neovim/nvim-lspconfig',             ft = { 'lua', 'typescript', 'python', 'cpp' } },
-  { 'stevearc/oil.nvim',                 cmd = 'Oil' },
+  -- File explorer
+  {
+    'stevearc/oil.nvim',
+    lazy = false, 
+    config = function()
+      local oil = require('oil')
+      oil.setup({
+        view_options = { show_hidden = true },
+        keymaps = {
+          ['<leader>oc'] = oil.discard_all_changes,
+        },
+      })
+
+      vim.api.nvim_create_autocmd("VimEnter", {
+        callback = function()
+          local arg = vim.fn.argv()[1]
+          if arg and vim.fn.isdirectory(arg) == 1 then
+            vim.cmd("Oil")
+          end
+        end,
+      })
+    end
+  },
+
+  -- Surround editing
   {
     'kylechui/nvim-surround',
     event = 'VeryLazy',
     config = function()
       require('nvim-surround').setup()
     end
-  }
+  },
+
+  {
+    'williamboman/mason.nvim',
+    cmd = 'Mason',
+    config = function()
+      require('mason').setup()
+    end
+  },
+  {
+    'williamboman/mason-lspconfig.nvim',
+    config = function()
+      require('mason-lspconfig').setup({
+        ensure_installed = {},
+      })
+    end
+  },
+
+  -- LSP
+  {
+    'neovim/nvim-lspconfig',
+    ft = { 'lua', 'typescript', 'python', 'cpp' },
+    config = function()
+      local lspconfig = require('lspconfig')
+      local lsp_diag = vim.diagnostic
+
+      lspconfig.lua_ls.setup({
+        settings = {
+          Lua = {
+            diagnostics = { globals = { 'vim' } },
+            telemetry = { enable = false },
+            workspace = { checkThirdParty = false },
+          },
+        },
+      })
+
+      lspconfig.ts_ls.setup({})
+      lspconfig.pylsp.setup({
+        settings = {
+          pylsp = {
+            plugins = {
+              pycodestyle = {
+                ignore = { 'E501' },
+                maxLineLength = 120,
+              },
+            },
+          },
+        },
+      })
+
+      lspconfig.clangd.setup({})
+
+      lsp_diag.config({
+        virtual_text = false,
+        signs = true,
+        underline = false,
+        update_in_insert = false,
+        severity_sort = true,
+      })
+    end
+  },
 
 }, {
   performance = {
     rtp = {
       disabled_plugins = {
-        'gzip',
-        'netrwPlugin',
-        'tarPlugin',
-        'tohtml',
-        'tutor',
-        'zipPlugin',
-        'osc52',
-        'spellfile',
+        'gzip', 'netrwPlugin', 'tarPlugin', 'tohtml',
+        'tutor', 'zipPlugin', 'osc52', 'spellfile', 'matchit',
       },
     },
   },
   checker = { enabled = false },
-
-})
-
-local oil = require('oil')
-oil.setup({
-  watch_for_changes = true,
-  keymaps = {
-    ['<leader>oc'] = oil.discard_all_changes,
-  },
-  view_options = {
-    show_hidden = true,
-  },
-})
-
-local lspconfig = require('lspconfig')
-require('mason').setup()
-require('mason-lspconfig').setup({
-  ensure_installed = { 'lua_ls', 'ts_ls', 'pylsp', 'clangd' },
-  automatic_installation = true,
-})
-lspconfig.lua_ls.setup({
-  settings = {
-    Lua = {
-      diagnostics = { globals = { 'vim' } },
-    },
-  },
-})
-lspconfig.ts_ls.setup({})
-lspconfig.pylsp.setup({
-  settings = {
-    pylsp = {
-      plugins = {
-        pycodestyle = {
-          ignore = { 'E501' },
-          maxLineLength = 120,
-        },
-      },
-    },
-  },
-})
-lspconfig.clangd.setup({})
-lsp_diag.config({
-  virtual_text = false,
-  signs = true,
-  underline = false,
-  update_in_insert = false,
-  severity_sort = true,
 })
 
 --: }}}
 
---: {{{ Custom functions
+--: {{{ Custom Functions
 
 api.nvim_create_autocmd({ 'CursorMoved', 'VimResized' }, {
   callback = function(event)
     if event.event == 'CursorMoved' then
-      cmd('normal! zz')
+      if not vim.bo.buftype:match("terminal") then
+        cmd('normal! zz')
+      end
     else
       cmd('wincmd =')
     end
   end,
 })
 
-local function RemoveTerminalBuffers()
+api.nvim_create_user_command('RmTerms', function()
   for _, buf in ipairs(api.nvim_list_bufs()) do
     if api.nvim_buf_get_option(buf, 'buftype') == 'terminal' then
       api.nvim_buf_delete(buf, { force = true })
     end
   end
-end
-api.nvim_create_user_command('RmTerms', RemoveTerminalBuffers, {})
+end, {})
 
-local function Quit()
+api.nvim_create_user_command('Quit', function()
+  local oil = require('oil')
   oil.discard_all_changes()
   cmd('q!')
-end
-api.nvim_create_user_command('Quit', Quit, {})
+end, {})
 
 --: }}}
 
 --: {{{ Keymaps
 
+local map = vim.keymap.set
+local opts = { noremap = true, silent = true }
+local lsp = vim.lsp.buf
+local diag = vim.diagnostic
+
 map('n', 'j', 'gj', opts)
 map('n', 'k', 'gk', opts)
 map('n', '<leader>cn', ':copen<CR>', opts)
 map('n', '<leader>cc', ':cclose<CR>', opts)
-map('n', '<leader>cn', ':cnext<CR>', opts)
 map('n', '<leader>ce', ':cend<CR>', opts)
 map('n', '<leader>cp', ':cprev<CR>', opts)
 map('n', '<leader>cb', ':cbegin<CR>', opts)
 map('n', '<leader>rm', ':RmTerms<CR>', opts)
 map('n', '<leader>gg', ':!git <Right><Right><Right><Right><Right>')
-map('n', '<leader>gd', lsp_buf.definition, opts)
-map('n', '<leader>gl', lsp_buf.declaration, opts)
-map('n', '<leader>gr', lsp_buf.references, opts)
-map('n', '<leader>gi', lsp_buf.implementation, opts)
-map('n', '<leader>gh', lsp_buf.hover, opts)
-map('n', '<leader>rn', lsp_buf.rename, opts)
-map('n', '<leader>ca', lsp_buf.code_action, opts)
-map('n', '<leader>fo', lsp_buf.format, opts)
-map('n', '<leader>go', lsp_buf.document_symbol, opts)
-map('n', '<leader>cd', lsp_diag.open_float, opts)
-map('n', '<leader>gf', lsp_diag.setqflist, opts)
+map('n', '<leader>gd', lsp.definition, opts)
+map('n', '<leader>gl', lsp.declaration, opts)
+map('n', '<leader>gr', lsp.references, opts)
+map('n', '<leader>gi', lsp.implementation, opts)
+map('n', '<leader>gh', lsp.hover, opts)
+map('n', '<leader>rn', lsp.rename, opts)
+map('n', '<leader>ca', lsp.code_action, opts)
+map('n', '<leader>fo', lsp.format, opts)
+map('n', '<leader>go', lsp.document_symbol, opts)
+map('n', '<leader>cd', diag.open_float, opts)
+map('n', '<leader>gf', diag.setqflist, opts)
+map('n', '[d', diag.goto_prev, opts)
+map('n', ']d', diag.goto_next, opts)
 map('n', '<leader>q', ':Quit<CR>', opts)
 map('n', '<leader>w', ':w<CR>', opts)
 map('n', '<leader>l', ':Lazy<CR>', opts)
@@ -281,7 +289,7 @@ map('n', '<leader>rr', ':@:<CR>', { noremap = true, silent = false })
 map('n', '-', ':Oil<CR>', opts)
 map({ 'n', 'v' }, '<leader>y', '"+y', opts)
 map({ 'n', 'v' }, '<leader>p', '"+p', opts)
-map({ 'n', 'v' }, '<leader>m', ':let @*=trim(execute(\"1messages\"))<cr>', opts)
-map({ 'n', 'v' }, '<leader>d', "\'_d", opts)
+map({ 'n', 'v' }, '<leader>m', ':let @*=trim(execute("1messages"))<cr>', opts)
+map({ 'n', 'v' }, '<leader>d', "'_d", opts)
 
 --: }}}
