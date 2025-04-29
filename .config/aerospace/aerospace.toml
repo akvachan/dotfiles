@@ -21,14 +21,12 @@ on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 
     alt-semicolon = 'split horizontal'
     alt-v = 'split vertical'
-
     alt-f = 'fullscreen'
+    alt-b = 'balance-sizes'
 
-    alt-s = 'layout v_accordion' 
-    alt-w = 'layout h_accordion' 
-    alt-e = 'layout tiles horizontal vertical' 
-
-    alt-shift-space = 'layout floating tiling'
+    alt-w = 'close'
+    alt-shift-w = 'close-all-windows-but-current --quit-if-last-window'
+    alt-e = 'enable toggle'
 
     alt-1 = 'workspace 1'
     alt-2 = 'workspace 2'
@@ -40,6 +38,8 @@ on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
     alt-8 = 'workspace 8'
     alt-9 = 'workspace 9'
     alt-0 = 'workspace 10'
+
+    alt-tab = 'focus-back-and-forth'
 
     alt-shift-1 = 'move-node-to-workspace 1'
     alt-shift-2 = 'move-node-to-workspace 2'
@@ -55,6 +55,14 @@ on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
     alt-shift-c = 'reload-config'
 
     alt-r = 'mode resize'
+
+[gaps]
+    inner.horizontal = 10
+    inner.vertical =   10
+    outer.left =       10
+    outer.bottom =     10
+    outer.top =        10
+    outer.right =      10
 
 [mode.resize.binding]
     h = 'resize width -50'
