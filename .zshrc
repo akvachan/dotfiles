@@ -48,21 +48,10 @@ fzf-cd() {
 #: Aliases {{{
  
 alias zshrc="nvim ~/.zshrc"
-alias skhdrc="nvim ~/.skhdrc"
-alias yabairc="nvim ~/.yabairc"
+alias asrc="nvim ~/.config/aerospace/aerospace.toml"
 alias nvimrc="nvim ~/.config/nvim/init.lua"
-alias vimrc="nvim ~/.vimrc"
-alias tmuxrc="nvim ~/.tmux.conf"
-alias ohmyzsh="nvim ~/.oh-my-zsh"
 alias config="/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME"
-alias dev="cd ~/Development"
-alias dow="cd ~/Downloads"
-alias sleep="sudo shutdown -s now"
-alias restart="sudo shutdown -r now"
-alias out="sudo pkill loginwindow"
-alias shutdown="sudo shutdown -h now"
-alias f='fzf-nvim'
-alias fcd='fzf-cd'
+alias ff='fzf-cd'
  
 # }}}
  
