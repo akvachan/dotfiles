@@ -176,44 +176,6 @@ require('lazy').setup({
       'williamboman/mason-lspconfig.nvim',
       dependencies = { 'williamboman/mason.nvim' },
     },
-    config = function()
-      local lspconfig = require('lspconfig')
-      local lsp_diag = vim.diagnostic
-
-      lspconfig.lua_ls.setup({
-        settings = {
-          Lua = {
-            diagnostics = { globals = { 'vim' } },
-            telemetry = { enable = false },
-            workspace = { checkThirdParty = false },
-          },
-        },
-      })
-
-      lspconfig.ts_ls.setup({})
-      lspconfig.pylsp.setup({
-        settings = {
-          pylsp = {
-            plugins = {
-              pycodestyle = {
-                ignore = { 'E501' },
-                maxLineLength = 120,
-              },
-            },
-          },
-        },
-      })
-
-      lspconfig.clangd.setup({})
-
-      lsp_diag.config({
-        virtual_text = false,
-        signs = true,
-        underline = false,
-        update_in_insert = false,
-        severity_sort = true,
-      })
-    end
   },
 
 }, {
@@ -228,6 +190,42 @@ require('lazy').setup({
   checker = { enabled = false },
 })
 
+local lspconfig = require('lspconfig')
+local lsp_diag = vim.diagnostic
+
+lspconfig.lua_ls.setup({
+  settings = {
+    Lua = {
+      diagnostics = { globals = { 'vim' } },
+      telemetry = { enable = false },
+      workspace = { checkThirdParty = false },
+    },
+  },
+})
+
+lspconfig.ts_ls.setup({})
+lspconfig.pylsp.setup({
+  settings = {
+    pylsp = {
+      plugins = {
+        pycodestyle = {
+          ignore = { 'E501' },
+          maxLineLength = 120,
+        },
+      },
+    },
+  },
+})
+
+lspconfig.clangd.setup({})
+
+lsp_diag.config({
+  virtual_text = false,
+  signs = true,
+  underline = false,
+  update_in_insert = false,
+  severity_sort = true,
+})
 --: }}}
 
 --: {{{ Custom Functions
