@@ -1,4 +1,4 @@
---: {{{ Basic Settings
+--: {{{ Basic Settings{{{
 
 local g, opt, cmd, fn, api = vim.g, vim.opt, vim.cmd, vim.fn, vim.api
 
@@ -37,7 +37,7 @@ opt.grepformat = '%f:%l:%c:%m,%f:%l:%m'
 
 cmd('colorscheme habamax')
 
---: }}}
+--: }}}}}}
 
 --: {{{ Lazy Plugin Setup
 
@@ -285,14 +285,13 @@ map('n', '<leader>fo', lsp.format, opts)
 map('n', '<leader>go', lsp.document_symbol, opts)
 map('n', '<leader>cd', diag.open_float, opts)
 map('n', '<leader>gf', diag.setqflist, opts)
-map('n', '[d', diag.goto_prev, opts)
-map('n', ']d', diag.goto_next, opts)
+map('n', '<leader>gp', diag.goto_prev, opts)
+map('n', '<leader>gn', diag.goto_next, opts)
 map('n', '<leader>q', ':Quit<CR>', opts)
 map('n', '<leader>w', ':w<CR>', opts)
 map('n', '<leader>l', ':Lazy<CR>', opts)
 map('n', '<leader>h', ':noh<CR>', opts)
 map('n', '<leader>t', ':term <Right><Right><Right><Right><Right>', { noremap = true, silent = false })
-map('n', '<leader>rr', ':@:<CR>', { noremap = true, silent = false })
 map('n', '-', ':Oil<CR>', opts)
 map({ 'n', 'v' }, '<leader>y', '"+y', opts)
 map({ 'n', 'v' }, '<leader>p', '"+p', opts)
