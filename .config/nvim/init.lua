@@ -1,7 +1,6 @@
 --: {{{ Basic Settings{{{
 
 local g, opt, cmd, fn, api = vim.g, vim.opt, vim.cmd, vim.fn, vim.api
-
 g.mapleader = ' '
 g.maplocalleader = ' '
 g.matchparen_timeout = 20
@@ -178,6 +177,88 @@ require('lazy').setup({
     },
   },
 
+  -- Autopair
+  {
+    'windwp/nvim-autopairs',
+    event = "InsertEnter",
+    config = true
+  },
+
+  -- Treesitter
+  {
+    'nvim-treesitter/nvim-treesitter',
+    build = ':TSUpdate',
+    event = { 'BufReadPre', 'BufNewFile' },
+    dependencies = {
+      'nvim-treesitter/nvim-treesitter-textobjects',
+    },
+    config = function()
+      require('nvim-treesitter.configs').setup {
+        ensure_installed = { 'cpp', 'c', 'lua', 'python', 'bash', 'json' },
+        highlight = { enable = true },
+        indent = { enable = true },
+        textobjects = {
+          select = {
+            enable = true,
+            lookahead = true,
+            keymaps = {
+              -- Functions
+              ["af"] = "@function.outer",
+              ["if"] = "@function.inner",
+
+              -- Classes
+              ["ac"] = "@class.outer",
+              ["ic"] = "@class.inner",
+
+              -- Parameters
+              ["aa"] = "@parameter.outer",
+              ["ia"] = "@parameter.inner",
+
+              -- Loops
+              ["al"] = "@loop.outer",
+              ["il"] = "@loop.inner",
+
+              -- Conditionals
+              ["ai"] = "@conditional.outer",
+              ["ii"] = "@conditional.inner",
+
+              -- Comments
+              ["a/"] = "@comment.outer",
+
+              -- Variables
+              ["av"] = "@assignment.outer",
+              ["iv"] = "@assignment.inner",
+            },
+          },
+
+          move = {
+            enable = true,
+            set_jumps = true,
+            goto_next_start = {
+              ["]f"] = "@function.outer",
+              ["]c"] = "@class.outer",
+              ["]a"] = "@parameter.inner",
+              ["]l"] = "@loop.outer",
+              ["]i"] = "@conditional.outer",
+              ["]/"] = "@comment.outer",
+              ["]v"] = "@assignment.outer",
+            },
+            goto_previous_start = {
+              ["[f"] = "@function.outer",
+              ["[c"] = "@class.outer",
+              ["[a"] = "@parameter.inner",
+              ["[l"] = "@loop.outer",
+              ["[i"] = "@conditional.outer",
+              ["[/"] = "@comment.outer",
+              ["[v"] = "@assignment.outer",
+            },
+          },
+        },
+      }
+    end,
+  }
+  ,
+
 }, {
   performance = {
     rtp = {
@@ -250,12 +331,6 @@ api.nvim_create_user_command('RmTerms', function()
   end
 end, {})
 
-api.nvim_create_user_command('Quit', function()
-  local oil = require('oil')
-  oil.discard_all_changes()
-  cmd('q!')
-end, {})
-
 --: }}}
 
 --: {{{ Keymaps
@@ -287,7 +362,8 @@ map('n', '<leader>cd', diag.open_float, opts)
 map('n', '<leader>gf', diag.setqflist, opts)
 map('n', '<leader>gp', diag.goto_prev, opts)
 map('n', '<leader>gn', diag.goto_next, opts)
-map('n', '<leader>q', ':Quit<CR>', opts)
+map('n', '<leader>q', ':q!<CR>', opts)
+map('n', '<leader>Q', ':qa!<CR>', opts)
 map('n', '<leader>w', ':w<CR>', opts)
 map('n', '<leader>l', ':Lazy<CR>', opts)
 map('n', '<leader>h', ':noh<CR>', opts)
@@ -297,5 +373,8 @@ map({ 'n', 'v' }, '<leader>y', '"+y', opts)
 map({ 'n', 'v' }, '<leader>p', '"+p', opts)
 map({ 'n', 'v' }, '<leader>m', ':let @*=trim(execute("1messages"))<cr>', opts)
 map({ 'n', 'v' }, '<leader>d', "'_d", opts)
-
+map('i', '<C-h>', '<Left>', opts)
+map('i', '<C-j>', '<Down>', opts)
+map('i', '<C-k>', '<Up>', opts)
+map('i', '<C-l>', '<Right>', opts)
 --: }}}
