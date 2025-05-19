@@ -6,6 +6,7 @@ g.maplocalleader = ' '
 g.matchparen_timeout = 20
 g.matchparen_insert_timeout = 20
 
+opt.mouse = 'a'
 opt.number = true
 opt.relativenumber = true
 opt.tabstop = 2
@@ -57,20 +58,10 @@ require('lazy').setup({
       'hrsh7th/cmp-buffer',
       'hrsh7th/cmp-path',
       'hrsh7th/cmp-cmdline',
-      {
-        'L3MON4D3/LuaSnip',
-        build = 'make install_jsregexp',
-        event = "InsertEnter",
-      },
     },
     config = function()
       local cmp = require('cmp')
       cmp.setup({
-        snippet = {
-          expand = function(args)
-            require('luasnip').lsp_expand(args.body)
-          end,
-        },
         mapping = {
           ['<C-j>'] = cmp.mapping.select_next_item(),
           ['<C-k>'] = cmp.mapping.select_prev_item(),
@@ -146,6 +137,17 @@ require('lazy').setup({
     end
   },
 
+
+  -- LSP
+  {
+    'neovim/nvim-lspconfig',
+    event = { 'BufReadPre', 'BufNewFile' },
+    ft = { 'lua', 'typescript', 'python', 'cpp' },
+    {
+      'williamboman/mason-lspconfig.nvim',
+      dependencies = { 'williamboman/mason.nvim' },
+    },
+  },
   {
     'williamboman/mason.nvim',
     cmd = 'Mason',
@@ -164,17 +166,6 @@ require('lazy').setup({
         ensure_installed = {},
       })
     end
-  },
-
-  -- LSP
-  {
-    'neovim/nvim-lspconfig',
-    event = { 'BufReadPre', 'BufNewFile' },
-    ft = { 'lua', 'typescript', 'python', 'cpp' },
-    {
-      'williamboman/mason-lspconfig.nvim',
-      dependencies = { 'williamboman/mason.nvim' },
-    },
   },
 
   -- Autopair
@@ -283,21 +274,8 @@ lspconfig.lua_ls.setup({
     },
   },
 })
-
 lspconfig.ts_ls.setup({})
-lspconfig.pylsp.setup({
-  settings = {
-    pylsp = {
-      plugins = {
-        pycodestyle = {
-          ignore = { 'E501' },
-          maxLineLength = 120,
-        },
-      },
-    },
-  },
-})
-
+lspconfig.pylsp.setup({})
 lspconfig.clangd.setup({})
 
 lsp_diag.config({
@@ -307,9 +285,18 @@ lsp_diag.config({
   update_in_insert = false,
   severity_sort = true,
 })
+
 --: }}}
 
 --: {{{ Custom Functions
+
+api.nvim_create_user_command('RmTerms', function()
+  for _, buf in ipairs(api.nvim_list_bufs()) do
+    if api.nvim_buf_get_option(buf, 'buftype') == 'terminal' then
+      api.nvim_buf_delete(buf, { force = true })
+    end
+  end
+end, {})
 
 api.nvim_create_autocmd({ 'CursorMoved', 'VimResized' }, {
   callback = function(event)
@@ -322,14 +309,6 @@ api.nvim_create_autocmd({ 'CursorMoved', 'VimResized' }, {
     end
   end,
 })
-
-api.nvim_create_user_command('RmTerms', function()
-  for _, buf in ipairs(api.nvim_list_bufs()) do
-    if api.nvim_buf_get_option(buf, 'buftype') == 'terminal' then
-      api.nvim_buf_delete(buf, { force = true })
-    end
-  end
-end, {})
 
 --: }}}
 
@@ -377,4 +356,5 @@ map('i', '<C-h>', '<Left>', opts)
 map('i', '<C-j>', '<Down>', opts)
 map('i', '<C-k>', '<Up>', opts)
 map('i', '<C-l>', '<Right>', opts)
+
 --: }}}

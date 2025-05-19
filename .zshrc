@@ -57,7 +57,6 @@ alias ff='fzf-cd'
  
 #: Editor {{{
  
-set -o vi
 export VISUAL='nvim'
 export EDITOR='nvim'
  
