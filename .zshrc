@@ -52,7 +52,6 @@ alias nvimrc="nvim ~/.config/nvim/init.lua"
 alias kittyrc="nvim ~/.config/kitty/kitty.conf"
 alias config="/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME"
 alias icat="kitten icat"
-alias pdf="kitten icat"
 alias ssh="kitten ssh"
 
 #: }}}
