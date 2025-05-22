@@ -1,4 +1,4 @@
---: {{{ Basic Settings{{{
+--: {{{ Basic Settings
 
 local g, opt, cmd, fn, api = vim.g, vim.opt, vim.cmd, vim.fn, vim.api
 g.mapleader = ' '
@@ -37,7 +37,7 @@ opt.grepformat = '%f:%l:%c:%m,%f:%l:%m'
 
 cmd('colorscheme habamax')
 
---: }}}}}}
+--: }}}
 
 --: {{{ Lazy Plugin Setup
 

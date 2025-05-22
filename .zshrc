@@ -1,82 +1,68 @@
 #!/bin/sh
  
-#: Oh My Zsh Settings {{{
- 
-#: Color Theme {{{
- 
+#: {{{ oh-my-zsh
+
 ZSH_THEME="apple"
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
- 
-# }}}
- 
-#: Plugins {{{
- 
 plugins=(
   git
   fzf
   zsh-syntax-highlighting
+  fancy-ctrl-z
 )
- 
-# }}}
- 
-#: Installation {{{
- 
-# Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 source $ZSH/oh-my-zsh.sh
- 
-# }}}
- 
-# }}}
- 
-#: Basic Settings {{{
- 
-#: Functions {{{
- 
-fzf-nvim() {
+
+#: }}} 
+
+#: {{{ Custom Functions
+
+# Function to fuzzy search projects 
+function fzf-cd() {
   local dir
-  dir=$(find ~/Development -type d | fzf) && nvim --cmd "cd $dir" "$dir"
+  dir=$(
+    find ~/Development \
+      -maxdepth 5 \
+      \( -name '.*' -prune \) \
+      -o -type d -print \
+    | fzf
+  ) && cd "$dir"
 }
 
-fzf-cd() {
-  local dir
-  dir=$(find ~/Development -type d | fzf) && cd $dir
+function fzf-cd-widget() {
+  fzf-cd
+  zle reset-prompt
 }
+zle -N fzf-cd-widget
+
+
+#: }}}
+
+#: {{{ Keybinds
+
+bindkey '^F' fzf-cd-widget
+
+#: }}}
  
-# }}}
- 
-#: Aliases {{{
- 
+#: {{{ Aliases
+
 alias zshrc="nvim ~/.zshrc"
 alias asrc="nvim ~/.config/aerospace/aerospace.toml"
 alias nvimrc="nvim ~/.config/nvim/init.lua"
+alias kittyrc="nvim ~/.config/kitty/kitty.conf"
 alias config="/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME"
-alias ff='fzf-cd'
+alias icat="kitten icat"
+alias pdf="kitten icat"
+alias ssh="kitten ssh"
+
+#: }}}
  
-# }}}
- 
-#: Editor {{{
- 
+#: {{{ Exports
+
 export VISUAL='nvim'
 export EDITOR='nvim'
- 
-# }}}
- 
-# }}}
- 
-#: Extra {{{
- 
-#: VulkanSDK {{{
- 
 export VULKAN_SDK=/Users/arseniikvachan/VulkanSDK/1.3.290.0
- 
-# }}}
- 
-#: STM32CubeMX {{{
- 
 export STM32CubeMX_PATH=/Applications/STMicroelectronics/STM32CubeMX.app/Contents/Resources
 export STM32_PRG_PATH=/Applications/STMicroelectronics/STM32Cube/STM32CubeProgrammer/STM32CubeProgrammer.app/Contents/MacOs/bin
- 
-# }}}
 
-# }}} 
+#: }}}
