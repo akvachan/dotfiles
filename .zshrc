@@ -29,18 +29,11 @@ function fzf-cd() {
   ) && cd "$dir"
 }
 
-function fzf-cd-widget() {
-  fzf-cd
-  zle reset-prompt
-}
-zle -N fzf-cd-widget
-
-
 #: }}}
 
 #: {{{ Keybinds
 
-bindkey '^F' fzf-cd-widget
+bindkey -s '^F' 'fzf-cd\n'
 
 #: }}}
  
