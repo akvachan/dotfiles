@@ -4,6 +4,13 @@ enable-normalization-opposite-orientation-for-nested-containers = true
 on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 
 [mode.main.binding]
+
+    cmd-alt-ctrl-n = '''exec-and-forget osascript -e '
+    tell application "Safari"
+        make new document at end of documents
+        activate
+    end tell'
+    '''
     cmd-alt-ctrl-h = 'focus left'
     cmd-alt-ctrl-j = 'focus down'
     cmd-alt-ctrl-k = 'focus up'
@@ -63,3 +70,23 @@ on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
     l = 'resize width +50'
     enter = 'mode main'
     esc = 'mode main'
+
+[[on-window-detected]]
+    if.app-id = 'net.kovidgoyal.kitty'
+    run = 'move-node-to-workspace 1' 
+
+[[on-window-detected]]
+    if.app-id = 'com.tdesktop.Telegram'
+    run = 'move-node-to-workspace 3'
+
+[[on-window-detected]]
+    if.app-id = 'com.apple.mail'
+    run = 'move-node-to-workspace 4'
+
+[[on-window-detected]]
+    if.app-id = 'com.apple.iCal'
+    run = 'move-node-to-workspace 4'
+
+[[on-window-detected]]
+    if.app-id = 'md.obsidian'
+    run = 'move-node-to-workspace 5'
