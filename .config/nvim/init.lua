@@ -107,7 +107,7 @@ require('lazy').setup({
   -- File explorer
   {
     'stevearc/oil.nvim',
-    lazy = false,
+    event = "VimEnter",
     config = function()
       local oil = require('oil')
       oil.setup({
@@ -116,37 +116,40 @@ require('lazy').setup({
           ['<leader>oc'] = oil.discard_all_changes,
         },
       })
-
-      vim.api.nvim_create_autocmd("VimEnter", {
-        callback = function()
-          local arg = vim.fn.argv()[1]
-          if arg and vim.fn.isdirectory(arg) == 1 then
-            vim.cmd("Oil")
-          end
-        end,
-      })
     end
   },
 
   -- Surround editing
   {
     'kylechui/nvim-surround',
-    event = 'VeryLazy',
+    event = "VeryLazy",
     config = function()
       require('nvim-surround').setup()
     end
   },
 
+  -- Autopair
+  {
+    'windwp/nvim-autopairs',
+    event = "InsertEnter",
+    config = true
+  },
 
   -- LSP
   {
     'neovim/nvim-lspconfig',
     event = { 'BufReadPre', 'BufNewFile' },
     ft = { 'lua', 'typescript', 'python', 'cpp' },
-    {
-      'williamboman/mason-lspconfig.nvim',
-      dependencies = { 'williamboman/mason.nvim' },
-    },
+    dependencies = { 'williamboman/mason-lspconfig.nvim' },
+    config = function()
+      vim.diagnostic.config({
+        virtual_text = false,
+        signs = true,
+        underline = false,
+        update_in_insert = false,
+        severity_sort = true,
+      })
+    end
   },
   {
     'williamboman/mason.nvim',
@@ -166,13 +169,6 @@ require('lazy').setup({
         ensure_installed = {},
       })
     end
-  },
-
-  -- Autopair
-  {
-    'windwp/nvim-autopairs',
-    event = "InsertEnter",
-    config = true
   },
 
   -- Treesitter
@@ -196,32 +192,25 @@ require('lazy').setup({
               -- Functions
               ["af"] = "@function.outer",
               ["if"] = "@function.inner",
-
               -- Classes
               ["ac"] = "@class.outer",
               ["ic"] = "@class.inner",
-
               -- Parameters
               ["aa"] = "@parameter.outer",
               ["ia"] = "@parameter.inner",
-
               -- Loops
               ["al"] = "@loop.outer",
               ["il"] = "@loop.inner",
-
               -- Conditionals
               ["ai"] = "@conditional.outer",
               ["ii"] = "@conditional.inner",
-
               -- Comments
               ["a/"] = "@comment.outer",
-
               -- Variables
               ["av"] = "@assignment.outer",
               ["iv"] = "@assignment.inner",
             },
           },
-
           move = {
             enable = true,
             set_jumps = true,
@@ -248,7 +237,6 @@ require('lazy').setup({
       }
     end,
   }
-  ,
 
 }, {
   performance = {
@@ -260,30 +248,6 @@ require('lazy').setup({
     },
   },
   checker = { enabled = false },
-})
-
-local lspconfig = require('lspconfig')
-local lsp_diag = vim.diagnostic
-
-lspconfig.lua_ls.setup({
-  settings = {
-    Lua = {
-      diagnostics = { globals = { 'vim' } },
-      telemetry = { enable = false },
-      workspace = { checkThirdParty = false },
-    },
-  },
-})
-lspconfig.ts_ls.setup({})
-lspconfig.pylsp.setup({})
-lspconfig.clangd.setup({})
-
-lsp_diag.config({
-  virtual_text = false,
-  signs = true,
-  underline = false,
-  update_in_insert = false,
-  severity_sort = true,
 })
 
 --: }}}
@@ -321,11 +285,6 @@ local diag = vim.diagnostic
 
 map('n', 'j', 'gj', opts)
 map('n', 'k', 'gk', opts)
-map('n', '<leader>cn', ':copen<CR>', opts)
-map('n', '<leader>cc', ':cclose<CR>', opts)
-map('n', '<leader>ce', ':cend<CR>', opts)
-map('n', '<leader>cp', ':cprev<CR>', opts)
-map('n', '<leader>cb', ':cbegin<CR>', opts)
 map('n', '<leader>rm', ':RmTerms<CR>', opts)
 map('n', '<leader>gg', ':!git <Right><Right><Right><Right><Right>')
 map('n', '<leader>gd', lsp.definition, opts)
@@ -367,8 +326,8 @@ map('t', '<A-h>', '<C-\\><C-N><C-w>h', { silent = false })
 map('t', '<A-j>', '<C-\\><C-N><C-w>j', { silent = false })
 map('t', '<A-k>', '<C-\\><C-N><C-w>k', { silent = false })
 map('t', '<A-l>', '<C-\\><C-N><C-w>l', { silent = false })
-map('t', '<A-h>', '<C-w>h', { silent = false })
-map('t', '<A-j>', '<C-w>j', { silent = false })
-map('t', '<A-k>', '<C-w>k', { silent = false })
-map('t', '<A-l>', '<C-w>l', { silent = false })
+map({ 'n', 't' }, '<A-h>', '<C-w>h', { silent = false })
+map({ 'n', 't' }, '<A-j>', '<C-w>j', { silent = false })
+map({ 'n', 't' }, '<A-k>', '<C-w>k', { silent = false })
+map({ 'n', 't' }, '<A-l>', '<C-w>l', { silent = false })
 --: }}}
