@@ -137,11 +137,16 @@ require('lazy').setup({
 
   -- LSP
   {
-    'neovim/nvim-lspconfig',
-    event = { 'BufReadPre', 'BufNewFile' },
-    ft = { 'lua', 'typescript', 'python', 'cpp' },
-    dependencies = { 'williamboman/mason-lspconfig.nvim' },
+    'williamboman/mason-lspconfig.nvim',
+    dependencies = {
+      'williamboman/mason.nvim',
+      'neovim/nvim-lspconfig',
+    },
     config = function()
+      require("mason").setup()
+      require("mason-lspconfig").setup({
+        automatic_enable = true
+      })
       vim.diagnostic.config({
         virtual_text = false,
         signs = true,
@@ -149,26 +154,7 @@ require('lazy').setup({
         update_in_insert = false,
         severity_sort = true,
       })
-    end
-  },
-  {
-    'williamboman/mason.nvim',
-    cmd = 'Mason',
-    config = function()
-      require('mason').setup()
-    end
-  },
-  {
-    'williamboman/mason-lspconfig.nvim',
-    event = { "BufReadPre", "BufNewFile" },
-    dependencies = {
-      'williamboman/mason.nvim'
-    },
-    config = function()
-      require('mason-lspconfig').setup({
-        ensure_installed = {},
-      })
-    end
+    end,
   },
 
   -- Treesitter
@@ -181,7 +167,7 @@ require('lazy').setup({
     },
     config = function()
       require('nvim-treesitter.configs').setup {
-        ensure_installed = { 'cpp', 'c', 'lua', 'python', 'bash', 'json' },
+        ensure_installed = { 'cpp', 'c', 'lua', 'python', 'bash', 'json', 'typescript', 'javascript' },
         highlight = { enable = true },
         indent = { enable = true },
         textobjects = {
@@ -242,8 +228,33 @@ require('lazy').setup({
   performance = {
     rtp = {
       disabled_plugins = {
-        'gzip', 'netrwPlugin', 'tarPlugin', 'tohtml',
-        'tutor', 'zipPlugin', 'osc52', 'spellfile', 'matchit',
+        "2html_plugin",
+        "tohtml",
+        "getscript",
+        "getscriptPlugin",
+        "gzip",
+        "logipat",
+        "netrw",
+        "netrwPlugin",
+        "netrwSettings",
+        "netrwFileHandlers",
+        "matchit",
+        "tar",
+        "tarPlugin",
+        "rrhelper",
+        "spellfile_plugin",
+        "vimball",
+        "vimballPlugin",
+        "zip",
+        "zipPlugin",
+        "tutor",
+        "rplugin",
+        "syntax",
+        "synmenu",
+        "optwin",
+        "compiler",
+        "bugreport",
+        "ftplugin",
       },
     },
   },
@@ -279,55 +290,42 @@ api.nvim_create_autocmd({ 'CursorMoved', 'VimResized' }, {
 --: {{{ Keymaps
 
 local map = vim.keymap.set
-local opts = { noremap = true, silent = true }
+local silent_opts = { noremap = true, silent = true }
+local opts = { noremap = true, silent = false }
 local lsp = vim.lsp.buf
 local diag = vim.diagnostic
 
-map('n', 'j', 'gj', opts)
-map('n', 'k', 'gk', opts)
-map('n', '<leader>rm', ':RmTerms<CR>', opts)
-map('n', '<leader>gg', ':!git <Right><Right><Right><Right><Right>')
-map('n', '<leader>gd', lsp.definition, opts)
-map('n', '<leader>gl', lsp.declaration, opts)
-map('n', '<leader>gr', lsp.references, opts)
-map('n', '<leader>gi', lsp.implementation, opts)
-map('n', '<leader>gh', lsp.hover, opts)
-map('n', '<leader>rn', lsp.rename, opts)
-map('n', '<leader>ca', lsp.code_action, opts)
-map('n', '<leader>fo', lsp.format, opts)
-map('n', '<leader>go', lsp.document_symbol, opts)
-map('n', '<leader>cd', diag.open_float, opts)
-map('n', '<leader>gf', diag.setqflist, opts)
-map('n', '<leader>gp', diag.goto_prev, opts)
-map('n', '<leader>gn', diag.goto_next, opts)
-map('n', '<leader>q', ':q!<CR>', opts)
-map('n', '<leader>Q', ':qa!<CR>', opts)
-map('n', '<leader>w', ':w<CR>', opts)
-map('n', '<leader>l', ':Lazy<CR>', opts)
-map('n', '<leader>h', ':noh<CR>', opts)
-map('n', '<leader>t', ':term <Right><Right><Right><Right><Right>', { noremap = true, silent = false })
-map('n', '-', ':Oil<CR>', opts)
-map({ 'n', 'v' }, '<leader>y', '"+y', opts)
-map({ 'n', 'v' }, '<leader>p', '"+p', opts)
-map({ 'n', 'v' }, '<leader>m', ':let @*=trim(execute("1messages"))<cr>', opts)
-map({ 'n', 'v' }, '<leader>d', "'_d", { silent = false })
-map({ 'i', 'c' }, '<C-h>', '<Left>', { silent = false })
-map({ 'i', 'c' }, '<C-j>', '<Down>', { silent = false })
-map({ 'i', 'c' }, '<C-k>', '<Up>', { silent = false })
-map({ 'i', 'c' }, '<C-l>', '<Right>', { silent = false })
-map('c', '<M-b>', '<C-Left>', { silent = false })
-map('c', '<M-f>', '<C-Right>', { silent = false })
-map('t', '<Esc>', '<C-\\><C-n>', { silent = false })
-map('t', '<A-h>', '<C-\\><C-N><C-w>h', { silent = false })
-map('t', '<A-j>', '<C-\\><C-N><C-w>j', { silent = false })
-map('t', '<A-k>', '<C-\\><C-N><C-w>k', { silent = false })
-map('t', '<A-l>', '<C-\\><C-N><C-w>l', { silent = false })
-map('t', '<A-h>', '<C-\\><C-N><C-w>h', { silent = false })
-map('t', '<A-j>', '<C-\\><C-N><C-w>j', { silent = false })
-map('t', '<A-k>', '<C-\\><C-N><C-w>k', { silent = false })
-map('t', '<A-l>', '<C-\\><C-N><C-w>l', { silent = false })
-map({ 'n', 't' }, '<A-h>', '<C-w>h', { silent = false })
-map({ 'n', 't' }, '<A-j>', '<C-w>j', { silent = false })
-map({ 'n', 't' }, '<A-k>', '<C-w>k', { silent = false })
-map({ 'n', 't' }, '<A-l>', '<C-w>l', { silent = false })
+map('n', 'j', 'gj', silent_opts)
+map('n', 'k', 'gk', silent_opts)
+map('n', '<leader>rm', ':RmTerms<CR>', silent_opts)
+map('n', '<leader>gg', ':!git <Right><Right><Right><Right><Right>', opts)
+map('n', '<leader>gd', lsp.definition, silent_opts)
+map('n', '<leader>gl', lsp.declaration, silent_opts)
+map('n', '<leader>gr', lsp.references, silent_opts)
+map('n', '<leader>gi', lsp.implementation, silent_opts)
+map('n', '<leader>gh', lsp.hover, silent_opts)
+map('n', '<leader>rn', lsp.rename, silent_opts)
+map('n', '<leader>ca', lsp.code_action, silent_opts)
+map('n', '<leader>fo', lsp.format, silent_opts)
+map('n', '<leader>go', lsp.document_symbol, silent_opts)
+map('n', '<leader>cd', diag.open_float, silent_opts)
+map('n', '<leader>gf', diag.setqflist, silent_opts)
+map('n', '<leader>gp', diag.goto_prev, silent_opts)
+map('n', '<leader>gn', diag.goto_next, silent_opts)
+map('n', '<leader>q', ':q!<CR>', silent_opts)
+map('n', '<leader>Q', ':qa!<CR>', silent_opts)
+map('n', '<leader>w', ':w<CR>', silent_opts)
+map('n', '<leader>l', ':Lazy<CR>', silent_opts)
+map('n', '<leader>h', ':noh<CR>', silent_opts)
+map('n', '<leader>t', ':term <Right><Right><Right><Right><Right>', opts)
+map('n', '-', ':Oil<CR>', silent_opts)
+map({ 'n', 'v' }, '<leader>y', '"+y', silent_opts)
+map({ 'n', 'v' }, '<leader>p', '"+p', silent_opts)
+map({ 'i', 'c' }, '<C-h>', '<Left>', opts)
+map({ 'i', 'c' }, '<C-j>', '<Down>', opts)
+map({ 'i', 'c' }, '<C-k>', '<Up>', opts)
+map({ 'i', 'c' }, '<C-l>', '<Right>', opts)
+map('c', '<M-b>', '<C-Left>', opts)
+map('c', '<M-f>', '<C-Right>', opts)
+map('t', '<Esc>', '<C-\\><C-n>', opts)
 --: }}}
