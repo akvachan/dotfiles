@@ -137,15 +137,8 @@ require('lazy').setup({
 
   -- LSP
   {
-    'williamboman/mason-lspconfig.nvim',
-    dependencies = {
-      'nvim-lspconfig',
-      'williamboman/mason.nvim',
-    },
+    'nvim-lspconfig',
     config = function()
-      require("mason").setup()
-      require("mason-lspconfig").setup()
-
       vim.lsp.enable({ "pyright", "ruff", "lua_ls" })
       vim.diagnostic.config({
         virtual_text = false,
