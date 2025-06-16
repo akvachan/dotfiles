@@ -139,14 +139,14 @@ require('lazy').setup({
   {
     'williamboman/mason-lspconfig.nvim',
     dependencies = {
+      'nvim-lspconfig',
       'williamboman/mason.nvim',
-      'neovim/nvim-lspconfig',
     },
     config = function()
       require("mason").setup()
-      require("mason-lspconfig").setup({
-        automatic_enable = true
-      })
+      require("mason-lspconfig").setup()
+
+      vim.lsp.enable({ "pyright", "ruff", "lua_ls" })
       vim.diagnostic.config({
         virtual_text = false,
         signs = true,
@@ -318,6 +318,7 @@ map('n', '<leader>w', ':w<CR>', silent_opts)
 map('n', '<leader>l', ':Lazy<CR>', silent_opts)
 map('n', '<leader>h', ':noh<CR>', silent_opts)
 map('n', '<leader>t', ':term <Right><Right><Right><Right><Right>', opts)
+map('n', '<leader>s', ':b#', opts)
 map('n', '-', ':Oil<CR>', silent_opts)
 map({ 'n', 'v' }, '<leader>y', '"+y', silent_opts)
 map({ 'n', 'v' }, '<leader>p', '"+p', silent_opts)
