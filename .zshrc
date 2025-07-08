@@ -1,3 +1,5 @@
+#!/usr/bin/zsh
+
 # Personal Zsh configuration file. It is strongly recommended to keep all
 # shell customization and configuration (including exported environment
 # variables such as PATH) in this file or in files sourced from it.
@@ -58,17 +60,8 @@ z4h init || return
 # Extend PATH.
 path=(~/bin $path)
 
-# Export environment variables.
-export GPG_TTY=$TTY
-
 # Source additional local files if they exist.
 z4h source ~/.env.zsh
-
-# Use additional Git repositories pulled in with `z4h install`.
-#
-# This is just an example that you should delete. It does nothing useful.
-z4h source ohmyzsh/ohmyzsh/lib/diagnostics.zsh  # source an individual file
-z4h load   ohmyzsh/ohmyzsh/plugins/emoji-clock  # load a plugin
 
 # Define key bindings.
 z4h bindkey undo Ctrl+/   Shift+Tab  # undo the last command line change
@@ -102,7 +95,7 @@ setopt no_auto_menu  # require an extra TAB press to open the completion menu
 # Custom functions
 
 # Function to cd into projects via fzf
-function fcd() {
+function ff() {
   local dir
   dir=$(
     find ~/Development \
@@ -122,12 +115,15 @@ alias kittyrc="nvim ~/.config/kitty/kitty.conf"
 alias config="/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME"
 alias icat="kitten icat"
 alias ssh="kitten ssh"
+alias ttd="tt -csv >> ~/.wpm.csv"
+alias quote="curl http://api.quotable.io/random|jq '[.text=.content|.attribution=.author]'|tt -quotes -"
+alias qwen="llama-cli -m ~/Library/Caches/llama.cpp/unsloth_Qwen2.5-Omni-7B-GGUF_Qwen2.5-Omni-7B-Q4_K_M.gguf"
+alias qwen-server="llama-server -m ~/Library/Caches/llama.cpp/unsloth_Qwen2.5-Omni-7B-GGUF_Qwen2.5-Omni-7B-Q4_K_M.gguf --mmproj ~/Library/Caches/llama.cpp/unsloth_Qwen2.5-Omni-7B-GGUF_mmproj-F16.gguf"
+alias phi="llama-cli -m ~/Library/Caches/llama.cpp/unsloth_Phi-4-reasoning-plus-GGUF_Phi-4-reasoning-plus-Q4_K_M.gguf"
+alias phi-server="llama-server -m ~/Library/Caches/llama.cpp/unsloth_Phi-4-reasoning-plus-GGUF_Phi-4-reasoning-plus-Q4_K_M.gguf"
+alias l="ls -la"
 
 # Custom exports
 
 export VISUAL='nvim'
 export EDITOR='nvim'
-export VULKAN_SDK=/Users/arseniikvachan/VulkanSDK/1.3.290.0
-export STM32CubeMX_PATH=/Applications/STMicroelectronics/STM32CubeMX.app/Contents/Resources
-export STM32_PRG_PATH=/Applications/STMicroelectronics/STM32Cube/STM32CubeProgrammer/STM32CubeProgrammer.app/Contents/MacOs/bin
-

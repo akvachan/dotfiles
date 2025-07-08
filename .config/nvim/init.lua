@@ -21,6 +21,7 @@ opt.ignorecase = true
 opt.termguicolors = true
 opt.foldmethod = 'marker'
 opt.foldenable = true
+opt.scrolloff = 1000
 opt.foldlevel = 20
 opt.updatetime = 100
 opt.splitbelow = true
@@ -48,7 +49,6 @@ end
 opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
-
   -- Completion
   {
     'hrsh7th/nvim-cmp',
@@ -151,71 +151,74 @@ require('lazy').setup({
   },
 
   -- Treesitter
-  {
-    'nvim-treesitter/nvim-treesitter',
-    build = ':TSUpdate',
-    event = { 'BufReadPre', 'BufNewFile' },
-    dependencies = {
-      'nvim-treesitter/nvim-treesitter-textobjects',
-    },
-    config = function()
-      require('nvim-treesitter.configs').setup {
-        ensure_installed = { 'cpp', 'c', 'lua', 'python', 'bash', 'json', 'typescript', 'javascript' },
-        highlight = { enable = true },
-        indent = { enable = true },
-        textobjects = {
-          select = {
-            enable = true,
-            lookahead = true,
-            keymaps = {
-              -- Functions
-              ["af"] = "@function.outer",
-              ["if"] = "@function.inner",
-              -- Classes
-              ["ac"] = "@class.outer",
-              ["ic"] = "@class.inner",
-              -- Parameters
-              ["aa"] = "@parameter.outer",
-              ["ia"] = "@parameter.inner",
-              -- Loops
-              ["al"] = "@loop.outer",
-              ["il"] = "@loop.inner",
-              -- Conditionals
-              ["ai"] = "@conditional.outer",
-              ["ii"] = "@conditional.inner",
-              -- Comments
-              ["a/"] = "@comment.outer",
-              -- Variables
-              ["av"] = "@assignment.outer",
-              ["iv"] = "@assignment.inner",
-            },
-          },
-          move = {
-            enable = true,
-            set_jumps = true,
-            goto_next_start = {
-              ["]f"] = "@function.outer",
-              ["]c"] = "@class.outer",
-              ["]a"] = "@parameter.inner",
-              ["]l"] = "@loop.outer",
-              ["]i"] = "@conditional.outer",
-              ["]/"] = "@comment.outer",
-              ["]v"] = "@assignment.outer",
-            },
-            goto_previous_start = {
-              ["[f"] = "@function.outer",
-              ["[c"] = "@class.outer",
-              ["[a"] = "@parameter.inner",
-              ["[l"] = "@loop.outer",
-              ["[i"] = "@conditional.outer",
-              ["[/"] = "@comment.outer",
-              ["[v"] = "@assignment.outer",
-            },
-          },
-        },
-      }
-    end,
-  }
+  -- {
+  --   'nvim-treesitter/nvim-treesitter',
+  --   build = ':TSUpdate',
+  --   event = { 'BufReadPre', 'BufNewFile' },
+  --   dependencies = {
+  --     {
+  --       'nvim-treesitter/nvim-treesitter-textobjects',
+  --       event = { 'BufReadPre', 'BufNewFile' },
+  --     }
+  --   },
+  --   config = function()
+  --     require('nvim-treesitter.configs').setup {
+  --       ensure_installed = { 'cpp', 'c', 'lua', 'python', 'bash', 'json', 'typescript', 'javascript' },
+  --       highlight = { enable = true },
+  --       indent = { enable = true },
+  --       textobjects = {
+  --         select = {
+  --           enable = true,
+  --           lookahead = true,
+  --           keymaps = {
+  --             -- Functions
+  --             ["af"] = "@function.outer",
+  --             ["if"] = "@function.inner",
+  --             -- Classes
+  --             ["ac"] = "@class.outer",
+  --             ["ic"] = "@class.inner",
+  --             -- Parameters
+  --             ["aa"] = "@parameter.outer",
+  --             ["ia"] = "@parameter.inner",
+  --             -- Loops
+  --             ["al"] = "@loop.outer",
+  --             ["il"] = "@loop.inner",
+  --             -- Conditionals
+  --             ["ai"] = "@conditional.outer",
+  --             ["ii"] = "@conditional.inner",
+  --             -- Comments
+  --             ["a/"] = "@comment.outer",
+  --             -- Variables
+  --             ["av"] = "@assignment.outer",
+  --             ["iv"] = "@assignment.inner",
+  --           },
+  --         },
+  --         move = {
+  --           enable = true,
+  --           set_jumps = true,
+  --           goto_next_start = {
+  --             ["]f"] = "@function.outer",
+  --             ["]c"] = "@class.outer",
+  --             ["]a"] = "@parameter.inner",
+  --             ["]l"] = "@loop.outer",
+  --             ["]i"] = "@conditional.outer",
+  --             ["]/"] = "@comment.outer",
+  --             ["]v"] = "@assignment.outer",
+  --           },
+  --           goto_previous_start = {
+  --             ["[f"] = "@function.outer",
+  --             ["[c"] = "@class.outer",
+  --             ["[a"] = "@parameter.inner",
+  --             ["[l"] = "@loop.outer",
+  --             ["[i"] = "@conditional.outer",
+  --             ["[/"] = "@comment.outer",
+  --             ["[v"] = "@assignment.outer",
+  --           },
+  --         },
+  --       },
+  --     }
+  --   end,
+  -- },
 
 }, {
   performance = {
@@ -258,6 +261,7 @@ require('lazy').setup({
 
 --: {{{ Custom Functions
 
+-- Delete terminal buffers
 api.nvim_create_user_command('RmTerms', function()
   for _, buf in ipairs(api.nvim_list_bufs()) do
     if api.nvim_buf_get_option(buf, 'buftype') == 'terminal' then
@@ -266,15 +270,32 @@ api.nvim_create_user_command('RmTerms', function()
   end
 end, {})
 
-api.nvim_create_autocmd({ 'CursorMoved', 'VimResized' }, {
-  callback = function(event)
-    if event.event == 'CursorMoved' then
-      if not vim.bo.buftype:match("terminal") then
-        cmd('normal! zz')
-      end
-    else
-      cmd('wincmd =')
+-- Remove background color
+api.nvim_create_autocmd("UIEnter", {
+  group = api.nvim_create_augroup("set_terminal_bg", {}),
+  callback = function()
+    local bg = api.nvim_get_hl_by_name("Normal", true)["background"]
+    if not bg then
+      return
     end
+
+    local fmt = string.format
+
+    if os.getenv("TMUX") then
+      bg = fmt('printf "\\ePtmux;\\e\\033]11;#%06x\\007\\e\\\\"', bg)
+    else
+      bg = fmt('printf "\\033]11;#%06x\\007"', bg)
+    end
+
+    os.execute(bg)
+    return true
+  end,
+})
+
+-- Resize vim automatically
+api.nvim_create_autocmd('VimResized', {
+  callback = function(event)
+    cmd('wincmd =')
   end,
 })
 

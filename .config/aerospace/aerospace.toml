@@ -17,6 +17,8 @@ on-focus-changed = ['move-mouse window-lazy-center']
     cmd-alt-ctrl-k = 'focus up'
     cmd-alt-ctrl-l = 'focus right'
 
+    cmd-alt-ctrl-semicolon = 'layout tiles horizontal vertical'
+
     cmd-alt-ctrl-a = 'move left'
     cmd-alt-ctrl-s = 'move down'
     cmd-alt-ctrl-d = 'move up'
@@ -91,3 +93,7 @@ on-focus-changed = ['move-mouse window-lazy-center']
 [[on-window-detected]]
     if.app-id = 'md.obsidian'
     run = 'move-node-to-workspace 5'
+
+[[on-window-detected]]
+    if.app-id = 'com.microsoft.teams2'
+    run = 'move-node-to-workspace 3'

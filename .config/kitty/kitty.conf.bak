@@ -108,7 +108,7 @@ map cmd+j neighboring_window down
 #: Theme {{{
  
 # BEGIN_KITTY_THEME
-# graphite
+# GitHub Dark
 include current-theme.conf
 # END_KITTY_THEME
  
