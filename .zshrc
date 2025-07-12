@@ -95,7 +95,7 @@ setopt no_auto_menu  # require an extra TAB press to open the completion menu
 # Custom functions
 
 # Function to cd into projects via fzf
-function ff() {
+function fzf-proj() {
   local dir
   dir=$(
     find ~/Development \
@@ -105,6 +105,21 @@ function ff() {
     | fzf
   ) && cd "$dir"
 }
+zle -N fzf-proj
+bindkey '^G' fzf-proj
+
+# Function to fg into last halted process 
+function fancy-ctrl-z() {
+  if [[ $#BUFFER -eq 0 ]]; then
+    BUFFER="fg"
+    zle accept-line -w
+  else
+    zle push-input -w
+    zle clear-screen -w
+  fi
+}
+zle -N fancy-ctrl-z
+bindkey '^Z' fancy-ctrl-z
 
 # Custom aliases
 
