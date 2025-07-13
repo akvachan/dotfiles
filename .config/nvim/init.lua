@@ -5,7 +5,7 @@ g.mapleader = ' '
 g.maplocalleader = ' '
 g.matchparen_timeout = 20
 g.matchparen_insert_timeout = 20
-
+g.copilot_enabled = false
 opt.mouse = 'a'
 opt.number = true
 opt.relativenumber = true
@@ -49,6 +49,35 @@ end
 opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
+  -- Copilot
+  {
+    "github/copilot.vim"
+  },
+
+  -- Status line
+  {
+    'nvim-lualine/lualine.nvim',
+    event = "VimEnter",
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    config = function()
+      require('lualine').setup({
+        options = {
+          theme = 'codedark',
+          section_separators = '',
+          component_separators = '',
+        },
+        sections = {
+          lualine_a = { 'mode' },
+          lualine_b = { 'branch', 'diff' },
+          lualine_c = { 'filename' },
+          lualine_x = { 'encoding', 'fileformat', 'filetype' },
+          lualine_y = { 'progress' },
+          lualine_z = { 'location' },
+        },
+      })
+    end
+  },
+
   -- Completion
   {
     'hrsh7th/nvim-cmp',
@@ -151,74 +180,74 @@ require('lazy').setup({
   },
 
   -- Treesitter
-  -- {
-  --   'nvim-treesitter/nvim-treesitter',
-  --   build = ':TSUpdate',
-  --   event = { 'BufReadPre', 'BufNewFile' },
-  --   dependencies = {
-  --     {
-  --       'nvim-treesitter/nvim-treesitter-textobjects',
-  --       event = { 'BufReadPre', 'BufNewFile' },
-  --     }
-  --   },
-  --   config = function()
-  --     require('nvim-treesitter.configs').setup {
-  --       ensure_installed = { 'cpp', 'c', 'lua', 'python', 'bash', 'json', 'typescript', 'javascript' },
-  --       highlight = { enable = true },
-  --       indent = { enable = true },
-  --       textobjects = {
-  --         select = {
-  --           enable = true,
-  --           lookahead = true,
-  --           keymaps = {
-  --             -- Functions
-  --             ["af"] = "@function.outer",
-  --             ["if"] = "@function.inner",
-  --             -- Classes
-  --             ["ac"] = "@class.outer",
-  --             ["ic"] = "@class.inner",
-  --             -- Parameters
-  --             ["aa"] = "@parameter.outer",
-  --             ["ia"] = "@parameter.inner",
-  --             -- Loops
-  --             ["al"] = "@loop.outer",
-  --             ["il"] = "@loop.inner",
-  --             -- Conditionals
-  --             ["ai"] = "@conditional.outer",
-  --             ["ii"] = "@conditional.inner",
-  --             -- Comments
-  --             ["a/"] = "@comment.outer",
-  --             -- Variables
-  --             ["av"] = "@assignment.outer",
-  --             ["iv"] = "@assignment.inner",
-  --           },
-  --         },
-  --         move = {
-  --           enable = true,
-  --           set_jumps = true,
-  --           goto_next_start = {
-  --             ["]f"] = "@function.outer",
-  --             ["]c"] = "@class.outer",
-  --             ["]a"] = "@parameter.inner",
-  --             ["]l"] = "@loop.outer",
-  --             ["]i"] = "@conditional.outer",
-  --             ["]/"] = "@comment.outer",
-  --             ["]v"] = "@assignment.outer",
-  --           },
-  --           goto_previous_start = {
-  --             ["[f"] = "@function.outer",
-  --             ["[c"] = "@class.outer",
-  --             ["[a"] = "@parameter.inner",
-  --             ["[l"] = "@loop.outer",
-  --             ["[i"] = "@conditional.outer",
-  --             ["[/"] = "@comment.outer",
-  --             ["[v"] = "@assignment.outer",
-  --           },
-  --         },
-  --       },
-  --     }
-  --   end,
-  -- },
+  {
+    'nvim-treesitter/nvim-treesitter',
+    build = ':TSUpdate',
+    event = { 'BufReadPre', 'BufNewFile' },
+    dependencies = {
+      {
+        'nvim-treesitter/nvim-treesitter-textobjects',
+        event = { 'BufReadPre', 'BufNewFile' },
+      }
+    },
+    config = function()
+      require('nvim-treesitter.configs').setup {
+        ensure_installed = { 'cpp', 'c', 'lua', 'python', 'bash', 'json', 'typescript', 'javascript' },
+        highlight = { enable = true },
+        indent = { enable = true },
+        textobjects = {
+          select = {
+            enable = true,
+            lookahead = true,
+            keymaps = {
+              -- Functions
+              ["af"] = "@function.outer",
+              ["if"] = "@function.inner",
+              -- Classes
+              ["ac"] = "@class.outer",
+              ["ic"] = "@class.inner",
+              -- Parameters
+              ["aa"] = "@parameter.outer",
+              ["ia"] = "@parameter.inner",
+              -- Loops
+              ["al"] = "@loop.outer",
+              ["il"] = "@loop.inner",
+              -- Conditionals
+              ["ai"] = "@conditional.outer",
+              ["ii"] = "@conditional.inner",
+              -- Comments
+              ["a/"] = "@comment.outer",
+              -- Variables
+              ["av"] = "@assignment.outer",
+              ["iv"] = "@assignment.inner",
+            },
+          },
+          move = {
+            enable = true,
+            set_jumps = true,
+            goto_next_start = {
+              ["]f"] = "@function.outer",
+              ["]c"] = "@class.outer",
+              ["]a"] = "@parameter.inner",
+              ["]l"] = "@loop.outer",
+              ["]i"] = "@conditional.outer",
+              ["]/"] = "@comment.outer",
+              ["]v"] = "@assignment.outer",
+            },
+            goto_previous_start = {
+              ["[f"] = "@function.outer",
+              ["[c"] = "@class.outer",
+              ["[a"] = "@parameter.inner",
+              ["[l"] = "@loop.outer",
+              ["[i"] = "@conditional.outer",
+              ["[/"] = "@comment.outer",
+              ["[v"] = "@assignment.outer",
+            },
+          },
+        },
+      }
+    end,
+  },
 
 }, {
   performance = {
@@ -294,10 +323,23 @@ api.nvim_create_autocmd("UIEnter", {
 
 -- Resize vim automatically
 api.nvim_create_autocmd('VimResized', {
-  callback = function(event)
+  callback = function()
     cmd('wincmd =')
   end,
 })
+
+-- Disable copilot
+function toggle_copilot()
+  if g.copilot_enabled then
+    cmd('Copilot disable')
+    print("Copilot disabled")
+    g.copilot_enabled = false
+  else
+    cmd('Copilot enable')
+    print("Copilot enabled")
+    g.copilot_enabled = true
+  end
+end
 
 --: }}}
 
@@ -343,4 +385,6 @@ map({ 'i', 'c' }, '<C-l>', '<Right>', opts)
 map('c', '<M-b>', '<C-Left>', opts)
 map('c', '<M-f>', '<C-Right>', opts)
 map('t', '<Esc>', '<C-\\><C-n>', opts)
+map({ 'n', 'i' }, '<M-g>', toggle_copilot, silent_opts)
+
 --: }}}

@@ -94,16 +94,17 @@ setopt no_auto_menu  # require an extra TAB press to open the completion menu
 
 # Custom functions
 
-# Function to cd into projects via fzf
+# Function to cd into projects
 function fzf-proj() {
-  local dir
-  dir=$(
-    find ~/Development \
-      -maxdepth 5 \
-      \( -name '.*' -prune \) \
-      -o -type d -print \
-    | fzf
-  ) && cd "$dir"
+  local selected_dir
+
+  selected_dir=$(find ~/Development -type d 2>/dev/null \
+    | fzf --prompt="Select directory: " --height=40%)
+
+  if [[ -n "$selected_dir" ]]; then
+    BUFFER="cd \"$selected_dir\""
+    zle accept-line
+  fi
 }
 zle -N fzf-proj
 bindkey '^G' fzf-proj
