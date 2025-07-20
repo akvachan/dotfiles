@@ -1,41 +1,41 @@
 --: {{{ Basic Settings
 
 local g, opt, cmd, fn, api = vim.g, vim.opt, vim.cmd, vim.fn, vim.api
-g.mapleader = ' '
-g.maplocalleader = ' '
-g.matchparen_timeout = 20
-g.matchparen_insert_timeout = 20
 g.copilot_enabled = false
 g.copilot_no_tab_map = true
+g.mapleader = ' '
+g.maplocalleader = ' '
+g.matchparen_insert_timeout = 20
+g.matchparen_timeout = 20
+opt.autoindent = true
+opt.background = 'dark'
+opt.backup = false
+opt.equalalways = true
+opt.expandtab = true
+opt.foldenable = true
+opt.foldlevel = 20
+opt.foldmethod = 'marker'
+opt.grepformat = '%f:%l:%c:%m,%f:%l:%m'
+opt.grepprg = 'rg --vimgrep --no-heading --smart-case'
+opt.hlsearch = true
+opt.ignorecase = true
+opt.incsearch = true
+opt.lazyredraw = true
 opt.mouse = 'a'
 opt.number = true
 opt.relativenumber = true
-opt.tabstop = 2
-opt.shiftwidth = 2
-opt.expandtab = true
-opt.autoindent = true
-opt.wrap = false
-opt.hlsearch = true
-opt.incsearch = true
-opt.smartcase = true
-opt.ignorecase = true
-opt.termguicolors = true
-opt.foldmethod = 'marker'
-opt.foldenable = true
 opt.scrolloff = 1000
-opt.foldlevel = 20
-opt.updatetime = 100
+opt.shiftwidth = 2
+opt.signcolumn = 'yes'
+opt.smartcase = true
 opt.splitbelow = true
 opt.splitright = true
-opt.signcolumn = 'yes'
 opt.swapfile = false
-opt.backup = false
+opt.tabstop = 2
+opt.termguicolors = true
+opt.updatetime = 100
+opt.wrap = false
 opt.writebackup = false
-opt.background = 'dark'
-opt.equalalways = true
-opt.lazyredraw = true
-opt.grepprg = 'rg --vimgrep --no-heading --smart-case'
-opt.grepformat = '%f:%l:%c:%m,%f:%l:%m'
 
 --: }}}
 
@@ -58,7 +58,7 @@ require('lazy').setup({
 
   -- Copilot
   {
-    'github/copilot.vim'
+    'github/copilot.vim',
   },
 
   -- Completion
@@ -152,7 +152,7 @@ require('lazy').setup({
     'nvim-lspconfig',
     event = 'VeryLazy',
     config = function()
-      vim.lsp.enable({ 'pyright', 'ruff', 'lua_ls' })
+      vim.lsp.enable({ 'clangd', 'bashls', 'pyright', 'ruff', 'lua_ls' })
       vim.diagnostic.config({
         virtual_text = false,
         signs = true,
@@ -320,50 +320,58 @@ end
 
 --: {{{ Keymaps
 
-local map = vim.keymap.set
-local silent_opts = { noremap = true, silent = true }
-local opts = { noremap = true, silent = false }
-local lsp = vim.lsp.buf
+local copilot_opts = { expr = true, replace_keycodes = false }
 local diag = vim.diagnostic
+local lsp = vim.lsp.buf
+local map = vim.keymap.set
+local opts = { noremap = true, silent = false }
+local silent_opts = { noremap = true, silent = true }
 
-map('n', 'j', 'gj', silent_opts)
-map('n', 'k', 'gk', silent_opts)
-map('n', '<leader>rm', ':RmTerms<CR>', silent_opts)
-map('n', '<leader>gg', ':!git <Right><Right><Right><Right><Right>', opts)
-map('n', '<leader>gd', lsp.definition, silent_opts)
-map('n', '<leader>gl', lsp.declaration, silent_opts)
-map('n', '<leader>gr', lsp.references, silent_opts)
-map('n', '<leader>gi', lsp.implementation, silent_opts)
-map('n', '<leader>gh', lsp.hover, silent_opts)
-map('n', '<leader>rn', lsp.rename, silent_opts)
-map('n', '<leader>ca', lsp.code_action, silent_opts)
-map('n', '<leader>fo', lsp.format, silent_opts)
-map('n', '<leader>go', lsp.document_symbol, silent_opts)
-map('n', '<leader>cd', diag.open_float, silent_opts)
-map('n', '<leader>gf', diag.setqflist, silent_opts)
-map('n', '<leader>gp', diag.goto_prev, silent_opts)
-map('n', '<leader>gn', diag.goto_next, silent_opts)
-map('n', '<leader>q', ':q!<CR>', silent_opts)
-map('n', '<leader>Q', ':qa!<CR>', silent_opts)
-map('n', '<leader>w', ':w<CR>', silent_opts)
-map('n', '<leader>l', ':Lazy<CR>', silent_opts)
-map('n', '<leader>h', ':noh<CR>', silent_opts)
-map('n', '<leader>t', ':term <Right><Right><Right><Right><Right>', opts)
-map('n', '<leader>s', ':b#', opts)
-map('n', '-', ':Oil<CR>', silent_opts)
-map({ 'n', 'v' }, '<leader>y', '"+y', silent_opts)
-map({ 'n', 'v' }, '<leader>p', '"+p', silent_opts)
 map('c', '<C-h>', '<C-Left>', opts)
 map('c', '<C-l>', '<C-Right>', opts)
-map('t', '<Esc>', '<C-\\><C-n>', opts)
-map('n', '<C-g>', toggle_copilot, silent_opts)
+map('i', '<C-c>', '<Plug>(copilot-dismiss)', silent_opts)
+map('i', '<C-f>', 'copilot#Accept("\\<CR>")', copilot_opts)
 map('i', '<C-j>', '<Plug>(copilot-next)', silent_opts)
 map('i', '<C-k>', '<Plug>(copilot-previous)', silent_opts)
 map('i', '<C-l>', '<Plug>(copilot-accept-word)', silent_opts)
-map('i', '<C-c>', '<Plug>(copilot-dismiss)', silent_opts)
-map('i', '<C-f>', 'copilot#Accept("\\<CR>")',
-  { expr = true, replace_keycodes = false }
-)
-
+map('n', '-', ':Oil<CR>', silent_opts)
+map('n', '<C-g>', toggle_copilot, silent_opts)
+map('n', '<leader>Q', ':qa!<CR>', silent_opts)
+map('n', '<leader>bd', ':bp|bd #<CR>', silent_opts)
+map('n', '<leader>ca', lsp.code_action, silent_opts)
+map('n', '<leader>cc', ':ccl<CR>', silent_opts)
+map('n', '<leader>cd', diag.open_float, silent_opts)
+map('n', '<leader>cf', ':cnf<CR>', silent_opts)
+map('n', '<leader>cn', ':cn<CR>', silent_opts)
+map('n', '<leader>co', ':copen<CR>', silent_opts)
+map('n', '<leader>cp', ':cp<CR>', silent_opts)
+map('n', '<leader>cu', ':.cc<CR>', silent_opts)
+map('n', '<leader>fo', lsp.format, silent_opts)
+map('n', '<leader>gd', lsp.definition, silent_opts)
+map('n', '<leader>gf', diag.setqflist, silent_opts)
+map('n', '<leader>gg', ':<C-u>!git ', opts)
+map('n', '<leader>gh', lsp.hover, silent_opts)
+map('n', '<leader>gi', lsp.implementation, silent_opts)
+map('n', '<leader>gl', lsp.declaration, silent_opts)
+map('n', '<leader>gn', diag.goto_next, silent_opts)
+map('n', '<leader>go', lsp.document_symbol, silent_opts)
+map('n', '<leader>gp', diag.goto_prev, silent_opts)
+map('n', '<leader>gr', lsp.references, silent_opts)
+map('n', '<leader>h', ':noh<CR>', silent_opts)
+map('n', '<leader>l', ':Lazy<CR>', silent_opts)
+map('n', '<leader>q', ':q!<CR>', silent_opts)
+map('n', '<leader>rm', ':RmTerms<CR>', silent_opts)
+map('n', '<leader>rn', lsp.rename, silent_opts)
+map('n', '<leader>s', ':b#<CR>', silent_opts)
+map('n', '<leader>t', ':<C-u>term ', opts)
+map('n', '<leader>w', ':w<CR>', silent_opts)
+map('n', '<leader>z', ':u0<CR>', silent_opts)
+map('n', 'B', '^', silent_opts)
+map('n', 'E', '$', silent_opts)
+map('n', 'j', 'gj', silent_opts)
+map('n', 'k', 'gk', silent_opts)
+map('t', '<Esc>', '<C-\\><C-n>', opts)
+map({ 'n', 'v' }, '<leader>p', '"+p', silent_opts)
+map({ 'n', 'v' }, '<leader>y', '"+y', silent_opts)
 
 --: }}}

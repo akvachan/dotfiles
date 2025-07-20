@@ -1,4 +1,5 @@
 brew "bpytop"
+brew "bash-language-server"
 brew "cmake"
 brew "cmake-docs"
 brew "cmatrix"
