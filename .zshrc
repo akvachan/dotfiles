@@ -104,6 +104,9 @@ function fzf-proj() {
   if [[ -n "$selected_dir" ]]; then
     BUFFER="cd \"$selected_dir\""
     zle accept-line
+  else
+    zle push-input -w
+    zle clear-screen -w
   fi
 }
 zle -N fzf-proj

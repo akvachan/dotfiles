@@ -34,7 +34,7 @@ enable_audio_bell no
 #: Window layout {{{
  
 enabled_layouts splits
-hide_window_decorations yes
+hide_window_decorations no
 confirm_os_window_close 0
 macos_menubar_title_max_length 0
 macos_show_window_title_in none
@@ -57,7 +57,7 @@ map cmd+b select_tab
  
 #: Color scheme {{{
  
-background_opacity 0
+background_opacity 1
  
 #: }}}
  
@@ -108,7 +108,7 @@ map cmd+j neighboring_window down
 #: Theme {{{
  
 # BEGIN_KITTY_THEME
-# GitHub Dark
+# Batman
 include current-theme.conf
 # END_KITTY_THEME
  
@@ -124,6 +124,6 @@ scrollback_pager nvim --clean -c 'setlocal nonumber nolist showtabline=0 foldcol
 #: Custom Integrations {{{
  
 # Fuzzy search tabs
-map ctrl+space launch --type=overlay --allow-remote-control ~/.config/kitty/scripts/fzftabs.sh
- 
+map ctrl+space launch --type=overlay --allow-remote-control ~/.config/kitty/scripts/kitty-fzf-tabs.sh
+
 # }}}

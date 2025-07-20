@@ -1,5 +1,7 @@
 #!/bin/zsh
  
+set -euo pipefail
+
 # Get all tabs, including their ids and focused status
 tab_info=$(kitty @ ls | /opt/homebrew/bin/jq -r '.[].tabs[] | "\(.id)|\(.is_focused)|\(.title)"')
  

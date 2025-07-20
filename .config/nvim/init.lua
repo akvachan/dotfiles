@@ -6,6 +6,7 @@ g.maplocalleader = ' '
 g.matchparen_timeout = 20
 g.matchparen_insert_timeout = 20
 g.copilot_enabled = false
+g.copilot_no_tab_map = true
 opt.mouse = 'a'
 opt.number = true
 opt.relativenumber = true
@@ -36,8 +37,6 @@ opt.lazyredraw = true
 opt.grepprg = 'rg --vimgrep --no-heading --smart-case'
 opt.grepformat = '%f:%l:%c:%m,%f:%l:%m'
 
-cmd('colorscheme habamax')
-
 --: }}}
 
 --: {{{ Lazy Plugin Setup
@@ -49,39 +48,23 @@ end
 opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
-  -- Copilot
+  -- Colorscheme
   {
-    "github/copilot.vim"
+    'projekt0n/github-nvim-theme',
+    config = function()
+      vim.cmd.colorscheme('github_dark_default')
+    end
   },
 
-  -- Status line
+  -- Copilot
   {
-    'nvim-lualine/lualine.nvim',
-    event = "VimEnter",
-    dependencies = { 'nvim-tree/nvim-web-devicons' },
-    config = function()
-      require('lualine').setup({
-        options = {
-          theme = 'codedark',
-          section_separators = '',
-          component_separators = '',
-        },
-        sections = {
-          lualine_a = { 'mode' },
-          lualine_b = { 'branch', 'diff' },
-          lualine_c = { 'filename' },
-          lualine_x = { 'encoding', 'fileformat', 'filetype' },
-          lualine_y = { 'progress' },
-          lualine_z = { 'location' },
-        },
-      })
-    end
+    'github/copilot.vim'
   },
 
   -- Completion
   {
     'hrsh7th/nvim-cmp',
-    event = "InsertEnter",
+    event = 'InsertEnter',
     dependencies = {
       'hrsh7th/cmp-nvim-lsp',
       'hrsh7th/cmp-buffer',
@@ -92,8 +75,8 @@ require('lazy').setup({
       local cmp = require('cmp')
       cmp.setup({
         mapping = {
-          ['<C-j>'] = cmp.mapping.select_next_item(),
-          ['<C-k>'] = cmp.mapping.select_prev_item(),
+          ['<C-n>'] = cmp.mapping.select_next_item(),
+          ['<C-p>'] = cmp.mapping.select_prev_item(),
           ['<C-c>'] = cmp.mapping.close(),
           ['<Tab>'] = cmp.mapping.confirm({ select = true }),
         },
@@ -110,9 +93,9 @@ require('lazy').setup({
   {
     'ibhagwan/fzf-lua',
     keys = {
-      { '<leader>ff', function() require('fzf-lua').files() end,     desc = "Find files" },
-      { '<leader>fg', function() require('fzf-lua').live_grep() end, desc = "Live grep" },
-      { '<leader>fb', function() require('fzf-lua').buffers() end,   desc = "Buffers" },
+      { '<leader>ff', function() require('fzf-lua').files() end,     desc = 'Find files' },
+      { '<leader>fg', function() require('fzf-lua').live_grep() end, desc = 'Live grep' },
+      { '<leader>fb', function() require('fzf-lua').buffers() end,   desc = 'Buffers' },
       { '<leader>fl', function() require('fzf-lua').blines() end,    desc = 'Current buffer lines' },
     },
     config = function()
@@ -136,7 +119,7 @@ require('lazy').setup({
   -- File explorer
   {
     'stevearc/oil.nvim',
-    event = "VimEnter",
+    event = 'VimEnter',
     config = function()
       local oil = require('oil')
       oil.setup({
@@ -151,7 +134,7 @@ require('lazy').setup({
   -- Surround editing
   {
     'kylechui/nvim-surround',
-    event = "VeryLazy",
+    event = 'VeryLazy',
     config = function()
       require('nvim-surround').setup()
     end
@@ -160,15 +143,16 @@ require('lazy').setup({
   -- Autopair
   {
     'windwp/nvim-autopairs',
-    event = "InsertEnter",
+    event = 'InsertEnter',
     config = true
   },
 
   -- LSP
   {
     'nvim-lspconfig',
+    event = 'VeryLazy',
     config = function()
-      vim.lsp.enable({ "pyright", "ruff", "lua_ls" })
+      vim.lsp.enable({ 'pyright', 'ruff', 'lua_ls' })
       vim.diagnostic.config({
         virtual_text = false,
         signs = true,
@@ -183,11 +167,10 @@ require('lazy').setup({
   {
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
-    event = { 'BufReadPre', 'BufNewFile' },
+    event = 'VeryLazy',
     dependencies = {
       {
         'nvim-treesitter/nvim-treesitter-textobjects',
-        event = { 'BufReadPre', 'BufNewFile' },
       }
     },
     config = function()
@@ -201,47 +184,47 @@ require('lazy').setup({
             lookahead = true,
             keymaps = {
               -- Functions
-              ["af"] = "@function.outer",
-              ["if"] = "@function.inner",
+              ['af'] = '@function.outer',
+              ['if'] = '@function.inner',
               -- Classes
-              ["ac"] = "@class.outer",
-              ["ic"] = "@class.inner",
+              ['ac'] = '@class.outer',
+              ['ic'] = '@class.inner',
               -- Parameters
-              ["aa"] = "@parameter.outer",
-              ["ia"] = "@parameter.inner",
+              ['aa'] = '@parameter.outer',
+              ['ia'] = '@parameter.inner',
               -- Loops
-              ["al"] = "@loop.outer",
-              ["il"] = "@loop.inner",
+              ['al'] = '@loop.outer',
+              ['il'] = '@loop.inner',
               -- Conditionals
-              ["ai"] = "@conditional.outer",
-              ["ii"] = "@conditional.inner",
+              ['ai'] = '@conditional.outer',
+              ['ii'] = '@conditional.inner',
               -- Comments
-              ["a/"] = "@comment.outer",
+              ['a/'] = '@comment.outer',
               -- Variables
-              ["av"] = "@assignment.outer",
-              ["iv"] = "@assignment.inner",
+              ['av'] = '@assignment.outer',
+              ['iv'] = '@assignment.inner',
             },
           },
           move = {
             enable = true,
             set_jumps = true,
             goto_next_start = {
-              ["]f"] = "@function.outer",
-              ["]c"] = "@class.outer",
-              ["]a"] = "@parameter.inner",
-              ["]l"] = "@loop.outer",
-              ["]i"] = "@conditional.outer",
-              ["]/"] = "@comment.outer",
-              ["]v"] = "@assignment.outer",
+              [']f'] = '@function.outer',
+              [']c'] = '@class.outer',
+              [']a'] = '@parameter.inner',
+              [']l'] = '@loop.outer',
+              [']i'] = '@conditional.outer',
+              [']/'] = '@comment.outer',
+              [']v'] = '@assignment.outer',
             },
             goto_previous_start = {
-              ["[f"] = "@function.outer",
-              ["[c"] = "@class.outer",
-              ["[a"] = "@parameter.inner",
-              ["[l"] = "@loop.outer",
-              ["[i"] = "@conditional.outer",
-              ["[/"] = "@comment.outer",
-              ["[v"] = "@assignment.outer",
+              ['[f'] = '@function.outer',
+              ['[c'] = '@class.outer',
+              ['[a'] = '@parameter.inner',
+              ['[l'] = '@loop.outer',
+              ['[i'] = '@conditional.outer',
+              ['[/'] = '@comment.outer',
+              ['[v'] = '@assignment.outer',
             },
           },
         },
@@ -253,33 +236,33 @@ require('lazy').setup({
   performance = {
     rtp = {
       disabled_plugins = {
-        "2html_plugin",
-        "tohtml",
-        "getscript",
-        "getscriptPlugin",
-        "gzip",
-        "logipat",
-        "netrw",
-        "netrwPlugin",
-        "netrwSettings",
-        "netrwFileHandlers",
-        "matchit",
-        "tar",
-        "tarPlugin",
-        "rrhelper",
-        "spellfile_plugin",
-        "vimball",
-        "vimballPlugin",
-        "zip",
-        "zipPlugin",
-        "tutor",
-        "rplugin",
-        "syntax",
-        "synmenu",
-        "optwin",
-        "compiler",
-        "bugreport",
-        "ftplugin",
+        '2html_plugin',
+        'tohtml',
+        'getscript',
+        'getscriptPlugin',
+        'gzip',
+        'logipat',
+        'netrw',
+        'netrwPlugin',
+        'netrwSettings',
+        'netrwFileHandlers',
+        'matchit',
+        'tar',
+        'tarPlugin',
+        'rrhelper',
+        'spellfile_plugin',
+        'vimball',
+        'vimballPlugin',
+        'zip',
+        'zipPlugin',
+        'tutor',
+        'rplugin',
+        'syntax',
+        'synmenu',
+        'optwin',
+        'compiler',
+        'bugreport',
+        'ftplugin',
       },
     },
   },
@@ -299,26 +282,18 @@ api.nvim_create_user_command('RmTerms', function()
   end
 end, {})
 
--- Remove background color
-api.nvim_create_autocmd("UIEnter", {
-  group = api.nvim_create_augroup("set_terminal_bg", {}),
+-- Automatically source virtual environment
+api.nvim_create_autocmd('BufEnter', {
   callback = function()
-    local bg = api.nvim_get_hl_by_name("Normal", true)["background"]
-    if not bg then
-      return
+    local cwd = vim.fn.getcwd()
+    local venv_path = cwd .. '/.venv/bin/activate'
+    if vim.fn.filereadable(venv_path) == 1 then
+      vim.env.VIRTUAL_ENV = cwd .. '/.venv'
+      vim.env.PATH = cwd .. '/.venv/bin:' .. vim.env.PATH
     end
-
-    local fmt = string.format
-
-    if os.getenv("TMUX") then
-      bg = fmt('printf "\\ePtmux;\\e\\033]11;#%06x\\007\\e\\\\"', bg)
-    else
-      bg = fmt('printf "\\033]11;#%06x\\007"', bg)
-    end
-
-    os.execute(bg)
-    return true
   end,
+  pattern = '*',
+  group = vim.api.nvim_create_augroup('AutoActivateVenv', { clear = true }),
 })
 
 -- Resize vim automatically
@@ -328,15 +303,15 @@ api.nvim_create_autocmd('VimResized', {
   end,
 })
 
--- Disable copilot
-function toggle_copilot()
+-- Toggle copilot
+local function toggle_copilot()
   if g.copilot_enabled then
     cmd('Copilot disable')
-    print("Copilot disabled")
+    print('Copilot disabled')
     g.copilot_enabled = false
   else
     cmd('Copilot enable')
-    print("Copilot enabled")
+    print('Copilot enabled')
     g.copilot_enabled = true
   end
 end
@@ -378,13 +353,17 @@ map('n', '<leader>s', ':b#', opts)
 map('n', '-', ':Oil<CR>', silent_opts)
 map({ 'n', 'v' }, '<leader>y', '"+y', silent_opts)
 map({ 'n', 'v' }, '<leader>p', '"+p', silent_opts)
-map({ 'i', 'c' }, '<C-h>', '<Left>', opts)
-map({ 'i', 'c' }, '<C-j>', '<Down>', opts)
-map({ 'i', 'c' }, '<C-k>', '<Up>', opts)
-map({ 'i', 'c' }, '<C-l>', '<Right>', opts)
-map('c', '<M-b>', '<C-Left>', opts)
-map('c', '<M-f>', '<C-Right>', opts)
+map('c', '<C-h>', '<C-Left>', opts)
+map('c', '<C-l>', '<C-Right>', opts)
 map('t', '<Esc>', '<C-\\><C-n>', opts)
-map({ 'n', 'i' }, '<M-g>', toggle_copilot, silent_opts)
+map('n', '<C-g>', toggle_copilot, silent_opts)
+map('i', '<C-j>', '<Plug>(copilot-next)', silent_opts)
+map('i', '<C-k>', '<Plug>(copilot-previous)', silent_opts)
+map('i', '<C-l>', '<Plug>(copilot-accept-word)', silent_opts)
+map('i', '<C-c>', '<Plug>(copilot-dismiss)', silent_opts)
+map('i', '<C-f>', 'copilot#Accept("\\<CR>")',
+  { expr = true, replace_keycodes = false }
+)
+
 
 --: }}}
