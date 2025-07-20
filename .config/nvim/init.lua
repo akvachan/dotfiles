@@ -52,7 +52,7 @@ require('lazy').setup({
   {
     'projekt0n/github-nvim-theme',
     config = function()
-      vim.cmd.colorscheme('github_dark_default')
+      vim.cmd.colorscheme('github_dark_dimmed')
     end
   },
 
