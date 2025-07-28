@@ -48,6 +48,26 @@ end
 opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
+  -- Leetcode stuff
+  {
+    "kawre/leetcode.nvim",
+    cmd = "Leet",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "MunifTanjim/nui.nvim",
+    },
+    opts = {
+      lang = "cpp",
+      keys = {
+        toggle = { "q" },
+        confirm = { "<CR>" },
+        reset_testcases = "r",
+        use_testcase = "U",
+        focus_testcases = "H",
+        focus_result = "L",
+      },
+    },
+  },
 
   -- Colorscheme
   {
