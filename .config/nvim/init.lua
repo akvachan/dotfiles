@@ -48,6 +48,7 @@ end
 opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
+
   -- Colorscheme
   {
     'projekt0n/github-nvim-theme',

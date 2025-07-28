@@ -18,6 +18,7 @@ on-focus-changed = ['move-mouse window-lazy-center']
     cmd-alt-ctrl-l = 'focus right'
 
     cmd-alt-ctrl-semicolon = 'layout tiles horizontal vertical'
+    cmd-alt-ctrl-comma = 'layout accordion horizontal vertical'
 
     cmd-alt-ctrl-a = 'move left'
     cmd-alt-ctrl-s = 'move down'

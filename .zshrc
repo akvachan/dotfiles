@@ -270,6 +270,9 @@ function ghce() {
 	GH_DEBUG="$GH_DEBUG" GH_HOST="$GH_HOST" gh copilot explain "$@"
 }
 
+# z 
+. /opt/homebrew/etc/profile.d/z.sh
+
 # Custom aliases
 
 alias zshrc="nvim ~/.zshrc"
