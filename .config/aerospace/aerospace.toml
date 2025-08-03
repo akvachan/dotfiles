@@ -84,6 +84,10 @@ on-focus-changed = ['move-mouse window-lazy-center']
     run = 'move-node-to-workspace 3'
 
 [[on-window-detected]]
+    if.app-id = 'com.microsoft.teams2'
+    run = 'move-node-to-workspace 3'
+
+[[on-window-detected]]
     if.app-id = 'com.apple.mail'
     run = 'move-node-to-workspace 4'
 
@@ -96,5 +100,13 @@ on-focus-changed = ['move-mouse window-lazy-center']
     run = 'move-node-to-workspace 5'
 
 [[on-window-detected]]
-    if.app-id = 'com.microsoft.teams2'
-    run = 'move-node-to-workspace 3'
+    if.app-id = 'com.docker.docker'
+    run = 'move-node-to-workspace 6'
+
+[[on-window-detected]]
+    if.app-id = 'com.valvesoftware.steam'
+    run = 'move-node-to-workspace 8'
+
+[[on-window-detected]]
+    if.app-id = 'com.apple.systempreferences'
+    run = 'move-node-to-workspace 10'

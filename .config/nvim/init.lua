@@ -337,6 +337,19 @@ local function toggle_copilot()
   end
 end
 
+-- Auto-format buffer on open
+vim.api.nvim_create_autocmd("BufReadPost", {
+  callback = function()
+    vim.defer_fn(function()
+      if vim.lsp.status() then
+        vim.lsp.buf.format({ async = true })
+      end
+    end, 0)
+  end,
+  group = vim.api.nvim_create_augroup("AutoFormatOnOpen", { clear = true }),
+})
+
+
 --: }}}
 
 --: {{{ Keymaps
@@ -387,8 +400,6 @@ map('n', '<leader>s', ':b#<CR>', silent_opts)
 map('n', '<leader>t', ':<C-u>term ', opts)
 map('n', '<leader>w', ':w<CR>', silent_opts)
 map('n', '<leader>z', ':u0<CR>', silent_opts)
-map('n', 'B', '^', silent_opts)
-map('n', 'E', '$', silent_opts)
 map('n', 'j', 'gj', silent_opts)
 map('n', 'k', 'gk', silent_opts)
 map('t', '<Esc>', '<C-\\><C-n>', opts)

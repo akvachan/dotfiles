@@ -1,0 +1,113 @@
+{
+  "actions" : [
+    {
+      "actions" : [
+        {
+          "key" : "b",
+          "type" : "application",
+          "value" : "/Applications/Safari.app"
+        },
+        {
+          "key" : "t",
+          "type" : "application",
+          "value" : "/Applications/kitty.app"
+        },
+        {
+          "key" : "a",
+          "type" : "application",
+          "value" : "/Applications/AeroSpace.app"
+        },
+        {
+          "key" : "l",
+          "type" : "application",
+          "value" : "/Applications/Leader Key.app"
+        }
+      ],
+      "key" : "o",
+      "type" : "group"
+    },
+    {
+      "actions" : [
+        {
+          "key" : "c",
+          "type" : "url",
+          "value" : "raycast://extensions/raycast/clipboard-history/clipboard-history"
+        },
+        {
+          "key" : "b",
+          "type" : "url",
+          "value" : "raycast://extensions/loris/safari/search-bookmarks"
+        },
+        {
+          "key" : "h",
+          "type" : "url",
+          "value" : "raycast://extensions/loris/safari/search-history"
+        },
+        {
+          "key" : "t",
+          "type" : "url",
+          "value" : "raycast://extensions/loris/safari/cloud-tabs"
+        },
+        {
+          "key" : "s",
+          "type" : "url",
+          "value" : "raycast://extensions/tegola/duck-duck-go-search/index"
+        },
+        {
+          "key" : "k",
+          "type" : "url",
+          "value" : "raycast://extensions/rolandleth/kill-process/index"
+        },
+        {
+          "key" : "y",
+          "type" : "url",
+          "value" : "raycast://extensions/loris/safari/copy-to-clipboard"
+        },
+        {
+          "key" : "x",
+          "type" : "url",
+          "value" : "raycast://extensions/loris/safari/close-other-tabs"
+        },
+        {
+          "key" : "p",
+          "type" : "url",
+          "value" : "raycast://extensions/raycast/screenshots/search-screenshots"
+        },
+        {
+          "key" : "f",
+          "type" : "url",
+          "value" : "raycast://extensions/raycast/file-search/search-files"
+        }
+      ],
+      "key" : "r",
+      "type" : "group"
+    },
+    {
+      "actions" : [
+        {
+          "key" : "d",
+          "type" : "url",
+          "value" : "raycast://extensions/raycast/system/shut-down"
+        },
+        {
+          "key" : "r",
+          "type" : "url",
+          "value" : "raycast://extensions/raycast/system/restart"
+        },
+        {
+          "key" : "o",
+          "type" : "url",
+          "value" : "raycast://extensions/raycast/system/log-out-arsenii-kvachan"
+        },
+        {
+          "key" : "s",
+          "type" : "url",
+          "value" : "raycast://extensions/raycast/system/sleep"
+        }
+      ],
+      "key" : "s",
+      "type" : "group"
+    }
+  ],
+  "type" : "group"
+}
