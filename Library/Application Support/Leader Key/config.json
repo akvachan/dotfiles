@@ -21,9 +21,40 @@
           "key" : "l",
           "type" : "application",
           "value" : "/Applications/Leader Key.app"
+        },
+        {
+          "key" : "m",
+          "type" : "application",
+          "value" : "/System/Applications/Mail.app"
+        },
+        {
+          "key" : "c",
+          "type" : "application",
+          "value" : "/System/Applications/Calendar.app"
+        },
+        {
+          "key" : "o",
+          "type" : "application",
+          "value" : "/Applications/Obsidian.app"
+        },
+        {
+          "key" : "d",
+          "type" : "application",
+          "value" : "/Applications/Discord.app"
+        },
+        {
+          "key" : "v",
+          "type" : "application",
+          "value" : "/Applications/Vial.app"
+        },
+        {
+          "key" : "s",
+          "type" : "application",
+          "value" : "/System/Applications/Utilities/Screenshot.app"
         }
       ],
       "key" : "o",
+      "label" : "Applications",
       "type" : "group"
     },
     {
@@ -80,6 +111,7 @@
         }
       ],
       "key" : "r",
+      "label" : "Raycast",
       "type" : "group"
     },
     {
@@ -106,6 +138,7 @@
         }
       ],
       "key" : "s",
+      "label" : "System",
       "type" : "group"
     }
   ],
