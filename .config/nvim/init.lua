@@ -337,19 +337,6 @@ local function toggle_copilot()
   end
 end
 
--- Auto-format buffer on open
-vim.api.nvim_create_autocmd("BufReadPost", {
-  callback = function()
-    vim.defer_fn(function()
-      if vim.lsp.status() then
-        vim.lsp.buf.format({ async = true })
-      end
-    end, 0)
-  end,
-  group = vim.api.nvim_create_augroup("AutoFormatOnOpen", { clear = true }),
-})
-
-
 --: }}}
 
 --: {{{ Keymaps
