@@ -258,32 +258,32 @@ require('lazy').setup({
     rtp = {
       disabled_plugins = {
         '2html_plugin',
-        'tohtml',
+        'bugreport',
+        'compiler',
+        'ftplugin',
         'getscript',
         'getscriptPlugin',
         'gzip',
         'logipat',
+        'matchit',
         'netrw',
+        'netrwFileHandlers',
         'netrwPlugin',
         'netrwSettings',
-        'netrwFileHandlers',
-        'matchit',
-        'tar',
-        'tarPlugin',
+        'optwin',
+        'rplugin',
         'rrhelper',
         'spellfile_plugin',
+        'synmenu',
+        'syntax',
+        'tar',
+        'tarPlugin',
+        'tohtml',
+        'tutor',
         'vimball',
         'vimballPlugin',
         'zip',
         'zipPlugin',
-        'tutor',
-        'rplugin',
-        'syntax',
-        'synmenu',
-        'optwin',
-        'compiler',
-        'bugreport',
-        'ftplugin',
       },
     },
   },
@@ -350,7 +350,9 @@ local silent_opts = { noremap = true, silent = true }
 
 map('c', '<C-h>', '<C-Left>', opts)
 map('c', '<C-l>', '<C-Right>', opts)
+map('i', '<C-a>', '<C-o>^', silent_opts)
 map('i', '<C-c>', '<Plug>(copilot-dismiss)', silent_opts)
+map('i', '<C-e>', '<C-o>$', silent_opts)
 map('i', '<C-f>', 'copilot#Accept("\\<CR>")', copilot_opts)
 map('i', '<C-j>', '<Plug>(copilot-next)', silent_opts)
 map('i', '<C-k>', '<Plug>(copilot-previous)', silent_opts)
