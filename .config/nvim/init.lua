@@ -48,6 +48,14 @@ end
 opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
+  -- Colorscheme
+  {
+    'projekt0n/github-nvim-theme',
+    config = function()
+      vim.cmd.colorscheme('github_dark_dimmed')
+    end
+  },
+
   -- Leetcode stuff
   {
     "kawre/leetcode.nvim",
@@ -67,14 +75,6 @@ require('lazy').setup({
         focus_result = "L",
       },
     },
-  },
-
-  -- Colorscheme
-  {
-    'projekt0n/github-nvim-theme',
-    config = function()
-      vim.cmd.colorscheme('github_dark_dimmed')
-    end
   },
 
   -- Copilot
@@ -173,7 +173,13 @@ require('lazy').setup({
     'nvim-lspconfig',
     event = 'VeryLazy',
     config = function()
-      vim.lsp.enable({ 'clangd', 'bashls', 'pyright', 'ruff', 'lua_ls' })
+      vim.lsp.enable({
+        'clangd',
+        'bashls',
+        'pyright',
+        'ruff',
+        'lua_ls'
+      })
       vim.diagnostic.config({
         virtual_text = false,
         signs = true,
@@ -187,7 +193,7 @@ require('lazy').setup({
   -- Treesitter
   {
     'nvim-treesitter/nvim-treesitter',
-    build = ':TSUpdate',
+    -- build = ':TSUpdate',
     event = 'VeryLazy',
     dependencies = {
       {
@@ -196,7 +202,21 @@ require('lazy').setup({
     },
     config = function()
       require('nvim-treesitter.configs').setup {
-        ensure_installed = { 'cpp', 'c', 'lua', 'python', 'bash', 'json', 'typescript', 'javascript' },
+        ensure_installed = {
+          'bash',
+          'c',
+          'cpp',
+          'html',
+          'javascript',
+          'json',
+          'lua',
+          'markdown',
+          'markdown_inline',
+          'python',
+          'typescript',
+          'xml',
+          'yaml',
+        },
         highlight = { enable = true },
         indent = { enable = true },
         textobjects = {
@@ -251,6 +271,16 @@ require('lazy').setup({
         },
       }
     end,
+  },
+
+  -- Markdown viewer
+  {
+    'MeanderingProgrammer/render-markdown.nvim',
+    keys = {
+      { '<leader>me', function() require('render-markdown').enable() end, desc = 'Turn on' },
+    },
+    dependencies = { 'nvim-treesitter/nvim-treesitter' },
+    opts = {},
   },
 
 }, {
@@ -392,6 +422,7 @@ map('n', '<leader>z', ':u0<CR>', silent_opts)
 map('n', 'j', 'gj', silent_opts)
 map('n', 'k', 'gk', silent_opts)
 map('t', '<Esc>', '<C-\\><C-n>', opts)
+map({ 'n', 'v' }, '<leader>mt', ':RenderMarkdown toggle<CR>', silent_opts)
 map({ 'n', 'v' }, '<leader>p', '"+p', silent_opts)
 map({ 'n', 'v' }, '<leader>y', '"+y', silent_opts)
 
