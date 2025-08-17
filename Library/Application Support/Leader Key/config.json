@@ -43,11 +43,6 @@
           "value" : "/Applications/Discord.app"
         },
         {
-          "key" : "v",
-          "type" : "application",
-          "value" : "/Applications/Vial.app"
-        },
-        {
           "key" : "s",
           "type" : "application",
           "value" : "/System/Applications/Utilities/Screenshot.app"
@@ -108,14 +103,7 @@
           "key" : "f",
           "type" : "url",
           "value" : "raycast://extensions/raycast/file-search/search-files"
-        }
-      ],
-      "key" : "r",
-      "label" : "Raycast",
-      "type" : "group"
-    },
-    {
-      "actions" : [
+        },
         {
           "key" : "d",
           "type" : "url",
@@ -132,13 +120,34 @@
           "value" : "raycast://extensions/raycast/system/log-out-arsenii-kvachan"
         },
         {
-          "key" : "s",
+          "key" : "v",
           "type" : "url",
-          "value" : "raycast://extensions/raycast/system/sleep"
+          "value" : "raycast://extensions/raycast/screenshots/paste-recent-screenshot"
+        },
+        {
+          "key" : "i",
+          "type" : "url",
+          "value" : "raycast://extensions/tonka3000/speedtest/index"
         }
       ],
-      "key" : "s",
-      "label" : "System",
+      "key" : "r",
+      "label" : "Raycast",
+      "type" : "group"
+    },
+    {
+      "actions" : [
+        {
+          "key" : "d",
+          "type" : "command",
+          "value" : "launchctl unload /Library/LaunchAgents/com.paloaltonetworks.gp.pangp*"
+        },
+        {
+          "key" : "e",
+          "type" : "command",
+          "value" : "launchctl load /Library/LaunchAgents/com.paloaltonetworks.gp.pangp*"
+        }
+      ],
+      "key" : "v",
       "type" : "group"
     }
   ],
