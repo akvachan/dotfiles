@@ -273,7 +273,7 @@ require('lazy').setup({
     end,
   },
 
-  -- Markdown viewer
+  -- Markdown
   {
     'MeanderingProgrammer/render-markdown.nvim',
     keys = {
@@ -281,6 +281,15 @@ require('lazy').setup({
     },
     dependencies = { 'nvim-treesitter/nvim-treesitter' },
     opts = {},
+  },
+
+  -- Latex
+  {
+    "lervag/vimtex",
+    lazy = false,
+    init = function()
+      g.vimtex_view_method = "skim"
+    end
   },
 
 }, {
@@ -381,8 +390,10 @@ local silent_opts = { noremap = true, silent = true }
 map('c', '<C-h>', '<C-Left>', opts)
 map('c', '<C-l>', '<C-Right>', opts)
 map('i', '<C-a>', '<C-o>^', silent_opts)
+map('n', '<C-a>', '^', silent_opts)
 map('i', '<C-c>', '<Plug>(copilot-dismiss)', silent_opts)
 map('i', '<C-e>', '<C-o>$', silent_opts)
+map('n', '<C-e>', '$', silent_opts)
 map('i', '<C-f>', 'copilot#Accept("\\<CR>")', copilot_opts)
 map('i', '<C-j>', '<Plug>(copilot-next)', silent_opts)
 map('i', '<C-k>', '<Plug>(copilot-previous)', silent_opts)
@@ -390,6 +401,7 @@ map('i', '<C-l>', '<Plug>(copilot-accept-word)', silent_opts)
 map('n', '-', ':Oil<CR>', silent_opts)
 map('n', '<C-g>', toggle_copilot, silent_opts)
 map('n', '<leader>Q', ':qa!<CR>', silent_opts)
+map('n', '<leader>a', ':Lazy<CR>', silent_opts)
 map('n', '<leader>bd', ':bp|bd #<CR>', silent_opts)
 map('n', '<leader>ca', lsp.code_action, silent_opts)
 map('n', '<leader>cc', ':ccl<CR>', silent_opts)
@@ -411,13 +423,13 @@ map('n', '<leader>go', lsp.document_symbol, silent_opts)
 map('n', '<leader>gp', diag.goto_prev, silent_opts)
 map('n', '<leader>gr', lsp.references, silent_opts)
 map('n', '<leader>h', ':noh<CR>', silent_opts)
-map('n', '<leader>l', ':Lazy<CR>', silent_opts)
 map('n', '<leader>q', ':q!<CR>', silent_opts)
 map('n', '<leader>rm', ':RmTerms<CR>', silent_opts)
 map('n', '<leader>rn', lsp.rename, silent_opts)
 map('n', '<leader>s', ':b#<CR>', silent_opts)
 map('n', '<leader>t', ':<C-u>term ', opts)
 map('n', '<leader>w', ':w<CR>', silent_opts)
+map('n', '<leader>x', ':%bd|e#|bd#<CR>', silent_opts)
 map('n', '<leader>z', ':u0<CR>', silent_opts)
 map('n', 'j', 'gj', silent_opts)
 map('n', 'k', 'gk', silent_opts)

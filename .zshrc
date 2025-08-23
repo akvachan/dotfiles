@@ -272,7 +272,6 @@ function ghce() {
 . /opt/homebrew/etc/profile.d/z.sh
 
 # Custom aliases
-
 alias zshrc="nvim ~/.zshrc"
 alias asrc="nvim ~/.config/aerospace/aerospace.toml"
 alias nvimrc="nvim ~/.config/nvim/init.lua"
@@ -291,8 +290,6 @@ alias l="ls -la"
 alias suggest="gh copilot suggest"
 alias explain="gh copilot explain"
 
-
 # Custom exports
-
 export VISUAL='nvim'
 export EDITOR='nvim'
