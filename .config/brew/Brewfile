@@ -1,66 +1,127 @@
-brew "bash-language-server"
-brew "bpytop"
-brew "cmake"
-brew "cmake-docs"
-brew "cmatrix"
-brew "doxygen"
-brew "fastfetch"
-brew "fd"
-brew "fzf"
-brew "gh"
-brew "git"
-brew "git-filter-repo"
-brew "glew"
-brew "glfw"
-brew "glm"
-brew "gnu-sed"
-brew "go"
-brew "gtk+3"
-brew "helm"
-brew "jq"
-brew "kubernetes-cli"
-brew "llama.cpp"
-brew "lua-language-server"
-brew "luarocks"
-brew "neovim"
-brew "node"
-brew "ollama"
-brew "pyright"
-brew "ripgrep"
-brew "ruff"
-brew "rust"
-brew "the_silver_searcher"
-brew "toilet"
-brew "tree"
-brew "tree-sitter"
-brew "uv"
-brew "wallpaper"
-brew "yarn"
-cask "adguard"
-cask "aerospace"
-cask "betterdisplay"
-cask "chromium"
-cask "discord"
-cask "docker"
-cask "font-hack-nerd-font"
-cask "google-drive"
-cask "kdenlive"
-cask "keycastr"
-cask "kitty"
-cask "krita"
-cask "leader-key"
-cask "obsidian"
-cask "protonvpn"
-cask "qutebrowser"
-cask "raycast"
-cask "roblox"
-cask "stats"
-cask "steam"
-cask "telegram"
-cask "tor-browser"
-cask "transmission"
-cask "utm"
-cask "vial"
-cask "vlc"
-tap "FelixKratz/formulae"
+tap "felixkratz/formulae"
+tap "homebrew-zathura/zathura"
+tap "homebrew/command-not-found"
+tap "ivan-volnov/tap"
+tap "koekeishiya/formulae"
 tap "nikitabobko/tap"
+# Message bus system, providing inter-application communication
+brew "dbus", restart_service: :changed
+# Google's own build tool
+brew "bazel"
+# Linux/OSX/FreeBSD resource monitor
+brew "bpytop"
+# Cross-platform make
+brew "cmake"
+# Documentation for CMake
+brew "cmake-docs"
+# Console Matrix
+brew "cmatrix"
+# Generate documentation for several programming languages
+brew "doxygen"
+# Like neofetch, but much faster because written mostly in C
+brew "fastfetch"
+# Simple, fast and user-friendly alternative to find
+brew "fd"
+# Command-line fuzzy finder written in Go
+brew "fzf"
+# GitHub command-line tool
+brew "gh"
+# Distributed revision control system
+brew "git"
+# Quickly rewrite git repository history
+brew "git-filter-repo"
+# OpenGL Extension Wrangler Library
+brew "glew"
+# Multi-platform library for OpenGL applications
+brew "glfw"
+# C++ mathematics library for graphics software
+brew "glm"
+# GNU implementation of the famous stream editor
+brew "gnu-sed"
+# Toolkit for creating graphical user interfaces
+brew "gtk+3"
+# Cross-platform program for developing Haskell projects
+brew "haskell-stack"
+# Tools and libraries to manipulate images in many formats
+brew "imagemagick"
+# Feature-rich interactive Jira CLI
+brew "jira-cli"
+# Lightweight and flexible command-line JSON processor
+brew "jq"
+# LLM inference in C/C++
+brew "llama.cpp"
+# Language Server for the Lua language
+brew "lua-language-server"
+# Package manager for the Lua programming language
+brew "luarocks"
+# Ambitious Vim-fork focused on extensibility and agility
+brew "neovim"
+# Platform built on V8 to build network applications
+brew "node"
+# Create, run, and share large language models (LLMs)
+brew "ollama"
+# On-chip debugging, in-system programming and boundary-scan testing
+brew "open-ocd"
+# Theme for zsh
+brew "powerlevel10k"
+# Static type checker for Python
+brew "pyright"
+# Search tool like grep and The Silver Searcher
+brew "ripgrep"
+# Extremely fast Python linter, written in Rust
+brew "ruff"
+# STM32 discovery line Linux programmer
+brew "stlink"
+# Code-search similar to ack
+brew "the_silver_searcher"
+# Terminal multiplexer
+brew "tmux"
+# Color-based alternative to figlet (uses libcaca)
+brew "toilet"
+# Display directories as trees (with optional color/HTML output)
+brew "tree"
+# Language Server Protocol implementation for TypeScript wrapping tsserver
+brew "typescript-language-server"
+# Extremely fast Python package installer and resolver, written in Rust
+brew "uv"
+# Manage the desktop wallpaper
+brew "wallpaper"
+# Tracks most-used directories to make cd smarter
+brew "z"
+# Custom macOS statusbar with shell plugin, interaction and graph support
+brew "felixkratz/formulae/sketchybar"
+# AeroSpace is an i3-like tiling window manager for macOS
+cask "aerospace"
+# Free and open-source web browser
+cask "chromium"
+# Voice and text chat software
+cask "discord"
+cask "font-hack-nerd-font"
+# Pre-built GNU bare-metal toolchain for 32-bit Arm processors
+cask "gcc-arm-embedded"
+# Client for the Google Drive storage service
+cask "google-drive"
+# Free and Open Source Video Editor
+cask "kdenlive"
+# Open-source keystroke visualiser
+cask "keycastr"
+# GPU-based terminal emulator
+cask "kitty"
+# Free and open-source painting and sketching program
+cask "krita"
+# Application launcher
+cask "leader-key"
+# Full TeX Live distribution without GUI applications
+cask "mactex-no-gui"
+# Keyboard-driven, vim-like browser based on PyQt5
+cask "qutebrowser"
+# Control your tools with a few keystrokes
+cask "raycast"
+# Online multiplayer game platform
+cask "roblox"
+# PDF reader and note-taking application
+cask "skim"
+# System monitor for the menu bar
+cask "stats"
+# Messaging app with a focus on speed and security
+cask "telegram"
