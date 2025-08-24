@@ -5,31 +5,32 @@ on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 on-focus-changed = ['move-mouse window-lazy-center']
 
 [mode.main.binding]
-
     cmd-alt-ctrl-n = '''exec-and-forget osascript -e '
     tell application "Safari"
         make new document at end of documents
         activate
     end tell'
     '''
+
+    cmd-alt-ctrl-b = 'balance-sizes'
+    cmd-alt-ctrl-c = 'reload-config'
+    cmd-alt-ctrl-g = 'enable toggle'
+    cmd-alt-ctrl-m = 'fullscreen'
+    cmd-alt-ctrl-tab = 'focus-back-and-forth'
+    cmd-alt-ctrl-x = 'close-all-windows-but-current --quit-if-last-window'
+    cmd-alt-ctrl-z = 'mode resize'
+    cmd-alt-ctrl-comma = 'layout accordion horizontal vertical'
+    cmd-alt-ctrl-semicolon = 'layout tiles horizontal vertical'
+
     cmd-alt-ctrl-h = 'focus left'
     cmd-alt-ctrl-j = 'focus down'
     cmd-alt-ctrl-k = 'focus up'
     cmd-alt-ctrl-l = 'focus right'
 
-    cmd-alt-ctrl-semicolon = 'layout tiles horizontal vertical'
-    cmd-alt-ctrl-comma = 'layout accordion horizontal vertical'
-
     cmd-alt-ctrl-a = 'move left'
-    cmd-alt-ctrl-s = 'move down'
     cmd-alt-ctrl-d = 'move up'
     cmd-alt-ctrl-f = 'move right'
-
-    cmd-alt-ctrl-m = 'fullscreen'
-    cmd-alt-ctrl-b = 'balance-sizes'
-
-    cmd-alt-ctrl-x = 'close-all-windows-but-current --quit-if-last-window'
-    cmd-alt-ctrl-g = 'enable toggle'
+    cmd-alt-ctrl-s = 'move down'
 
     cmd-alt-ctrl-q = 'workspace 1'
     cmd-alt-ctrl-w = 'workspace 2'
@@ -42,22 +43,16 @@ on-focus-changed = ['move-mouse window-lazy-center']
     cmd-alt-ctrl-o = 'workspace 9'
     cmd-alt-ctrl-p = 'workspace 10'
 
-    cmd-alt-ctrl-tab = 'focus-back-and-forth'
-
-    cmd-alt-ctrl-shift-q = 'move-node-to-workspace 1'
-    cmd-alt-ctrl-shift-w = 'move-node-to-workspace 2'
-    cmd-alt-ctrl-shift-e = 'move-node-to-workspace 3'
-    cmd-alt-ctrl-shift-r = 'move-node-to-workspace 4'
-    cmd-alt-ctrl-shift-t = 'move-node-to-workspace 5'
-    cmd-alt-ctrl-shift-y = 'move-node-to-workspace 6'
-    cmd-alt-ctrl-shift-u = 'move-node-to-workspace 7'
-    cmd-alt-ctrl-shift-i = 'move-node-to-workspace 8'
-    cmd-alt-ctrl-shift-o = 'move-node-to-workspace 9'
-    cmd-alt-ctrl-shift-p = 'move-node-to-workspace 10'
-
-    cmd-alt-ctrl-c = 'reload-config'
-
-    cmd-alt-ctrl-z = 'mode resize'
+    cmd-alt-ctrl-shift-q = 'move-node-to-workspace 1 --focus-follows-window'
+    cmd-alt-ctrl-shift-w = 'move-node-to-workspace 2 --focus-follows-window'
+    cmd-alt-ctrl-shift-e = 'move-node-to-workspace 3 --focus-follows-window'
+    cmd-alt-ctrl-shift-r = 'move-node-to-workspace 4 --focus-follows-window'
+    cmd-alt-ctrl-shift-t = 'move-node-to-workspace 5 --focus-follows-window'
+    cmd-alt-ctrl-shift-y = 'move-node-to-workspace 6 --focus-follows-window'
+    cmd-alt-ctrl-shift-u = 'move-node-to-workspace 7 --focus-follows-window'
+    cmd-alt-ctrl-shift-i = 'move-node-to-workspace 8 --focus-follows-window'
+    cmd-alt-ctrl-shift-o = 'move-node-to-workspace 9 --focus-follows-window'
+    cmd-alt-ctrl-shift-p = 'move-node-to-workspace 10 --focus-follows-window'
 
 [gaps]
     inner.horizontal = 5
