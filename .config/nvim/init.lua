@@ -288,7 +288,8 @@ require('lazy').setup({
     "lervag/vimtex",
     lazy = false,
     init = function()
-      g.vimtex_view_method = "skim"
+      -- g.vimtex_view_method = "skim"
+      g.vimtex_view_enabled = 0
     end
   },
 
@@ -341,20 +342,6 @@ api.nvim_create_user_command('RmTerms', function()
     end
   end
 end, {})
-
--- Automatically source virtual environment
-api.nvim_create_autocmd('BufEnter', {
-  callback = function()
-    local cwd = vim.fn.getcwd()
-    local venv_path = cwd .. '/.venv/bin/activate'
-    if vim.fn.filereadable(venv_path) == 1 then
-      vim.env.VIRTUAL_ENV = cwd .. '/.venv'
-      vim.env.PATH = cwd .. '/.venv/bin:' .. vim.env.PATH
-    end
-  end,
-  pattern = '*',
-  group = vim.api.nvim_create_augroup('AutoActivateVenv', { clear = true }),
-})
 
 -- Resize vim automatically
 api.nvim_create_autocmd('VimResized', {

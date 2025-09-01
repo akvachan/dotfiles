@@ -71,16 +71,28 @@ on-focus-changed = ['move-mouse window-lazy-center']
     esc = 'mode main'
 
 [[on-window-detected]]
+    if.app-id = 'com.docker.docker'
+    run = 'move-node-to-workspace 6'
+
+[[on-window-detected]]
     if.app-id = 'net.kovidgoyal.kitty'
     run = 'move-node-to-workspace 1' 
 
 [[on-window-detected]]
-    if.app-id = 'com.jetbrains.CLion'
-    run = 'move-node-to-workspace 1' 
+    if.app-id = 'org.chromium.Chromium'
+    run = 'move-node-to-workspace 2' 
 
 [[on-window-detected]]
-    if.app-id = 'com.google.Chrome'
-    run = 'move-node-to-workspace 2' 
+    if.app-id = 'md.obsidian'
+    run = 'move-node-to-workspace 5'
+
+[[on-window-detected]]
+    if.app-id = 'org.krita'
+    run = 'move-node-to-workspace 7'
+
+[[on-window-detected]]
+    if.app-id = 'org.kde.Kdenlive'
+    run = 'move-node-to-workspace 7'
 
 [[on-window-detected]]
     if.app-id = 'com.tdesktop.Telegram'
@@ -103,31 +115,11 @@ on-focus-changed = ['move-mouse window-lazy-center']
     run = 'move-node-to-workspace 4'
 
 [[on-window-detected]]
-    if.app-id = 'md.obsidian'
-    run = 'move-node-to-workspace 5'
-
-[[on-window-detected]]
-    if.app-id = 'com.docker.docker'
-    run = 'move-node-to-workspace 6'
-
-[[on-window-detected]]
-    if.app-id = 'today.vial'
-    run = 'move-node-to-workspace 7'
-
-[[on-window-detected]]
     if.app-id = 'com.valvesoftware.steam'
-    run = 'move-node-to-workspace 8'
-
-[[on-window-detected]]
-    if.app-id = 'com.roblox.RobloxPlayer'
-    run = 'move-node-to-workspace 8'
-
-[[on-window-detected]]
-    if.app-id = 'org.krita'
     run = 'move-node-to-workspace 9'
 
 [[on-window-detected]]
-    if.app-id = 'org.kde.Kdenlive'
+    if.app-id = 'com.roblox.RobloxPlayer'
     run = 'move-node-to-workspace 9'
 
 [[on-window-detected]]

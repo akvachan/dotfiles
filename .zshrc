@@ -277,6 +277,7 @@ alias asrc="nvim ~/.config/aerospace/aerospace.toml"
 alias nvimrc="nvim ~/.config/nvim/init.lua"
 alias kittyrc="nvim ~/.config/kitty/kitty.conf"
 alias brewrc="nvim ~/.config/brew/Brewfile"
+alias rnotes='cd "/Users/arseniikvachan/Library/CloudStorage/GoogleDrive-arsenii@kvachan.com/My Drive/REMOTE/REMOTE/" && nvim .'
 alias config="/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME"
 alias icat="kitten icat"
 alias ssh="kitten ssh"
