@@ -190,88 +190,88 @@ require('lazy').setup({
     end,
   },
 
-  -- Treesitter
-  {
-    'nvim-treesitter/nvim-treesitter',
-    -- build = ':TSUpdate',
-    event = 'VeryLazy',
-    dependencies = {
-      {
-        'nvim-treesitter/nvim-treesitter-textobjects',
-      }
-    },
-    config = function()
-      require('nvim-treesitter.configs').setup {
-        ensure_installed = {
-          'bash',
-          'c',
-          'cpp',
-          'html',
-          'javascript',
-          'json',
-          'lua',
-          'markdown',
-          'markdown_inline',
-          'python',
-          'typescript',
-          'xml',
-          'yaml',
-        },
-        highlight = { enable = true },
-        indent = { enable = true },
-        textobjects = {
-          select = {
-            enable = true,
-            lookahead = true,
-            keymaps = {
-              -- Functions
-              ['af'] = '@function.outer',
-              ['if'] = '@function.inner',
-              -- Classes
-              ['ac'] = '@class.outer',
-              ['ic'] = '@class.inner',
-              -- Parameters
-              ['aa'] = '@parameter.outer',
-              ['ia'] = '@parameter.inner',
-              -- Loops
-              ['al'] = '@loop.outer',
-              ['il'] = '@loop.inner',
-              -- Conditionals
-              ['ai'] = '@conditional.outer',
-              ['ii'] = '@conditional.inner',
-              -- Comments
-              ['a/'] = '@comment.outer',
-              -- Variables
-              ['av'] = '@assignment.outer',
-              ['iv'] = '@assignment.inner',
-            },
-          },
-          move = {
-            enable = true,
-            set_jumps = true,
-            goto_next_start = {
-              [']f'] = '@function.outer',
-              [']c'] = '@class.outer',
-              [']a'] = '@parameter.inner',
-              [']l'] = '@loop.outer',
-              [']i'] = '@conditional.outer',
-              [']/'] = '@comment.outer',
-              [']v'] = '@assignment.outer',
-            },
-            goto_previous_start = {
-              ['[f'] = '@function.outer',
-              ['[c'] = '@class.outer',
-              ['[a'] = '@parameter.inner',
-              ['[l'] = '@loop.outer',
-              ['[i'] = '@conditional.outer',
-              ['[/'] = '@comment.outer',
-              ['[v'] = '@assignment.outer',
-            },
-          },
-        },
-      }
-    end,
-  },
+  -- -- Treesitter
+  -- {
+  --   'nvim-treesitter/nvim-treesitter',
+  --   -- build = ':TSUpdate',
+  --   event = 'VeryLazy',
+  --   dependencies = {
+  --     {
+  --       'nvim-treesitter/nvim-treesitter-textobjects',
+  --     }
+  --   },
+  --   config = function()
+  --     require('nvim-treesitter.configs').setup {
+  --       ensure_installed = {
+  --         'bash',
+  --         'c',
+  --         'cpp',
+  --         'html',
+  --         'javascript',
+  --         'json',
+  --         'lua',
+  --         'markdown',
+  --         'markdown_inline',
+  --          'python',
+  --         'typescript',
+  --         'xml',
+  --         'yaml',
+  --       },
+  --       highlight = { enable = true },
+  --       indent = { enable = true },
+  --       textobjects = {
+  --         select = {
+  --           enable = true,
+  --           lookahead = true,
+  --           keymaps = {
+  --             -- Functions
+  --             ['af'] = '@function.outer',
+  --             ['if'] = '@function.inner',
+  --             -- Classes
+  --             ['ac'] = '@class.outer',
+  --             ['ic'] = '@class.inner',
+  --             -- Parameters
+  --             ['aa'] = '@parameter.outer',
+  --             ['ia'] = '@parameter.inner',
+  --             -- Loops
+  --             ['al'] = '@loop.outer',
+  --             ['il'] = '@loop.inner',
+  --             -- Conditionals
+  --             ['ai'] = '@conditional.outer',
+  --             ['ii'] = '@conditional.inner',
+  --             -- Comments
+  --             ['a/'] = '@comment.outer',
+  --             -- Variables
+  --             ['av'] = '@assignment.outer',
+  --             ['iv'] = '@assignment.inner',
+  --           },
+  --         },
+  --         move = {
+  --           enable = true,
+  --           set_jumps = true,
+  --           goto_next_start = {
+  --             [']f'] = '@function.outer',
+  --             [']c'] = '@class.outer',
+  --             [']a'] = '@parameter.inner',
+  --             [']l'] = '@loop.outer',
+  --             [']i'] = '@conditional.outer',
+  --             [']/'] = '@comment.outer',
+  --             [']v'] = '@assignment.outer',
+  --           },
+  --           goto_previous_start = {
+  --             ['[f'] = '@function.outer',
+  --             ['[c'] = '@class.outer',
+  --             ['[a'] = '@parameter.inner',
+  --             ['[l'] = '@loop.outer',
+  --             ['[i'] = '@conditional.outer',
+  --             ['[/'] = '@comment.outer',
+  --             ['[v'] = '@assignment.outer',
+  --           },
+  --         },
+  --       },
+  --     }
+  --   end,
+  -- },
 
   -- Markdown
   {
@@ -424,5 +424,4 @@ map('t', '<Esc>', '<C-\\><C-n>', opts)
 map({ 'n', 'v' }, '<leader>mt', ':RenderMarkdown toggle<CR>', silent_opts)
 map({ 'n', 'v' }, '<leader>p', '"+p', silent_opts)
 map({ 'n', 'v' }, '<leader>y', '"+y', silent_opts)
-
 --: }}}

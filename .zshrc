@@ -93,6 +93,14 @@ setopt glob_dots     # no special treatment for file names with a leading dot
 setopt no_auto_menu  # require an extra TAB press to open the completion menu
 
 # Custom functions
+#
+# Define a widget that opens nvim in the current directory
+function nvim_cwd() {
+  BUFFER="nvim ."
+  zle accept-line
+}
+zle -N nvim_cwd
+bindkey '^O' nvim_cwd
 
 # Function to cd into projects
 function fzf-proj() {
@@ -278,7 +286,6 @@ alias nvimrc="nvim ~/.config/nvim/init.lua"
 alias kittyrc="nvim ~/.config/kitty/kitty.conf"
 alias brewrc="nvim ~/.config/brew/Brewfile"
 alias config="/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME"
-alias notes="cd 'Library/CloudStorage/GoogleDrive-arsenii@kvachan.com/My Drive/Obsidian/Uni'"
 alias icat="kitten icat"
 alias ssh="kitten ssh"
 alias ttd="tt -csv >> ~/.wpm.csv"
@@ -290,6 +297,7 @@ alias phi-server="llama-server -m ~/Library/Caches/llama.cpp/unsloth_Phi-4-reaso
 alias l="ls -la"
 alias suggest="gh copilot suggest"
 alias explain="gh copilot explain"
+alias rnotes="cd '/Users/arseniikvachan/Library/CloudStorage/GoogleDrive-arsenii@kvachan.com/My Drive/Obsidian' && nvim ."
 
 # Custom exports
 export VISUAL='nvim'
