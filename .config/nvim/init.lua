@@ -77,6 +77,15 @@ require('lazy').setup({
     },
   },
 
+  -- Git Diffview
+  {
+    "sindrets/diffview.nvim",
+    cmd = { "DiffviewOpen", "DiffviewClose", "DiffviewToggleFiles", "DiffviewFocusFiles" },
+    config = function()
+      require("diffview").setup({})
+    end,
+  },
+
   -- Copilot
   {
     'github/copilot.vim',
@@ -144,8 +153,34 @@ require('lazy').setup({
     config = function()
       local oil = require('oil')
       oil.setup({
+        columns = {
+          "permissions",
+          "size",
+          { "mtime", highlight = "Comment", format = "%Y-%m-%d %H:%M" },
+        },
         view_options = { show_hidden = true },
         keymaps = {
+          -- Copy absolute path
+          ['<leader>oy'] = {
+            desc = 'Copy filepath to system clipboard',
+            callback = function()
+              require('oil.actions').copy_entry_path.callback()
+              vim.fn.setreg("+", vim.fn.getreg(vim.v.register))
+            end,
+          },
+          -- Copy relative path
+          ['<leader>or'] = {
+            callback = function()
+              local entry = oil.get_cursor_entry()
+              local dir = oil.get_current_dir()
+              if not entry or not dir then
+                return
+              end
+              local relpath = vim.fn.fnamemodify(dir, ":.")
+              vim.fn.setreg("+", relpath .. entry.name)
+            end,
+          },
+          -- Discard all filesystem changes
           ['<leader>oc'] = oil.discard_all_changes,
         },
       })
@@ -377,15 +412,15 @@ local silent_opts = { noremap = true, silent = true }
 map('c', '<C-h>', '<C-Left>', opts)
 map('c', '<C-l>', '<C-Right>', opts)
 map('i', '<C-a>', '<C-o>^', silent_opts)
-map('n', '<C-a>', '^', silent_opts)
 map('i', '<C-c>', '<Plug>(copilot-dismiss)', silent_opts)
 map('i', '<C-e>', '<C-o>$', silent_opts)
-map('n', '<C-e>', '$', silent_opts)
 map('i', '<C-f>', 'copilot#Accept("\\<CR>")', copilot_opts)
 map('i', '<C-j>', '<Plug>(copilot-next)', silent_opts)
 map('i', '<C-k>', '<Plug>(copilot-previous)', silent_opts)
 map('i', '<C-l>', '<Plug>(copilot-accept-word)', silent_opts)
 map('n', '-', ':Oil<CR>', silent_opts)
+map('n', '<C-a>', '^', silent_opts)
+map('n', '<C-e>', '$', silent_opts)
 map('n', '<C-g>', toggle_copilot, silent_opts)
 map('n', '<leader>Q', ':qa!<CR>', silent_opts)
 map('n', '<leader>a', ':Lazy<CR>', silent_opts)
@@ -398,6 +433,11 @@ map('n', '<leader>cn', ':cn<CR>', silent_opts)
 map('n', '<leader>co', ':copen<CR>', silent_opts)
 map('n', '<leader>cp', ':cp<CR>', silent_opts)
 map('n', '<leader>cu', ':.cc<CR>', silent_opts)
+map('n', '<leader>dc', '<cmd>DiffviewClose<cr>', { desc = 'Diffview Close' })
+map('n', '<leader>df', '<cmd>DiffviewFileHistory %<cr>', { desc = 'File History (current file)' })
+map('n', '<leader>do', '<cmd>DiffviewOpen<cr>', { desc = 'Diffview Open' })
+map('n', '<leader>dr', '<cmd>DiffviewFileHistory<cr>', { desc = 'File History (project)' })
+map('n', '<leader>dt', '<cmd>DiffviewToggleFiles<cr>', { desc = 'Diffview Toggle Files' })
 map('n', '<leader>fo', lsp.format, silent_opts)
 map('n', '<leader>gd', lsp.definition, silent_opts)
 map('n', '<leader>gf', diag.setqflist, silent_opts)
@@ -424,4 +464,5 @@ map('t', '<Esc>', '<C-\\><C-n>', opts)
 map({ 'n', 'v' }, '<leader>mt', ':RenderMarkdown toggle<CR>', silent_opts)
 map({ 'n', 'v' }, '<leader>p', '"+p', silent_opts)
 map({ 'n', 'v' }, '<leader>y', '"+y', silent_opts)
+
 --: }}}

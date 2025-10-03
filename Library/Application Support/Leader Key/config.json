@@ -138,6 +138,11 @@
           "key" : "l",
           "type" : "url",
           "value" : "raycast://extensions/gebeto/translate/translate"
+        },
+        {
+          "key" : ")",
+          "type" : "url",
+          "value" : "raycast://script-commands/detach-safari-tab"
         }
       ],
       "key" : "r",
