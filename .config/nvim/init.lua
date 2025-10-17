@@ -1,4 +1,4 @@
---: {{{ Basic Settings
+-- {{{ Basic Settings
 
 local g, opt, cmd, fn, api = vim.g, vim.opt, vim.cmd, vim.fn, vim.api
 g.copilot_enabled = false
@@ -13,7 +13,7 @@ opt.backup = false
 opt.equalalways = true
 opt.expandtab = true
 opt.foldenable = true
-opt.foldlevel = 20
+opt.foldlevel = 0
 opt.foldmethod = 'marker'
 opt.grepformat = '%f:%l:%c:%m,%f:%l:%m'
 opt.grepprg = 'rg --vimgrep --no-heading --smart-case'
@@ -37,9 +37,11 @@ opt.updatetime = 100
 opt.wrap = false
 opt.writebackup = false
 
---: }}}
+-- }}}
 
---: {{{ Lazy Plugin Setup
+-- {{{ Plugins
+
+-- {{{ Lazy Setup
 
 local lazypath = fn.stdpath('data') .. '/lazy/lazy.nvim'
 if not vim.loop.fs_stat(lazypath) then
@@ -48,15 +50,19 @@ end
 opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
-  -- Colorscheme
+
+  -- }}}
+
+  -- {{{ Colorscheme
   {
     'projekt0n/github-nvim-theme',
     config = function()
       vim.cmd.colorscheme('github_dark_dimmed')
     end
   },
+  -- }}}
 
-  -- Leetcode stuff
+  -- {{{ Leetcode stuff
   {
     "kawre/leetcode.nvim",
     cmd = "Leet",
@@ -76,22 +82,15 @@ require('lazy').setup({
       },
     },
   },
+  -- }}}
 
-  -- Git Diffview
-  {
-    "sindrets/diffview.nvim",
-    cmd = { "DiffviewOpen", "DiffviewClose", "DiffviewToggleFiles", "DiffviewFocusFiles" },
-    config = function()
-      require("diffview").setup({})
-    end,
-  },
-
-  -- Copilot
+  -- {{{ Copilot
   {
     'github/copilot.vim',
   },
+  -- }}}
 
-  -- Completion
+  -- {{{ Completion
   {
     'hrsh7th/nvim-cmp',
     event = 'InsertEnter',
@@ -118,8 +117,9 @@ require('lazy').setup({
       })
     end
   },
+  -- }}}
 
-  -- Fuzzy finder
+  -- {{{ Fuzzy finder
   {
     'ibhagwan/fzf-lua',
     keys = {
@@ -145,8 +145,9 @@ require('lazy').setup({
       })
     end
   },
+  -- }}}
 
-  -- File explorer
+  -- {{{ File explorer
   {
     'stevearc/oil.nvim',
     event = 'VimEnter',
@@ -186,8 +187,9 @@ require('lazy').setup({
       })
     end
   },
+  -- }}}
 
-  -- Surround editing
+  -- {{{ Surround editing
   {
     'kylechui/nvim-surround',
     event = 'VeryLazy',
@@ -195,15 +197,17 @@ require('lazy').setup({
       require('nvim-surround').setup()
     end
   },
+  -- }}}
 
-  -- Autopair
+  -- {{{ Autopair
   {
     'windwp/nvim-autopairs',
     event = 'InsertEnter',
     config = true
   },
+  -- }}}
 
-  -- LSP
+  -- {{{ LSP
   {
     'nvim-lspconfig',
     event = 'VeryLazy',
@@ -224,8 +228,9 @@ require('lazy').setup({
       })
     end,
   },
+  -- }}}
 
-  -- Dart
+  -- {{{ Dart
   {
     'nvim-flutter/flutter-tools.nvim',
     lazy = false,
@@ -234,8 +239,9 @@ require('lazy').setup({
     },
     config = true,
   },
+  -- }}}
 
-  -- Treesitter
+  -- {{{ Treesitter
   {
     'nvim-treesitter/nvim-treesitter',
     -- build = ':TSUpdate',
@@ -319,8 +325,9 @@ require('lazy').setup({
       }
     end,
   },
+  -- }}}
 
-  -- Markdown
+  -- {{{ Markdown
   {
     'MeanderingProgrammer/render-markdown.nvim',
     keys = {
@@ -329,8 +336,9 @@ require('lazy').setup({
     dependencies = { 'nvim-treesitter/nvim-treesitter' },
     opts = {},
   },
+  -- }}}
 
-  -- Latex
+  -- {{{ Latex
   {
     "lervag/vimtex",
     lazy = false,
@@ -339,7 +347,9 @@ require('lazy').setup({
       g.vimtex_view_enabled = 0
     end
   },
+  -- }}}
 
+-- {{{ Disable RTP Plugins
 }, {
   performance = {
     rtp = {
@@ -376,12 +386,13 @@ require('lazy').setup({
   },
   checker = { enabled = false },
 })
+-- }}}
 
---: }}}
+-- }}}
 
---: {{{ Custom Functions
+-- {{{ Custom Functions
 
--- Delete terminal buffers
+-- {{{ Delete terminal buffers
 api.nvim_create_user_command('RmTerms', function()
   for _, buf in ipairs(api.nvim_list_bufs()) do
     if api.nvim_buf_get_option(buf, 'buftype') == 'terminal' then
@@ -389,15 +400,17 @@ api.nvim_create_user_command('RmTerms', function()
     end
   end
 end, {})
+-- }}}
 
--- Resize vim automatically
+-- {{{ Resize vim automatically
 api.nvim_create_autocmd('VimResized', {
   callback = function()
     cmd('wincmd =')
   end,
 })
+-- }}}
 
--- Toggle copilot
+-- {{{ Toggle copilot
 local function toggle_copilot()
   if g.copilot_enabled then
     cmd('Copilot disable')
@@ -409,10 +422,11 @@ local function toggle_copilot()
     g.copilot_enabled = true
   end
 end
+-- }}}
 
---: }}}
+-- }}}
 
---: {{{ Keymaps
+-- {{{ Keymaps
 
 local copilot_opts = { expr = true, replace_keycodes = false }
 local diag = vim.diagnostic
