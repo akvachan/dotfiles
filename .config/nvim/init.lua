@@ -225,6 +225,16 @@ require('lazy').setup({
     end,
   },
 
+  -- Dart
+  {
+    'nvim-flutter/flutter-tools.nvim',
+    lazy = false,
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+    },
+    config = true,
+  },
+
   -- Treesitter
   {
     'nvim-treesitter/nvim-treesitter',
@@ -238,6 +248,7 @@ require('lazy').setup({
     config = function()
       require('nvim-treesitter.configs').setup {
         ensure_installed = {
+          'dart',
           'bash',
           'c',
           'cpp',
@@ -251,6 +262,7 @@ require('lazy').setup({
           'typescript',
           'xml',
           'yaml',
+          'toml'
         },
         highlight = { enable = true },
         indent = { enable = true },

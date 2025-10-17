@@ -276,6 +276,22 @@ function ghce() {
 	GH_DEBUG="$GH_DEBUG" GH_HOST="$GH_HOST" gh copilot explain "$@"
 }
 
+command rbenv rehash 2>/dev/null
+rbenv() {
+  local command
+  command="${1:-}"
+  if [ "$#" -gt 0 ]; then
+    shift
+  fi
+
+  case "$command" in
+  rehash|shell)
+    eval "$(rbenv "sh-$command" "$@")";;
+  *)
+    command rbenv "$command" "$@";;
+  esac
+}
+
 # z 
 . /opt/homebrew/etc/profile.d/z.sh
 
@@ -297,8 +313,11 @@ alias phi-server="llama-server -m ~/Library/Caches/llama.cpp/unsloth_Phi-4-reaso
 alias l="ls -la"
 alias suggest="gh copilot suggest"
 alias explain="gh copilot explain"
-alias rnotes="cd '/Users/arseniikvachan/Library/CloudStorage/GoogleDrive-arsenii@kvachan.com/My Drive/Obsidian' && nvim ."
+alias rnotes="cd '$HOME/Library/CloudStorage/GoogleDrive-arsenii@kvachan.com/My Drive/Obsidian' && nvim ."
 
 # Custom exports
 export VISUAL='nvim'
 export EDITOR='nvim'
+export PATH=$HOME/Development/Flutter/SDK/flutter/bin:$PATH
+export PATH="/Users/arseniikvachan/.rbenv/shims:${PATH}"
+export RBENV_SHELL=zsh
