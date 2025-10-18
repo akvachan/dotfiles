@@ -45,7 +45,8 @@ opt.writebackup = false
 
 local lazypath = fn.stdpath('data') .. '/lazy/lazy.nvim'
 if not vim.loop.fs_stat(lazypath) then
-  fn.system({ 'git', 'clone', '--filter=blob:none', 'https://github.com/folke/lazy.nvim', '--branch=stable', lazypath })
+  fn.system({ 'git', 'clone', '--filter=blob:none', 'https://github.com/folke/lazy.nvim', '--branch=stable',
+    lazypath })
 end
 opt.rtp:prepend(lazypath)
 
@@ -123,10 +124,10 @@ require('lazy').setup({
   {
     'ibhagwan/fzf-lua',
     keys = {
-      { '<leader>ff', function() require('fzf-lua').files() end,     desc = 'Find files' },
-      { '<leader>fg', function() require('fzf-lua').live_grep() end, desc = 'Live grep' },
-      { '<leader>fb', function() require('fzf-lua').buffers() end,   desc = 'Buffers' },
-      { '<leader>fl', function() require('fzf-lua').blines() end,    desc = 'Current buffer lines' },
+      { '<leader>ff', function() require('fzf-lua').files({ resume = true }) end,     desc = 'Find files' },
+      { '<leader>fg', function() require('fzf-lua').live_grep({ resume = true }) end, desc = 'Live grep' },
+      { '<leader>fb', function() require('fzf-lua').buffers({ resume = true }) end,   desc = 'Buffers' },
+      { '<leader>fl', function() require('fzf-lua').blines({ resume = true }) end,    desc = 'Current buffer lines' },
     },
     config = function()
       require('fzf-lua').setup({
@@ -135,7 +136,8 @@ require('lazy').setup({
           cmd = 'fd --type f --hidden --follow --exclude .git',
         },
         grep = {
-          cmd = 'rg --column --color=never --no-heading --line-number --hidden --smart-case'
+          cmd =
+          'rg --column --color=never --no-heading --line-number --hidden --smart-case'
         },
         keymap = {
           fzf = {
@@ -237,7 +239,13 @@ require('lazy').setup({
     dependencies = {
       'nvim-lua/plenary.nvim',
     },
-    config = true,
+    config = function()
+      require("flutter-tools").setup {
+        closing_tags = {
+          enabled = false,
+        },
+      }
+    end,
   },
   -- }}}
 
@@ -349,7 +357,7 @@ require('lazy').setup({
   },
   -- }}}
 
--- {{{ Disable RTP Plugins
+  -- {{{ Disable RTP Plugins
 }, {
   performance = {
     rtp = {
@@ -435,58 +443,60 @@ local map = vim.keymap.set
 local opts = { noremap = true, silent = false }
 local silent_opts = { noremap = true, silent = true }
 
-map('c', '<C-h>', '<C-Left>', opts)
-map('c', '<C-l>', '<C-Right>', opts)
-map('i', '<C-a>', '<C-o>^', silent_opts)
-map('i', '<C-c>', '<Plug>(copilot-dismiss)', silent_opts)
-map('i', '<C-e>', '<C-o>$', silent_opts)
-map('i', '<C-f>', 'copilot#Accept("\\<CR>")', copilot_opts)
-map('i', '<C-j>', '<Plug>(copilot-next)', silent_opts)
-map('i', '<C-k>', '<Plug>(copilot-previous)', silent_opts)
-map('i', '<C-l>', '<Plug>(copilot-accept-word)', silent_opts)
-map('n', '-', ':Oil<CR>', silent_opts)
-map('n', '<C-g>', toggle_copilot, silent_opts)
-map('n', '<leader>Q', ':qa!<CR>', silent_opts)
-map('n', '<leader>a', ':Lazy<CR>', silent_opts)
-map('n', '<leader>bd', ':bp|bd #<CR>', silent_opts)
-map('n', '<leader>ca', lsp.code_action, silent_opts)
-map('n', '<leader>cc', ':ccl<CR>', silent_opts)
-map('n', '<leader>cd', diag.open_float, silent_opts)
-map('n', '<leader>cf', ':cnf<CR>', silent_opts)
-map('n', '<leader>cn', ':cn<CR>', silent_opts)
-map('n', '<leader>co', ':copen<CR>', silent_opts)
-map('n', '<leader>cp', ':cp<CR>', silent_opts)
-map('n', '<leader>cu', ':.cc<CR>', silent_opts)
-map('n', '<leader>dc', '<cmd>DiffviewClose<cr>', { desc = 'Diffview Close' })
-map('n', '<leader>df', '<cmd>DiffviewFileHistory %<cr>', { desc = 'File History (current file)' })
-map('n', '<leader>do', '<cmd>DiffviewOpen<cr>', { desc = 'Diffview Open' })
-map('n', '<leader>dr', '<cmd>DiffviewFileHistory<cr>', { desc = 'File History (project)' })
-map('n', '<leader>dt', '<cmd>DiffviewToggleFiles<cr>', { desc = 'Diffview Toggle Files' })
-map('n', '<leader>fo', lsp.format, silent_opts)
-map('n', '<leader>gd', lsp.definition, silent_opts)
-map('n', '<leader>gf', diag.setqflist, silent_opts)
-map('n', '<leader>gg', ':<C-u>!git ', opts)
-map('n', '<leader>gh', lsp.hover, silent_opts)
-map('n', '<leader>gi', lsp.implementation, silent_opts)
-map('n', '<leader>gl', lsp.declaration, silent_opts)
-map('n', '<leader>gn', diag.goto_next, silent_opts)
-map('n', '<leader>go', lsp.document_symbol, silent_opts)
-map('n', '<leader>gp', diag.goto_prev, silent_opts)
-map('n', '<leader>gr', lsp.references, silent_opts)
-map('n', '<leader>h', ':noh<CR>', silent_opts)
-map('n', '<leader>q', ':q!<CR>', silent_opts)
-map('n', '<leader>rm', ':RmTerms<CR>', silent_opts)
-map('n', '<leader>rn', lsp.rename, silent_opts)
-map('n', '<leader>s', ':b#<CR>', silent_opts)
-map('n', '<leader>t', ':<C-u>term ', opts)
-map('n', '<leader>w', ':w<CR>', silent_opts)
-map('n', '<leader>x', ':%bd|e#|bd#<CR>', silent_opts)
-map('n', '<leader>z', ':u0<CR>', silent_opts)
-map('n', 'j', 'gj', silent_opts)
-map('n', 'k', 'gk', silent_opts)
-map('t', '<Esc>', '<C-\\><C-n>', opts)
+map({ 'c' }, '<C-h>', '<C-Left>', opts)
+map({ 'c' }, '<C-l>', '<C-Right>', opts)
+map({ 'i' }, '<C-a>', '<C-o>^', silent_opts)
+map({ 'i' }, '<C-c>', '<Plug>(copilot-dismiss)', silent_opts)
+map({ 'i' }, '<C-e>', '<C-o>$', silent_opts)
+map({ 'i' }, '<C-f>', 'copilot#Accept("\\<CR>")', copilot_opts)
+map({ 'i' }, '<C-j>', '<Plug>(copilot-next)', silent_opts)
+map({ 'i' }, '<C-k>', '<Plug>(copilot-previous)', silent_opts)
+map({ 'i' }, '<C-l>', '<Plug>(copilot-accept-word)', silent_opts)
+map({ 'n' }, '-', ':Oil<CR>', silent_opts)
+map({ 'n' }, '<C-g>', toggle_copilot, silent_opts)
+map({ 'n' }, '<leader>Q', ':qa!<CR>', silent_opts)
+map({ 'n' }, '<leader>a', ':Lazy<CR>', silent_opts)
+map({ 'n' }, '<leader>bd', ':bp|bd #<CR>', silent_opts)
+map({ 'n' }, '<leader>ca', lsp.code_action, silent_opts)
+map({ 'n' }, '<leader>cc', ':ccl<CR>', silent_opts)
+map({ 'n' }, '<leader>cd', diag.open_float, silent_opts)
+map({ 'n' }, '<leader>cf', ':cnf<CR>', silent_opts)
+map({ 'n' }, '<leader>cn', ':cn<CR>', silent_opts)
+map({ 'n' }, '<leader>co', ':copen<CR>', silent_opts)
+map({ 'n' }, '<leader>cp', ':cp<CR>', silent_opts)
+map({ 'n' }, '<leader>cu', ':.cc<CR>', silent_opts)
+map({ 'n' }, '<leader>dc', '<cmd>DiffviewClose<cr>', { desc = 'Diffview Close' })
+map({ 'n' }, '<leader>df', '<cmd>DiffviewFileHistory %<cr>', { desc = 'File History (current file)' })
+map({ 'n' }, '<leader>do', '<cmd>DiffviewOpen<cr>', { desc = 'Diffview Open' })
+map({ 'n' }, '<leader>dr', '<cmd>DiffviewFileHistory<cr>', { desc = 'File History (project)' })
+map({ 'n' }, '<leader>dt', '<cmd>DiffviewToggleFiles<cr>', { desc = 'Diffview Toggle Files' })
+map({ 'n' }, '<leader>fo', lsp.format, silent_opts)
+map({ 'n' }, '<leader>gd', lsp.definition, silent_opts)
+map({ 'n' }, '<leader>gf', diag.setqflist, silent_opts)
+map({ 'n' }, '<leader>gg', ':<C-u>!git ', opts)
+map({ 'n' }, '<leader>gh', lsp.hover, silent_opts)
+map({ 'n' }, '<leader>gi', lsp.implementation, silent_opts)
+map({ 'n' }, '<leader>gl', lsp.declaration, silent_opts)
+map({ 'n' }, '<leader>gn', diag.goto_next, silent_opts)
+map({ 'n' }, '<leader>go', lsp.document_symbol, silent_opts)
+map({ 'n' }, '<leader>gp', diag.goto_prev, silent_opts)
+map({ 'n' }, '<leader>gr', lsp.references, silent_opts)
+map({ 'n' }, '<leader>h', ':noh<CR>', silent_opts)
+map({ 'n' }, '<leader>q', ':q!<CR>', silent_opts)
+map({ 'n' }, '<leader>rm', ':RmTerms<CR>', silent_opts)
+map({ 'n' }, '<leader>rn', lsp.rename, silent_opts)
+map({ 'n' }, '<leader>s', ':b#<CR>', silent_opts)
+map({ 'n' }, '<leader>t', ':<C-u>term ', opts)
+map({ 'n' }, '<leader>w', ':w<CR>', silent_opts)
+map({ 'n' }, '<leader>x', ':%bd|e#|bd#<CR>', silent_opts)
+map({ 'n' }, '<leader>z', ':u0<CR>', silent_opts)
+map({ 'n' }, 'j', 'gj', silent_opts)
+map({ 'n' }, 'k', 'gk', silent_opts)
+map({ 't' }, '<Esc>', '<C-\\><C-n>', opts)
 map({ 'n', 'v' }, '<leader>mt', ':RenderMarkdown toggle<CR>', silent_opts)
 map({ 'n', 'v' }, '<leader>p', '"+p', silent_opts)
 map({ 'n', 'v' }, '<leader>y', '"+y', silent_opts)
+map({ 'n' }, '<leader>ls', '<cmd>FlutterDevices<CR>', silent_opts)
+map({ 'n' }, '<leader>ld', '<cmd>FlutterLogToggle<CR>', silent_opts)
 
 --: }}}

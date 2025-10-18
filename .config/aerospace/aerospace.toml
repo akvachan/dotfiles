@@ -1,3 +1,4 @@
+accordion-padding = 0
 start-at-login = true
 enable-normalization-flatten-containers = true
 enable-normalization-opposite-orientation-for-nested-containers = true 
@@ -80,6 +81,10 @@ on-focus-changed = ['move-mouse window-lazy-center']
 
 [[on-window-detected]]
     if.app-id = 'org.chromium.Chromium'
+    run = 'move-node-to-workspace 2' 
+
+[[on-window-detected]]
+    if.app-id = 'com.apple.Safari'
     run = 'move-node-to-workspace 2' 
 
 [[on-window-detected]]
