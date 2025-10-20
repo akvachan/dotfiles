@@ -40,7 +40,6 @@ opt.writebackup = false
 -- }}}
 
 -- {{{ Plugins
-
 -- {{{ Lazy Setup
 
 local lazypath = fn.stdpath('data') .. '/lazy/lazy.nvim'
@@ -124,10 +123,11 @@ require('lazy').setup({
   {
     'ibhagwan/fzf-lua',
     keys = {
-      { '<leader>ff', function() require('fzf-lua').files({ resume = true }) end,     desc = 'Find files' },
-      { '<leader>fg', function() require('fzf-lua').live_grep({ resume = true }) end, desc = 'Live grep' },
-      { '<leader>fb', function() require('fzf-lua').buffers({ resume = true }) end,   desc = 'Buffers' },
-      { '<leader>fl', function() require('fzf-lua').blines({ resume = true }) end,    desc = 'Current buffer lines' },
+      { '<leader>ff', function() require('fzf-lua').files() end,     desc = 'Find files' },
+      { '<leader>fg', function() require('fzf-lua').live_grep() end, desc = 'Live grep' },
+      { '<leader>fb', function() require('fzf-lua').buffers() end,   desc = 'Buffers' },
+      { '<leader>fl', function() require('fzf-lua').blines() end,    desc = 'Current buffer lines' },
+      { '<leader>fr', function() require('fzf-lua').resume() end,    desc = 'Resume work' },
     },
     config = function()
       require('fzf-lua').setup({
@@ -243,6 +243,12 @@ require('lazy').setup({
       require("flutter-tools").setup {
         closing_tags = {
           enabled = false,
+        },
+        dev_log = {
+          open_cmd = "10split",
+        },
+        settings = {
+          enableSnippets = false,
         },
       }
     end,
@@ -432,6 +438,13 @@ local function toggle_copilot()
 end
 -- }}}
 
+-- {{{ Launch Flutter
+local function launch_flutter()
+  print('Launching Flutter...');
+  cmd('FlutterDevices');
+end
+-- }}}
+
 -- }}}
 
 -- {{{ Keymaps
@@ -496,7 +509,13 @@ map({ 't' }, '<Esc>', '<C-\\><C-n>', opts)
 map({ 'n', 'v' }, '<leader>mt', ':RenderMarkdown toggle<CR>', silent_opts)
 map({ 'n', 'v' }, '<leader>p', '"+p', silent_opts)
 map({ 'n', 'v' }, '<leader>y', '"+y', silent_opts)
-map({ 'n' }, '<leader>ls', '<cmd>FlutterDevices<CR>', silent_opts)
+map({ 'n' }, '<leader>ls', launch_flutter, silent_opts)
 map({ 'n' }, '<leader>ld', '<cmd>FlutterLogToggle<CR>', silent_opts)
+map({ 'n' }, '<leader>lc', '<cmd>FlutterLogClear<CR>', opts)
+map({ 'n' }, '<leader>ll', '<cmd>FlutterLspRestart<CR>', silent_opts)
+map({ 'n' }, '<leader>lr', '<cmd>FlutterRestart<CR>', silent_opts)
+map({ 'n' }, '<leader>lo', '<cmd>FlutterReload<CR>', silent_opts)
+map({ 'n' }, '<leader>lv', '<cmd>FlutterVisualDebug<CR>', silent_opts)
+map({ 'n' }, '<leader>lq', '<cmd>FlutterQuit<CR>', silent_opts)
 
 --: }}}
