@@ -3,76 +3,9 @@
     {
       "actions" : [
         {
-          "key" : "b",
-          "type" : "application",
-          "value" : "/Applications/Safari.app"
-        },
-        {
-          "key" : "t",
-          "type" : "application",
-          "value" : "/Applications/kitty.app"
-        },
-        {
-          "key" : "a",
-          "type" : "application",
-          "value" : "/Applications/AeroSpace.app"
-        },
-        {
-          "key" : "m",
-          "type" : "application",
-          "value" : "/System/Applications/Mail.app"
-        },
-        {
-          "key" : "c",
-          "type" : "application",
-          "value" : "/System/Applications/Calendar.app"
-        },
-        {
-          "key" : "o",
-          "type" : "application",
-          "value" : "/Applications/Obsidian.app"
-        },
-        {
-          "key" : "d",
-          "type" : "application",
-          "value" : "/Applications/Discord.app"
-        },
-        {
-          "key" : "s",
-          "type" : "application",
-          "value" : "/System/Applications/Utilities/Screenshot.app"
-        },
-        {
-          "key" : "i",
-          "type" : "application",
-          "value" : "/Applications/Xcode.app/Contents/Developer/Applications/Simulator.app"
-        }
-      ],
-      "key" : "o",
-      "label" : "Applications",
-      "type" : "group"
-    },
-    {
-      "actions" : [
-        {
           "key" : "c",
           "type" : "url",
           "value" : "raycast://extensions/raycast/clipboard-history/clipboard-history"
-        },
-        {
-          "key" : "b",
-          "type" : "url",
-          "value" : "raycast://extensions/loris/safari/search-bookmarks"
-        },
-        {
-          "key" : "h",
-          "type" : "url",
-          "value" : "raycast://extensions/loris/safari/search-history"
-        },
-        {
-          "key" : "t",
-          "type" : "url",
-          "value" : "raycast://extensions/koinzhang/browser-tabs/index"
         },
         {
           "key" : "s",

@@ -72,28 +72,12 @@ on-focus-changed = ['move-mouse window-lazy-center']
     esc = 'mode main'
 
 [[on-window-detected]]
-    if.app-id = 'com.docker.docker'
-    run = 'move-node-to-workspace 6'
-
-[[on-window-detected]]
     if.app-id = 'net.kovidgoyal.kitty'
     run = 'move-node-to-workspace 1' 
 
 [[on-window-detected]]
-    if.app-id = 'org.chromium.Chromium'
+    if.app-id = 'org.qutebrowser.qutebrowser'
     run = 'move-node-to-workspace 2' 
-
-[[on-window-detected]]
-    if.app-id = 'md.obsidian'
-    run = 'move-node-to-workspace 5'
-
-[[on-window-detected]]
-    if.app-id = 'org.krita'
-    run = 'move-node-to-workspace 7'
-
-[[on-window-detected]]
-    if.app-id = 'org.kde.Kdenlive'
-    run = 'move-node-to-workspace 7'
 
 [[on-window-detected]]
     if.app-id = 'ru.keepcoder.Telegram'
@@ -118,6 +102,18 @@ on-focus-changed = ['move-mouse window-lazy-center']
 [[on-window-detected]]
     if.app-id = 'com.apple.iCal'
     run = 'move-node-to-workspace 4'
+
+[[on-window-detected]]
+    if.app-id = 'io.freetubeapp.freetube'
+    run = 'move-node-to-workspace 5'
+
+[[on-window-detected]]
+    if.app-id = 'com.docker.docker'
+    run = 'move-node-to-workspace 6'
+
+[[on-window-detected]]
+    if.app-id = 'com.apple.dt.Xcode'
+    run = 'move-node-to-workspace 7' 
 
 [[on-window-detected]]
     if.app-id = 'com.apple.Maps'
