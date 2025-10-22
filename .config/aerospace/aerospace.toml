@@ -80,7 +80,7 @@ on-focus-changed = ['move-mouse window-lazy-center']
     run = 'move-node-to-workspace 1' 
 
 [[on-window-detected]]
-    if.app-id = 'com.apple.Safari'
+    if.app-id = 'org.chromium.Chromium'
     run = 'move-node-to-workspace 2' 
 
 [[on-window-detected]]

@@ -40,6 +40,7 @@ opt.writebackup = false
 -- }}}
 
 -- {{{ Plugins
+
 -- {{{ Lazy Setup
 
 local lazypath = fn.stdpath('data') .. '/lazy/lazy.nvim'
@@ -232,10 +233,10 @@ require('lazy').setup({
   },
   -- }}}
 
-  -- {{{ Dart
+  -- {{{ Flutter
   {
     'nvim-flutter/flutter-tools.nvim',
-    lazy = false,
+    lazy = true,
     dependencies = {
       'nvim-lua/plenary.nvim',
     },
