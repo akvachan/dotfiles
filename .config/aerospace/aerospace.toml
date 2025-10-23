@@ -6,13 +6,6 @@ on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 on-focus-changed = ['move-mouse window-lazy-center']
 
 [mode.main.binding]
-    cmd-alt-ctrl-n = '''exec-and-forget osascript -e '
-    tell application "Safari"
-        make new document at end of documents
-        activate
-    end tell'
-    '''
-
     cmd-alt-ctrl-b = 'balance-sizes'
     cmd-alt-ctrl-c = 'reload-config'
     cmd-alt-ctrl-g = 'enable toggle'
