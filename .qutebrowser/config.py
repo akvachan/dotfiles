@@ -16,4 +16,47 @@ config.set("tabs.show", "never")
 # Set a default font for better Mac rendering
 c.fonts.default_family = "SF Pro Text"
 
-c.editor.command = ["kitty", "--single-instance", "-T", "auxiliary text edit", "nvim", "{file}", "+startinsert", "+call cursor({line}, {column})"]
+# Default font for qutebrowser UI
+monospace: str = "20px 'SF Pro Text'"
+
+# Font used in the completion categories.
+c.fonts.completion.category = f"bold {monospace}"
+
+# Font used in the completion widget.
+c.fonts.completion.entry = monospace
+
+# Font used for the debugging console.
+c.fonts.debug_console = monospace
+
+# Font used for the downloadbar.
+c.fonts.downloads = monospace
+
+# Font used in the keyhint widget.
+c.fonts.keyhint = monospace
+
+# Font used for error messages.
+c.fonts.messages.error = monospace
+
+# Font used for info messages.
+c.fonts.messages.info = monospace
+
+# Font used for warning messages.
+c.fonts.messages.warning = monospace
+
+# Font used for prompts.
+c.fonts.prompts = monospace
+
+# Font used in the statusbar.
+c.fonts.statusbar = monospace
+
+# Emacs like online text editing
+config.unbind('<Ctrl-e>', mode="insert")
+config.bind('<Ctrl-e>', 'fake-key <Ctrl-Right>', mode="insert")
+config.bind('<Ctrl-a>', 'fake-key <Ctrl-Left>', mode="insert")
+config.bind('<Ctrl-u>', 'fake-key <Home><Shift-End><Delete>', mode="insert")
+config.bind('<Ctrl-k>', 'fake-key <Shift-End><Delete>', mode="insert")
+config.bind('<Ctrl-w>', 'fake-key <Alt-Backspace>', mode="insert")
+config.bind('<Ctrl-f>', 'fake-key <Alt-Right>', mode="insert")
+config.bind('<Ctrl-b>', 'fake-key <Alt-Left>', mode="insert")
+config.bind('<ctrl+j>', 'completion-item-focus next', mode="command")
+config.bind('<ctrl+k>', 'completion-item-focus prev', mode="command")

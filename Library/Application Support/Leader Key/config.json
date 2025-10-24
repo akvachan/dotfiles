@@ -92,6 +92,16 @@
       ],
       "key" : "v",
       "type" : "group"
+    },
+    {
+      "key" : "b",
+      "type" : "application",
+      "value" : "/Applications/qutebrowser.app"
+    },
+    {
+      "key" : "t",
+      "type" : "application",
+      "value" : "/Applications/kitty.app"
     }
   ],
   "type" : "group"
