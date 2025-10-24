@@ -102,6 +102,11 @@
       "key" : "t",
       "type" : "application",
       "value" : "/Applications/kitty.app"
+    },
+    {
+      "key" : "s",
+      "type" : "application",
+      "value" : "/System/Applications/System Settings.app"
     }
   ],
   "type" : "group"
