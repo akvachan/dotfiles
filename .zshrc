@@ -92,6 +92,9 @@ alias ls="${aliases[ls]:-ls} -A"
 setopt glob_dots     # no special treatment for file names with a leading dot
 setopt no_auto_menu  # require an extra TAB press to open the completion menu
 
+# vi
+source $(brew --prefix)/opt/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+
 # Custom functions
 #
 # Define a widget that opens nvim in the current directory
@@ -99,8 +102,8 @@ function nvim_cwd() {
   BUFFER="nvim ."
   zle accept-line
 }
-zle -N nvim_cwd
-bindkey '^O' nvim_cwd
+zvm_define_widget nvim_cwd
+zvm_bindkey vicmd '^O' nvim_cwd
 
 # Function to cd into projects
 function fzf-proj() {
@@ -115,8 +118,8 @@ function fzf-proj() {
     zle clear-screen -w
   fi
 }
-zle -N fzf-proj
-bindkey '^G' fzf-proj
+zvm_define_widget fzf-proj
+zvm_bindkey vicmd '^G' fzf-proj
 
 # Function to fg into last halted process 
 function fancy-ctrl-z() {
@@ -128,8 +131,8 @@ function fancy-ctrl-z() {
     zle clear-screen -w
   fi
 }
-zle -N fancy-ctrl-z
-bindkey '^Z' fancy-ctrl-z
+zvm_define_widget fancy-ctrl-z
+zvm_bindkey vicmd '^Z' fancy-ctrl-z
 
 function ghcs() {
 	FUNCNAME="$funcstack[1]"
