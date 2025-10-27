@@ -54,40 +54,20 @@ require('lazy').setup({
 
   -- }}}
 
+  -- {{{ Autopair
+  {
+    'windwp/nvim-autopairs',
+    event = 'InsertEnter',
+    config = true
+  },
+  -- }}}
+
   -- {{{ Colorscheme
   {
     'projekt0n/github-nvim-theme',
     config = function()
       vim.cmd.colorscheme('github_dark_dimmed')
     end
-  },
-  -- }}}
-
-  -- {{{ Leetcode stuff
-  {
-    "kawre/leetcode.nvim",
-    cmd = "Leet",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "MunifTanjim/nui.nvim",
-    },
-    opts = {
-      lang = "cpp",
-      keys = {
-        toggle = { "q" },
-        confirm = { "<CR>" },
-        reset_testcases = "r",
-        use_testcase = "U",
-        focus_testcases = "H",
-        focus_result = "L",
-      },
-    },
-  },
-  -- }}}
-
-  -- {{{ Copilot
-  {
-    'github/copilot.vim',
   },
   -- }}}
 
@@ -120,33 +100,9 @@ require('lazy').setup({
   },
   -- }}}
 
-  -- {{{ Fuzzy finder
+  -- {{{ Copilot
   {
-    'ibhagwan/fzf-lua',
-    keys = {
-      { '<leader>ff', function() require('fzf-lua').files() end,     desc = 'Find files' },
-      { '<leader>fg', function() require('fzf-lua').live_grep() end, desc = 'Live grep' },
-      { '<leader>fb', function() require('fzf-lua').buffers() end,   desc = 'Buffers' },
-      { '<leader>fl', function() require('fzf-lua').blines() end,    desc = 'Current buffer lines' },
-      { '<leader>fr', function() require('fzf-lua').resume() end,    desc = 'Resume work' },
-    },
-    config = function()
-      require('fzf-lua').setup({
-        'border-fused',
-        files = {
-          cmd = 'fd --type f --hidden --follow --exclude .git',
-        },
-        grep = {
-          cmd =
-          'rg --column --color=never --no-heading --line-number --hidden --smart-case'
-        },
-        keymap = {
-          fzf = {
-            ['ctrl-q'] = 'select-all+accept',
-          },
-        },
-      })
-    end
+    'github/copilot.vim',
   },
   -- }}}
 
@@ -192,47 +148,6 @@ require('lazy').setup({
   },
   -- }}}
 
-  -- {{{ Surround editing
-  {
-    'kylechui/nvim-surround',
-    event = 'VeryLazy',
-    config = function()
-      require('nvim-surround').setup()
-    end
-  },
-  -- }}}
-
-  -- {{{ Autopair
-  {
-    'windwp/nvim-autopairs',
-    event = 'InsertEnter',
-    config = true
-  },
-  -- }}}
-
-  -- {{{ LSP
-  {
-    'nvim-lspconfig',
-    event = 'VeryLazy',
-    config = function()
-      vim.lsp.enable({
-        'clangd',
-        'bashls',
-        'pyright',
-        'ruff',
-        'lua_ls'
-      })
-      vim.diagnostic.config({
-        virtual_text = false,
-        signs = true,
-        underline = false,
-        update_in_insert = false,
-        severity_sort = true,
-      })
-    end,
-  },
-  -- }}}
-
   -- {{{ Flutter
   {
     'nvim-flutter/flutter-tools.nvim',
@@ -253,6 +168,114 @@ require('lazy').setup({
         },
       }
     end,
+  },
+  -- }}}
+
+  -- {{{ Fuzzy finder
+  {
+    'ibhagwan/fzf-lua',
+    keys = {
+      { '<leader>ff', function() require('fzf-lua').files() end,     desc = 'Find files' },
+      { '<leader>fg', function() require('fzf-lua').live_grep() end, desc = 'Live grep' },
+      { '<leader>fb', function() require('fzf-lua').buffers() end,   desc = 'Buffers' },
+      { '<leader>fl', function() require('fzf-lua').blines() end,    desc = 'Current buffer lines' },
+      { '<leader>fr', function() require('fzf-lua').resume() end,    desc = 'Resume work' },
+    },
+    config = function()
+      require('fzf-lua').setup({
+        'border-fused',
+        files = {
+          cmd = 'fd --type f --hidden --follow --exclude .git',
+        },
+        grep = {
+          cmd =
+          'rg --column --color=never --no-heading --line-number --hidden --smart-case'
+        },
+        keymap = {
+          fzf = {
+            ['ctrl-q'] = 'select-all+accept',
+          },
+        },
+      })
+    end
+  },
+  -- }}}
+
+  -- {{{ Latex
+  {
+    "lervag/vimtex",
+    lazy = false,
+    init = function()
+      -- g.vimtex_view_method = "skim"
+      g.vimtex_view_enabled = 0
+    end
+  },
+  -- }}}
+
+  -- {{{ Leetcode stuff
+  {
+    "kawre/leetcode.nvim",
+    cmd = "Leet",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "MunifTanjim/nui.nvim",
+    },
+    opts = {
+      lang = "cpp",
+      keys = {
+        toggle = { "q" },
+        confirm = { "<CR>" },
+        reset_testcases = "r",
+        use_testcase = "U",
+        focus_testcases = "H",
+        focus_result = "L",
+      },
+    },
+  },
+  -- }}}
+
+  -- {{{ LSP
+  {
+    'nvim-lspconfig',
+    event = 'VeryLazy',
+    config = function()
+      vim.lsp.enable({
+        'bashls',
+        'clangd',
+        'lua_ls',
+        'pyright',
+        'ruff',
+        'sourcekit',
+      })
+      vim.diagnostic.config({
+        virtual_text = false,
+        signs = true,
+        underline = false,
+        update_in_insert = false,
+        severity_sort = true,
+      })
+    end,
+  },
+  -- }}}
+
+  -- {{{ Markdown
+  {
+    'MeanderingProgrammer/render-markdown.nvim',
+    keys = {
+      { '<leader>me', function() require('render-markdown').enable() end, desc = 'Turn on' },
+    },
+    dependencies = { 'nvim-treesitter/nvim-treesitter' },
+    opts = {},
+  },
+  -- }}}
+
+  -- {{{ Surround editing
+  {
+    'kylechui/nvim-surround',
+    event = 'VeryLazy',
+    config = function()
+      require('nvim-surround').setup()
+    end
   },
   -- }}}
 
@@ -339,28 +362,6 @@ require('lazy').setup({
         },
       }
     end,
-  },
-  -- }}}
-
-  -- {{{ Markdown
-  {
-    'MeanderingProgrammer/render-markdown.nvim',
-    keys = {
-      { '<leader>me', function() require('render-markdown').enable() end, desc = 'Turn on' },
-    },
-    dependencies = { 'nvim-treesitter/nvim-treesitter' },
-    opts = {},
-  },
-  -- }}}
-
-  -- {{{ Latex
-  {
-    "lervag/vimtex",
-    lazy = false,
-    init = function()
-      -- g.vimtex_view_method = "skim"
-      g.vimtex_view_enabled = 0
-    end
   },
   -- }}}
 

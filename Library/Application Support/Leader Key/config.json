@@ -107,6 +107,11 @@
       "key" : "s",
       "type" : "application",
       "value" : "/System/Applications/System Settings.app"
+    },
+    {
+      "key" : "y",
+      "type" : "application",
+      "value" : "/Applications/FreeTube.app"
     }
   ],
   "type" : "group"
