@@ -5,9 +5,15 @@ tap "ivan-volnov/tap"
 tap "koekeishiya/formulae"
 tap "nikitabobko/tap"
 # Message bus system, providing inter-application communication
-brew "dbus", restart_service: :changed
+brew "dbus"
+# Automatic configure script builder
+brew "autoconf"
+# Tool for generating GNU Standards-compliant Makefiles
+brew "automake"
 # Google's own build tool
 brew "bazel"
+# Manipulates BibTeX databases
+brew "bib-tool"
 # Linux/OSX/FreeBSD resource monitor
 brew "bpytop"
 # Cross-platform make
@@ -16,8 +22,14 @@ brew "cmake"
 brew "cmake-docs"
 # Console Matrix
 brew "cmatrix"
+# GNU File, Shell, and Text utilities
+brew "coreutils"
+# Pack, ship and run any application as a lightweight container
+brew "docker"
 # Generate documentation for several programming languages
 brew "doxygen"
+# GNU Emacs text editor
+brew "emacs"
 # Like neofetch, but much faster because written mostly in C
 brew "fastfetch"
 # Simple, fast and user-friendly alternative to find
@@ -38,36 +50,60 @@ brew "glfw"
 brew "glm"
 # GNU implementation of the famous stream editor
 brew "gnu-sed"
+# GNU version of the tar archiving utility
+brew "gnu-tar"
 # Toolkit for creating graphical user interfaces
 brew "gtk+3"
 # Cross-platform program for developing Haskell projects
 brew "haskell-stack"
 # Tools and libraries to manipulate images in many formats
 brew "imagemagick"
+# Interior point optimizer
+brew "ipopt"
 # Feature-rich interactive Jira CLI
 brew "jira-cli"
 # Lightweight and flexible command-line JSON processor
 brew "jq"
+# Jupyter notebooks as Markdown documents, Julia, Python or R scripts
+brew "jupytext"
 # LLM inference in C/C++
 brew "llama.cpp"
 # Language Server for the Lua language
 brew "lua-language-server"
 # Package manager for the Lua programming language
 brew "luarocks"
+# Media player based on MPlayer and mplayer2
+brew "mpv"
+# Lightweight PDF and XPS viewer
+brew "mupdf-tools"
+# Thread-based email index, search, and tagging
+brew "notmuch"
+# E-mail reader with support for Notmuch, NNTP and much more
+brew "neomutt"
 # Ambitious Vim-fork focused on extensibility and agility
 brew "neovim"
-# Platform built on V8 to build network applications
+# Open-source, cross-platform JavaScript runtime environment
 brew "node"
 # Create, run, and share large language models (LLMs)
 brew "ollama"
 # On-chip debugging, in-system programming and boundary-scan testing
 brew "open-ocd"
+# Cryptography and SSL/TLS Toolkit
+brew "openssl@1.1"
+# Execute binaries from Python packages in isolated environments
+brew "pipx"
+# Package compiler and linker metadata toolkit
+brew "pkgconf"
 # Theme for zsh
 brew "powerlevel10k"
 # Static type checker for Python
 brew "pyright"
+# Ruby version manager
+brew "rbenv"
 # Search tool like grep and The Silver Searcher
 brew "ripgrep"
+# Powerful, clean, object-oriented scripting language
+brew "ruby"
 # Extremely fast Python linter, written in Rust
 brew "ruff"
 # STM32 discovery line Linux programmer
@@ -78,6 +114,8 @@ brew "the_silver_searcher"
 brew "tmux"
 # Color-based alternative to figlet (uses libcaca)
 brew "toilet"
+# Anonymizing overlay network for TCP
+brew "tor"
 # Display directories as trees (with optional color/HTML output)
 brew "tree"
 # Language Server Protocol implementation for TypeScript wrapping tsserver
@@ -86,21 +124,36 @@ brew "typescript-language-server"
 brew "uv"
 # Manage the desktop wallpaper
 brew "wallpaper"
+# Little beautifier tool for xcodebuild
+brew "xcbeautify"
+# Build server protocol implementation for integrating Xcode with sourcekit-lsp
+brew "xcode-build-server"
 # Tracks most-used directories to make cd smarter
 brew "z"
+# Programming language designed for robustness, optimality, and clarity
+brew "zig"
+# Better and friendly vi(vim) mode plugin for ZSH
+brew "zsh-vi-mode"
+# A window border system for macOS
+brew "felixkratz/formulae/borders"
 # Custom macOS statusbar with shell plugin, interaction and graph support
 brew "felixkratz/formulae/sketchybar"
 # AeroSpace is an i3-like tiling window manager for macOS
 cask "aerospace"
-# Free and open-source web browser
-cask "chromium"
 # Voice and text chat software
 cask "discord"
+# App to build and share containerised applications and microservices
+cask "docker-desktop"
 cask "font-hack-nerd-font"
+cask "font-mona-sans"
+# YouTube player focusing on privacy
+cask "freetube"
 # Pre-built GNU bare-metal toolchain for 32-bit Arm processors
 cask "gcc-arm-embedded"
 # Client for the Google Drive storage service
 cask "google-drive"
+# Keyboard shortcuts for every button on your screen
+cask "homerow"
 # Free and Open Source Video Editor
 cask "kdenlive"
 # Open-source keystroke visualiser
@@ -111,6 +164,8 @@ cask "kitty"
 cask "krita"
 # Application launcher
 cask "leader-key"
+# Free cross-platform office suite, fresh version
+cask "libreoffice"
 # Full TeX Live distribution without GUI applications
 cask "mactex-no-gui"
 # Keyboard-driven, vim-like browser based on PyQt5
@@ -125,3 +180,7 @@ cask "skim"
 cask "stats"
 # Messaging app with a focus on speed and security
 cask "telegram"
+# Web browser focusing on security
+cask "tor-browser"
+# Virtual machines UI using QEMU
+cask "utm"

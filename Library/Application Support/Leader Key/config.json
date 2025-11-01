@@ -112,6 +112,21 @@
       "key" : "y",
       "type" : "application",
       "value" : "/Applications/FreeTube.app"
+    },
+    {
+      "key" : "m",
+      "type" : "application",
+      "value" : "/System/Applications/Mail.app"
+    },
+    {
+      "key" : "c",
+      "type" : "application",
+      "value" : "/System/Applications/Calendar.app"
+    },
+    {
+      "key" : "f",
+      "type" : "application",
+      "value" : "/System/Applications/FaceTime.app"
     }
   ],
   "type" : "group"

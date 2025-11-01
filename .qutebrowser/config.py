@@ -49,6 +49,11 @@ c.fonts.prompts = monospace
 # Font used in the statusbar.
 c.fonts.statusbar = monospace
 
+# General keybindings
+
+config.bind('<Space>do', 'download-open')
+config.bind('<Space>dn', 'download-open --number')
+
 # Emacs-like keybindings 
 
 # Jumpt to the end of the line
@@ -206,6 +211,8 @@ c.colors.tabs.selected.even.fg = selection_fg
 c.colors.tabs.selected.even.bg = selection_bg
 
 # Webpage colors
-c.colors.webpage.bg = bg 
-c.colors.webpage.preferred_color_scheme = 'dark'
+# c.colors.webpage.bg = bg 
+# c.colors.webpage.preferred_color_scheme = 'dark'
+# c.content.user_stylesheets = ['~/.qutebrowser/custom.css']
+
 # c.colors.webpage.darkmode.enabled = True 
