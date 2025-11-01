@@ -69,6 +69,10 @@ on-focus-changed = ['move-mouse window-lazy-center']
     run = 'move-node-to-workspace 1' 
 
 [[on-window-detected]]
+    if.app-id = 'com.apple.dt.Xcode'
+    run = 'move-node-to-workspace 1' 
+
+[[on-window-detected]]
     if.app-id = 'org.qutebrowser.qutebrowser'
     run = 'move-node-to-workspace 2' 
 
@@ -103,10 +107,6 @@ on-focus-changed = ['move-mouse window-lazy-center']
 [[on-window-detected]]
     if.app-id = 'com.docker.docker'
     run = 'move-node-to-workspace 6'
-
-[[on-window-detected]]
-    if.app-id = 'com.apple.dt.Xcode'
-    run = 'move-node-to-workspace 7' 
 
 [[on-window-detected]]
     if.app-id = 'com.apple.Maps'
