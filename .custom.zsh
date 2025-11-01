@@ -6,7 +6,7 @@ function nvim_cwd() {
   zle accept-line
 }
 zle -N nvim_cwd
-bindkey -M vicmd '^O' nvim_cwd
+bindkey '^O' nvim_cwd
 
 # Function to cd into projects
 function fzf-proj() {
@@ -22,7 +22,7 @@ function fzf-proj() {
   fi
 }
 zle -N fzf-proj
-bindkey -M vicmd '^G' fzf-proj
+bindkey '^G' fzf-proj
 
 # Function to fg into last halted process 
 function fancy-ctrl-z() {
@@ -35,13 +35,13 @@ function fancy-ctrl-z() {
   fi
 }
 zle -N fancy-ctrl-z
-bindkey -M vicmd '^Z' fancy-ctrl-z
+bindkey '^Z' fancy-ctrl-z
 
 # z 
 . /opt/homebrew/etc/profile.d/z.sh
 
 # Custom aliases
-alias zshrc="nvim ~/.zshrc"
+alias zshrc="nvim ~/.custom.zsh"
 alias asrc="nvim ~/.config/aerospace/aerospace.toml"
 alias nvimrc="nvim ~/.config/nvim/init.lua"
 alias kittyrc="nvim ~/.config/kitty/kitty.conf"
