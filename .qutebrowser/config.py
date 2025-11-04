@@ -1,6 +1,10 @@
 # config.py for qutebrowser
 config.load_autoconfig()
 
+# ============================================================================
+# Window and Display Settings
+# ============================================================================
+
 # Enable native macOS window decorations (title bar with traffic lights)
 config.set("window.hide_decoration", False)
 
@@ -13,94 +17,112 @@ config.set("statusbar.show", "in-mode")
 # Hide the tab bar unless multiple tabs are open
 config.set("tabs.show", "never")
 
+# ============================================================================
+# Font Configuration
+# ============================================================================
+
 # Set a default font for better Mac rendering
 c.fonts.default_family = "SF Pro Text"
 
 # Default font for qutebrowser UI
 monospace: str = "20px 'SF Pro Text'"
 
-# Font used in the completion categories.
+# Font used in the completion categories
 c.fonts.completion.category = f"bold {monospace}"
 
-# Font used in the completion widget.
+# Font used in the completion widget
 c.fonts.completion.entry = monospace
 
-# Font used for the debugging console.
+# Font used for the debugging console
 c.fonts.debug_console = monospace
 
-# Font used for the downloadbar.
+# Font used for the downloadbar
 c.fonts.downloads = monospace
 
-# Font used in the keyhint widget.
+# Font used in the keyhint widget
 c.fonts.keyhint = monospace
 
-# Font used for error messages.
+# Font used for error messages
 c.fonts.messages.error = monospace
 
-# Font used for info messages.
+# Font used for info messages
 c.fonts.messages.info = monospace
 
-# Font used for warning messages.
+# Font used for warning messages
 c.fonts.messages.warning = monospace
 
-# Font used for prompts.
+# Font used for prompts
 c.fonts.prompts = monospace
 
-# Font used in the statusbar.
+# Font used in the statusbar
 c.fonts.statusbar = monospace
 
+# ============================================================================
+# Keybindings
+# ============================================================================
+
 # General keybindings
+# Toggle dark mode
+config.bind(
+    "<Space>td",
+    "config-cycle -u *://{url:host}/* colors.webpage.darkmode.enabled",
+)
 
-config.bind('<Space>do', 'download-open')
-config.bind('<Space>dn', 'download-open --number')
+# Open downloads
+config.bind("<Space>do", "download-open")
 
-# Emacs-like keybindings 
+# Open n-th download
+config.bind("<Space>dn", "download-open --number")
 
-# Jumpt to the end of the line
-config.unbind('<Ctrl-e>', mode="insert")
-config.bind('<Ctrl-e>', 'fake-key <Ctrl-Right>', mode="insert")
+# Insert mode keybindings
+# Jump to the end of the line
+config.unbind("<Ctrl-e>", mode="insert")
+config.bind("<Ctrl-e>", "fake-key <Ctrl-Right>", mode="insert")
 
 # Jump to the beginning of the line
-config.bind('<Ctrl-a>', 'fake-key <Ctrl-Left>', mode="insert")
+config.bind("<Ctrl-a>", "fake-key <Ctrl-Left>", mode="insert")
 
 # Delete from the end until current cursor position
-config.bind('<Ctrl-u>', 'fake-key <Home><Shift-End><Delete>', mode="insert")
+config.bind("<Ctrl-u>", "fake-key <Home><Shift-End><Delete>", mode="insert")
 
 # Delete from the start until current cursor position
-config.bind('<Ctrl-k>', 'fake-key <Shift-End><Delete>', mode="insert")
+config.bind("<Ctrl-k>", "fake-key <Shift-End><Delete>", mode="insert")
 
 # Delete previous word
-config.bind('<Ctrl-w>', 'fake-key <Alt-Backspace>', mode="insert")
+config.bind("<Ctrl-w>", "fake-key <Alt-Backspace>", mode="insert")
 
 # Jump to the next word
-config.bind('<Alt-f>', 'fake-key <Alt-Right>', mode="insert")
+config.bind("<Alt-f>", "fake-key <Alt-Right>", mode="insert")
 
 # Jump to the previous word
-config.bind('<Alt-b>', 'fake-key <Alt-Left>', mode="insert")
+config.bind("<Alt-b>", "fake-key <Alt-Left>", mode="insert")
 
+# Command mode keybindings
 # Select next completion item in the command menu
-config.bind('<Ctrl+j>', 'completion-item-focus next', mode="command")
+config.bind("<Ctrl+j>", "completion-item-focus next", mode="command")
 
 # Select previous completion item in the command menu
-config.bind('<Ctrl+k>', 'completion-item-focus prev', mode="command")
+config.bind("<Ctrl+k>", "completion-item-focus prev", mode="command")
 
+# ============================================================================
 # GitHub Theme for Qutebrowser
+# ============================================================================
 
 # Base colors
-bg = '#22272e'
-fg = '#adbac7'
-selection_bg = '#539bf5'
-selection_fg = '#22272e'
+bg = "#22272e"
+fg = "#adbac7"
+selection_bg = "#539bf5"
+selection_fg = "#22272e"
 
 # Accent colors (derived from GitHub's palette)
-blue = '#539bf5'
-green = '#57ab5a'
-yellow = '#c69026'
-red = '#e5534b'
-purple = '#b083f0'
-gray = '#636e7b'
-dark_bg = '#1c2128'
-lighter_bg = '#2d333b'
+blue = "#539bf5"
+green = "#57ab5a"
+yellow = "#c69026"
+red = "#e5534b"
+purple = "#b083f0"
+gray = "#636e7b"
+dark_bg = "#1c2128"
+lighter_bg = "#2d333b"
 
 # Completion widget
 c.colors.completion.fg = fg
@@ -210,9 +232,11 @@ c.colors.tabs.selected.odd.bg = selection_bg
 c.colors.tabs.selected.even.fg = selection_fg
 c.colors.tabs.selected.even.bg = selection_bg
 
-# Webpage colors
-# c.colors.webpage.bg = bg 
+# ============================================================================
+# Webpage Colors (Commented)
+# ============================================================================
+
+# c.colors.webpage.bg = bg
 # c.colors.webpage.preferred_color_scheme = 'dark'
 # c.content.user_stylesheets = ['~/.qutebrowser/custom.css']
-
-# c.colors.webpage.darkmode.enabled = True 
+# c.colors.webpage.darkmode.enabled = True
