@@ -114,9 +114,9 @@ require('lazy').setup({
       local oil = require('oil')
       oil.setup({
         columns = {
-          "permissions",
-          "size",
-          { "mtime", highlight = "Comment", format = "%Y-%m-%d %H:%M" },
+          'permissions',
+          'size',
+          { 'mtime', highlight = 'Comment', format = '%Y-%m-%d %H:%M' },
         },
         view_options = { show_hidden = true },
         keymaps = {
@@ -234,11 +234,26 @@ require('lazy').setup({
   },
   -- }}}
 
+  -- {{{ Rust
+  {
+  'mrcjkb/rustaceanvim',
+  version = '^6', 
+  lazy = false, 
+  },
+  -- }}}
+
   -- {{{ LSP
   {
     'nvim-lspconfig',
     event = 'VeryLazy',
     config = function()
+      vim.diagnostic.config({
+        virtual_text = false,
+        signs = true,
+        underline = false,
+        update_in_insert = false,
+        severity_sort = true,
+      })
       vim.lsp.enable({
         'bashls',
         'clangd',
@@ -246,13 +261,6 @@ require('lazy').setup({
         'pyright',
         'ruff',
         'sourcekit',
-      })
-      vim.diagnostic.config({
-        virtual_text = false,
-        signs = true,
-        underline = false,
-        update_in_insert = false,
-        severity_sort = true,
       })
     end,
   },
@@ -300,6 +308,7 @@ require('lazy').setup({
           'javascript',
           'json',
           'lua',
+          'rust',
           'markdown',
           'markdown_inline',
           'python',

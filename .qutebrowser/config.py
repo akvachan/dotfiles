@@ -65,7 +65,7 @@ c.fonts.statusbar = monospace
 # Toggle dark mode
 config.bind(
     "<Space>td",
-    "config-cycle -u *://{url:host}/* colors.webpage.darkmode.enabled",
+    "config-cycle -u *://{url:host}/* colors.webpage.darkmode.enabled ;; reload",
 )
 
 # Open downloads
@@ -236,7 +236,7 @@ c.colors.tabs.selected.even.bg = selection_bg
 # Webpage Colors (Commented)
 # ============================================================================
 
-# c.colors.webpage.bg = bg
-# c.colors.webpage.preferred_color_scheme = 'dark'
+c.colors.webpage.bg = bg
+c.colors.webpage.preferred_color_scheme = 'dark'
 # c.content.user_stylesheets = ['~/.qutebrowser/custom.css']
 # c.colors.webpage.darkmode.enabled = True
