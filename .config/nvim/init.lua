@@ -7,6 +7,19 @@ g.mapleader = ' '
 g.maplocalleader = ' '
 g.matchparen_insert_timeout = 20
 g.matchparen_timeout = 20
+g.rustaceanvim = {
+  server = {
+    cmd = { "rustup", "run", "stable", "rust-analyzer" },
+    cmd_env = { RA_LOG = "rust_analyzer=error" },
+    default_settings = {
+      ["rust-analyzer"] = {
+        cargo = { buildScripts = { enable = true } },
+        procMacro = { enable = true },
+        files = { excludeDirs = { "target", ".git", "node_modules" } },
+      },
+    },
+  },
+}
 opt.autoindent = true
 opt.background = 'dark'
 opt.backup = false
@@ -175,11 +188,14 @@ require('lazy').setup({
   {
     'ibhagwan/fzf-lua',
     keys = {
-      { '<leader>ff', function() require('fzf-lua').files() end,     desc = 'Find files' },
-      { '<leader>fg', function() require('fzf-lua').live_grep() end, desc = 'Live grep' },
-      { '<leader>fb', function() require('fzf-lua').buffers() end,   desc = 'Buffers' },
-      { '<leader>fl', function() require('fzf-lua').blines() end,    desc = 'Current buffer lines' },
-      { '<leader>fr', function() require('fzf-lua').resume() end,    desc = 'Resume work' },
+      { '<leader>ff', function() require('fzf-lua').files() end,                 desc = 'Find files' },
+      { '<leader>fg', function() require('fzf-lua').live_grep() end,             desc = 'Live grep' },
+      { '<leader>fb', function() require('fzf-lua').buffers() end,               desc = 'Buffers' },
+      { '<leader>fl', function() require('fzf-lua').blines() end,                desc = 'Current buffer lines' },
+      { '<leader>fr', function() require('fzf-lua').resume() end,                desc = 'Resume work' },
+      { '<leader>sd', function() require('fzf-lua').lsp_document_symbols() end,  desc = 'Symbols (document)' },
+      { '<leader>sw', function() require('fzf-lua').lsp_workspace_symbols() end, desc = 'Symbols (workspace)' },
+      { '<leader>st', function() require('fzf-lua').treesitter() end,            desc = 'Treesitter symbols (document)' },
     },
     config = function()
       require('fzf-lua').setup({
@@ -188,16 +204,21 @@ require('lazy').setup({
           cmd = 'fd --type f --hidden --follow --exclude .git',
         },
         grep = {
-          cmd =
-          'rg --column --color=never --no-heading --line-number --hidden --smart-case'
+          cmd = 'rg --column --color=never --no-heading --line-number --hidden --smart-case',
         },
         keymap = {
           fzf = {
             ['ctrl-q'] = 'select-all+accept',
           },
         },
+        lsp = {
+          symbols = {
+            symbol_style = 1,
+            path_shorten = 1,
+          },
+        },
       })
-    end
+    end,
   },
   -- }}}
 
@@ -236,9 +257,9 @@ require('lazy').setup({
 
   -- {{{ Rust
   {
-  'mrcjkb/rustaceanvim',
-  version = '^6', 
-  lazy = false, 
+    'mrcjkb/rustaceanvim',
+    version = '^6',
+    lazy = false,
   },
   -- }}}
 
@@ -370,6 +391,35 @@ require('lazy').setup({
           },
         },
       }
+    end,
+  },
+  -- }}}
+
+  -- {{{ Treesitter Header
+  {
+    "nvim-treesitter/nvim-treesitter-context",
+    event = { "BufReadPost", "BufNewFile" },
+    opts = {
+      enable = true,
+      throttle = true,
+      max_lines = 5,
+      trim_scope = "outer",
+      patterns = {
+        default = {
+          "class",
+          "function",
+          "method",
+          "for",
+          "while",
+          "if",
+          "switch",
+          "case",
+        },
+      },
+      mode = "cursor",
+    },
+    config = function(_, opts)
+      require("treesitter-context").setup(opts)
     end,
   },
   -- }}}
@@ -509,7 +559,6 @@ map({ 'n' }, '<leader>h', ':noh<CR>', silent_opts)
 map({ 'n' }, '<leader>q', ':q!<CR>', silent_opts)
 map({ 'n' }, '<leader>rm', ':RmTerms<CR>', silent_opts)
 map({ 'n' }, '<leader>rn', lsp.rename, silent_opts)
-map({ 'n' }, '<leader>s', ':b#<CR>', silent_opts)
 map({ 'n' }, '<leader>t', ':<C-u>term ', opts)
 map({ 'n' }, '<leader>w', ':w<CR>', silent_opts)
 map({ 'n' }, '<leader>x', ':%bd|e#|bd#<CR>', silent_opts)
