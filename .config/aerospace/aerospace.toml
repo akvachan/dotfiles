@@ -1,80 +1,167 @@
 accordion-padding = 0
 start-at-login = true
 enable-normalization-flatten-containers = true
-enable-normalization-opposite-orientation-for-nested-containers = true 
+enable-normalization-opposite-orientation-for-nested-containers = true
 on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 on-focus-changed = ['move-mouse window-lazy-center']
 
+[gaps]
+inner.horizontal = 5
+inner.vertical   = 5
+outer.left       = 5
+outer.bottom     = 5
+outer.top        = 5
+outer.right      = 5
+
 [mode.main.binding]
-    cmd-alt-ctrl-b = 'balance-sizes'
+    # Core Aerospace controls
     cmd-alt-ctrl-c = 'reload-config'
     cmd-alt-ctrl-g = 'enable toggle'
-    cmd-alt-ctrl-m = 'fullscreen'
-    cmd-alt-ctrl-tab = 'focus-back-and-forth'
-    cmd-alt-ctrl-x = 'close-all-windows-but-current --quit-if-last-window'
-    cmd-alt-ctrl-z = 'mode resize'
-    cmd-alt-ctrl-comma = 'layout accordion horizontal vertical'
-    cmd-alt-ctrl-semicolon = 'layout tiles horizontal vertical'
 
-    cmd-alt-ctrl-h = 'focus left'
-    cmd-alt-ctrl-j = 'focus down'
-    cmd-alt-ctrl-k = 'focus up'
-    cmd-alt-ctrl-l = 'focus right'
+    # Screenshot shortcut – opens macOS Screenshot.app
+    cmd-alt-ctrl-s = 'exec-and-forget open -a "Screenshot"'
 
-    cmd-alt-ctrl-a = 'move left'
-    cmd-alt-ctrl-d = 'move up'
-    cmd-alt-ctrl-f = 'move right'
-    cmd-alt-ctrl-s = 'move down'
+    # Leaders for modal keymaps
+    cmd-alt-ctrl-w       = 'mode window'          # window actions
+    cmd-alt-ctrl-f       = 'mode focus'           # focus movement
+    cmd-alt-ctrl-m       = 'mode move'            # move window in tree
+    cmd-alt-ctrl-q       = 'mode ws-focus'        # focus workspace
+    cmd-alt-ctrl-shift-q = 'mode ws-move'         # move window to workspace (+follow)
+    cmd-alt-ctrl-r       = 'mode resize'          # resize mode
+    cmd-alt-ctrl-a       = 'mode apps'            # apps launcher
+    cmd-alt-ctrl-x       = 'mode raycast'         # Raycast actions
+    cmd-alt-ctrl-d       = 'mode displays'        # NEW: monitor / displays mode
 
-    cmd-alt-ctrl-q = 'workspace 1'
-    cmd-alt-ctrl-w = 'workspace 2'
-    cmd-alt-ctrl-e = 'workspace 3'
-    cmd-alt-ctrl-r = 'workspace 4'
-    cmd-alt-ctrl-t = 'workspace 5'
-    cmd-alt-ctrl-y = 'workspace 6'
-    cmd-alt-ctrl-u = 'workspace 7'
-    cmd-alt-ctrl-i = 'workspace 8'
-    cmd-alt-ctrl-o = 'workspace 9'
-    cmd-alt-ctrl-p = 'workspace 10'
+[mode.window.binding]
+    b         = ['balance-sizes', 'mode main']
+    m         = ['fullscreen', 'mode main']
+    tab       = ['focus-back-and-forth', 'mode main']
+    x         = ['close-all-windows-but-current --quit-if-last-window', 'mode main']
+    comma     = ['layout accordion horizontal vertical', 'mode main']
+    semicolon = ['layout tiles horizontal vertical', 'mode main']
+    g         = ['enable toggle', 'mode main']
+    z         = ['mode resize'] 
 
-    cmd-alt-ctrl-shift-q = 'move-node-to-workspace 1 --focus-follows-window'
-    cmd-alt-ctrl-shift-w = 'move-node-to-workspace 2 --focus-follows-window'
-    cmd-alt-ctrl-shift-e = 'move-node-to-workspace 3 --focus-follows-window'
-    cmd-alt-ctrl-shift-r = 'move-node-to-workspace 4 --focus-follows-window'
-    cmd-alt-ctrl-shift-t = 'move-node-to-workspace 5 --focus-follows-window'
-    cmd-alt-ctrl-shift-y = 'move-node-to-workspace 6 --focus-follows-window'
-    cmd-alt-ctrl-shift-u = 'move-node-to-workspace 7 --focus-follows-window'
-    cmd-alt-ctrl-shift-i = 'move-node-to-workspace 8 --focus-follows-window'
-    cmd-alt-ctrl-shift-o = 'move-node-to-workspace 9 --focus-follows-window'
-    cmd-alt-ctrl-shift-p = 'move-node-to-workspace 10 --focus-follows-window'
+    esc       = 'mode main'
+    enter     = 'mode main'
 
-[gaps]
-    inner.horizontal = 5
-    inner.vertical =   5
-    outer.left =       5
-    outer.bottom =     5
-    outer.top =        5
-    outer.right =      5
+[mode.focus.binding]
+    h    = ['focus left', 'mode main']
+    j    = ['focus down', 'mode main']
+    k    = ['focus up', 'mode main']
+    l    = ['focus right', 'mode main']
+    tab  = ['focus-back-and-forth', 'mode main']
+
+    esc   = 'mode main'
+    enter = 'mode main'
+
+[mode.move.binding]
+    h    = ['move left', 'mode main']
+    j    = ['move down', 'mode main']
+    k    = ['move up', 'mode main']
+    l    = ['move right', 'mode main']
+
+    esc   = 'mode main'
+    enter = 'mode main'
+
+[mode.ws-focus.binding]
+    q = ['workspace 1', 'mode main']
+    w = ['workspace 2', 'mode main']
+    e = ['workspace 3', 'mode main']
+    r = ['workspace 4', 'mode main']
+    t = ['workspace 5', 'mode main']
+    y = ['workspace 6', 'mode main']
+    u = ['workspace 7', 'mode main']
+    i = ['workspace 8', 'mode main']
+    o = ['workspace 9', 'mode main']
+    p = ['workspace 10', 'mode main']
+
+    tab  = ['workspace-back-and-forth', 'mode main']
+
+    esc   = 'mode main'
+    enter = 'mode main'
+
+[mode.ws-move.binding]
+    q = ['move-node-to-workspace 1 --focus-follows-window', 'mode main']
+    w = ['move-node-to-workspace 2 --focus-follows-window', 'mode main']
+    e = ['move-node-to-workspace 3 --focus-follows-window', 'mode main']
+    r = ['move-node-to-workspace 4 --focus-follows-window', 'mode main']
+    t = ['move-node-to-workspace 5 --focus-follows-window', 'mode main']
+    y = ['move-node-to-workspace 6 --focus-follows-window', 'mode main']
+    u = ['move-node-to-workspace 7 --focus-follows-window', 'mode main']
+    i = ['move-node-to-workspace 8 --focus-follows-window', 'mode main']
+    o = ['move-node-to-workspace 9 --focus-follows-window', 'mode main']
+    p = ['move-node-to-workspace 10 --focus-follows-window', 'mode main']
+
+    esc   = 'mode main'
+    enter = 'mode main'
 
 [mode.resize.binding]
-    h = 'resize width -50'
-    j = 'resize height +50'
-    k = 'resize height -50'
-    l = 'resize width +50'
+    h    = ['resize width -50', 'mode main']
+    j    = ['resize height +50', 'mode main']
+    k    = ['resize height -50', 'mode main']
+    l    = ['resize width +50', 'mode main']
+
+    esc   = 'mode main'
     enter = 'mode main'
-    esc = 'mode main'
+
+[mode.apps.binding]
+    b       = ['exec-and-forget open -a "Chromium"', 'mode main']
+    shift-b = ['exec-and-forget open -na "Chromium"', 'mode main']
+
+    t = ['exec-and-forget open -a "kitty"', 'mode main']
+    s = ['exec-and-forget open -a "System Settings"', 'mode main']
+    y = ['exec-and-forget open -a "FreeTube"', 'mode main']
+    m = ['exec-and-forget open -a "Mail"', 'mode main']
+    c = ['exec-and-forget open -a "Calendar"', 'mode main']
+    f = ['exec-and-forget open -a "FaceTime"', 'mode main']
+
+    esc   = 'mode main'
+    enter = 'mode main'
+
+[mode.raycast.binding]
+    c = ['exec-and-forget open "raycast://extensions/raycast/clipboard-history/clipboard-history"', 'mode main']
+    s = ['exec-and-forget open "raycast://extensions/tegola/duck-duck-go-search/index"', 'mode main']
+    k = ['exec-and-forget open "raycast://extensions/rolandleth/kill-process/index"', 'mode main']
+    p = ['exec-and-forget open "raycast://extensions/raycast/screenshots/search-screenshots"', 'mode main']
+    f = ['exec-and-forget open "raycast://extensions/raycast/file-search/search-files"', 'mode main']
+    d = ['exec-and-forget open "raycast://extensions/raycast/system/shut-down"', 'mode main']
+    r = ['exec-and-forget open "raycast://extensions/raycast/system/restart"', 'mode main']
+    o = ['exec-and-forget open "raycast://extensions/raycast/system/log-out-arsenii-kvachan"', 'mode main']
+    v = ['exec-and-forget open "raycast://extensions/raycast/screenshots/paste-recent-screenshot"', 'mode main']
+    i = ['exec-and-forget open "raycast://extensions/tonka3000/speedtest/index"', 'mode main']
+    m = ['exec-and-forget open "raycast://extensions/raycast/navigation/search-menu-items"', 'mode main']
+
+    esc   = 'mode main'
+    enter = 'mode main'
+
+[mode.displays.binding]
+    # Focus monitors relative to current
+    h = ['focus-monitor left --wrap-around', 'mode main']
+    j = ['focus-monitor down --wrap-around', 'mode main']
+    k = ['focus-monitor up --wrap-around', 'mode main']
+    l = ['focus-monitor right --wrap-around', 'mode main']
+
+    # Move window to monitor and follow
+    shift-h = ['move-node-to-monitor left --focus-follows-window --wrap-around', 'mode main']
+    shift-j = ['move-node-to-monitor down --focus-follows-window --wrap-around', 'mode main']
+    shift-k = ['move-node-to-monitor up --focus-follows-window --wrap-around', 'mode main']
+    shift-l = ['move-node-to-monitor right --focus-follows-window --wrap-around', 'mode main']
+
+    esc   = 'mode main'
+    enter = 'mode main'
 
 [[on-window-detected]]
     if.app-id = 'net.kovidgoyal.kitty'
-    run = 'move-node-to-workspace 1' 
+    run = 'move-node-to-workspace 1'
 
 [[on-window-detected]]
     if.app-id = 'com.apple.dt.Xcode'
-    run = 'move-node-to-workspace 1' 
+    run = 'move-node-to-workspace 1'
 
 [[on-window-detected]]
     if.app-id = 'org.qutebrowser.qutebrowser'
-    run = 'move-node-to-workspace 2' 
+    run = 'move-node-to-workspace 2'
 
 [[on-window-detected]]
     if.app-id = 'ru.keepcoder.Telegram'
@@ -86,10 +173,6 @@ on-focus-changed = ['move-mouse window-lazy-center']
 
 [[on-window-detected]]
     if.app-id = 'com.hnc.Discord'
-    run = 'move-node-to-workspace 3'
-
-[[on-window-detected]]
-    if.app-id = 'com.apple.FaceTime'
     run = 'move-node-to-workspace 3'
 
 [[on-window-detected]]
@@ -107,6 +190,10 @@ on-focus-changed = ['move-mouse window-lazy-center']
 [[on-window-detected]]
     if.app-id = 'com.docker.docker'
     run = 'move-node-to-workspace 6'
+
+[[on-window-detected]]
+    if.app-id = 'com.apple.FaceTime'
+    run = 'move-node-to-workspace 8'
 
 [[on-window-detected]]
     if.app-id = 'com.apple.Maps'
