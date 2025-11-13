@@ -1,32 +1,12 @@
 -- {{{ Basic Settings
 
 local g, opt, cmd, fn, api = vim.g, vim.opt, vim.cmd, vim.fn, vim.api
-g.copilot_enabled = false
-g.copilot_no_tab_map = true
-g.mapleader = ' '
-g.maplocalleader = ' '
-g.matchparen_insert_timeout = 20
-g.matchparen_timeout = 20
-g.rustaceanvim = {
-  server = {
-    cmd = { "rustup", "run", "stable", "rust-analyzer" },
-    cmd_env = { RA_LOG = "rust_analyzer=error" },
-    default_settings = {
-      ["rust-analyzer"] = {
-        cargo = { buildScripts = { enable = true } },
-        procMacro = { enable = true },
-        files = { excludeDirs = { "target", ".git", "node_modules" } },
-      },
-    },
-  },
-}
 opt.autoindent = true
 opt.background = 'dark'
 opt.backup = false
 opt.equalalways = true
 opt.expandtab = true
 opt.foldenable = true
-opt.foldlevel = 0
 opt.foldmethod = 'marker'
 opt.grepformat = '%f:%l:%c:%m,%f:%l:%m'
 opt.grepprg = 'rg --vimgrep --no-heading --smart-case'
@@ -49,6 +29,25 @@ opt.termguicolors = true
 opt.updatetime = 100
 opt.wrap = false
 opt.writebackup = false
+g.copilot_enabled = false
+g.copilot_no_tab_map = true
+g.mapleader = ' '
+g.maplocalleader = ' '
+g.matchparen_insert_timeout = 20
+g.matchparen_timeout = 20
+g.rustaceanvim = {
+  server = {
+    cmd = { "rustup", "run", "stable", "rust-analyzer" },
+    cmd_env = { RA_LOG = "rust_analyzer=error" },
+    default_settings = {
+      ["rust-analyzer"] = {
+        cargo = { buildScripts = { enable = true } },
+        procMacro = { enable = true },
+        files = { excludeDirs = { "target", ".git", "node_modules" } },
+      },
+    },
+  },
+}
 
 -- }}}
 
@@ -196,6 +195,13 @@ require('lazy').setup({
       { '<leader>sd', function() require('fzf-lua').lsp_document_symbols() end,  desc = 'Symbols (document)' },
       { '<leader>sw', function() require('fzf-lua').lsp_workspace_symbols() end, desc = 'Symbols (workspace)' },
       { '<leader>st', function() require('fzf-lua').treesitter() end,            desc = 'Treesitter symbols (document)' },
+      { '<leader>gs', function() require('fzf-lua').git_status() end,            desc = 'Git status (stage/unstage)' },
+      { '<leader>gf', function() require('fzf-lua').git_files() end,             desc = 'Git files' },
+      { '<leader>gc', function() require('fzf-lua').git_commits() end,           desc = 'Git commits' },
+      { '<leader>gC', function() require('fzf-lua').git_bcommits() end,          desc = 'Git commits (buffer)' },
+      { '<leader>gb', function() require('fzf-lua').git_branches() end,          desc = 'Git branches' },
+      { '<leader>gS', function() require('fzf-lua').git_stash() end,             desc = 'Git stash' },
+      { '<leader>gB', function() require('fzf-lua').git_blame() end,             desc = 'Git blame (current file)' },
     },
     config = function()
       require('fzf-lua').setup({
@@ -217,6 +223,17 @@ require('lazy').setup({
             path_shorten = 1,
           },
         },
+        git = {
+          status = {
+            actions = {
+              ["ctrl-a"] = { fn = require("fzf-lua.actions").git_stage,   reload = true },
+              ["ctrl-u"] = { fn = require("fzf-lua.actions").git_unstage, reload = true },
+              ["right"] = false,
+              ["left"]  = false,
+            },
+          },
+        },
+
       })
     end,
   },
@@ -391,35 +408,6 @@ require('lazy').setup({
           },
         },
       }
-    end,
-  },
-  -- }}}
-
-  -- {{{ Treesitter Header
-  {
-    "nvim-treesitter/nvim-treesitter-context",
-    event = { "BufReadPost", "BufNewFile" },
-    opts = {
-      enable = true,
-      throttle = true,
-      max_lines = 5,
-      trim_scope = "outer",
-      patterns = {
-        default = {
-          "class",
-          "function",
-          "method",
-          "for",
-          "while",
-          "if",
-          "switch",
-          "case",
-        },
-      },
-      mode = "cursor",
-    },
-    config = function(_, opts)
-      require("treesitter-context").setup(opts)
     end,
   },
   -- }}}

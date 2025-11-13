@@ -178,10 +178,6 @@ outer.right      = 5
     run = 'move-node-to-workspace 4'
 
 [[on-window-detected]]
-    if.app-id = 'io.freetubeapp.freetube'
-    run = 'move-node-to-workspace 5'
-
-[[on-window-detected]]
     if.app-id = 'com.docker.docker'
     run = 'move-node-to-workspace 6'
 
