@@ -1,52 +1,73 @@
-## Software and hardware
+# Software and Hardware
 
-Philosophy: Everything open source, 
 
-- Operating system: macOS for personal use, Arch for servers
-- Editor: [nvim](https://github.com/neovim/neovim)
-- Terminal: [kitty](https://github.com/kovidgoyal/kitty)
-- Shell: zsh via [zsh4humans](https://github.com/romkatv/zsh4humans)
-- Windows manager: [aerospace](https://github.com/nikitabobko/AeroSpace)
-- Browser: [qutebrowser](https://github.com/qutebrowser/qutebrowser)
-- Kyboard: [Custom Dactyl Manuform](https://cyboard.digital/products/custom-dactyl-manuform)
-- Layout: [Colemak](https://en.wikipedia.org/wiki/Colemak) because it is supported by all major OS (Windows, macOS, Linux).
+|                     |                                                                                   | Config                                           |
+| ------------------- | --------------------------------------------------------------------------------- | ------------------------------------------------ |
+| **Editor**          | [Neovim](https://github.com/neovim/neovim)                                        | [`config/nvim`](./config/nvim)                   |
+| **Terminal**        | [Kitty](https://github.com/kovidgoyal/kitty)                                      | [`config/kitty`](./config/kitty)                 |
+| **Window Manager**  | [AeroSpace](https://github.com/nikitabobko/AeroSpace)                             | [`config/aerospace`](./config/aerospace)         |
+| **Package Manager** | [Brew](https://brew.sh/)                                                          | [`config/brew/Brewfile`](./config/brew/Brewfile) |
+| **Shell**           | Zsh via [zsh4humans](https://github.com/romkatv/zsh4humans)                       | [`.zshrc`](./.zshrc)                             |
+| **Keyboard**        | [Custom Dactyl Manuform](https://cyboard.digital/products/custom-dactyl-manuform) | —                                                |
+| **Layout**          | [Colemak](https://en.wikipedia.org/wiki/Colemak)                                  | —                                                |
+
 
 <img width="1582" height="743" alt="Screenshot 2025-08-14 at 17 00 04" src="https://github.com/user-attachments/assets/a0952fc9-1b44-4b88-bebd-c7de42cf9c21" />
 <img width="1569" height="735" alt="Screenshot 2025-08-14 at 17 00 32" src="https://github.com/user-attachments/assets/d4acef75-3106-4118-b4a1-bbc0b7ffd426" />
 
-## Shortcuts
+---
 
-- Emacs-esque text manipulation across all macOS apps: [KeyBindings](https://github.com/ttscoff/KeyBindings) 
-- Reserved key (mapped to RAlt) for interacting with the windows manager: [Hyper Key from Raycast](https://manual.raycast.com/hyperkey)
+# Goodies
 
-## Useful apps
+* **Text manipulation across Cocoa-based apps** [KeyBindings](https://github.com/ttscoff/KeyBindings)
+* **Reserved Hyper key** (mapped to `RAlt`) for window manager control: [Raycast Hyper Key](https://manual.raycast.com/hyperkey)
+* **Menu bar system monitor (RAM / CPU / GPU):** [Stats](https://github.com/exelban/stats)
 
-- Quick systems resources overview (RAM | CPU | GPU) in the menu bar: [Stats](https://github.com/exelban/stats) 
-- Detailed systems resources overview: [bpytop](https://github.com/aristocratos/bpytop) 
-  
-## Setup
+---
 
-1. All configs are managed elegantly via an "alias" git repository. Follow [this](https://www.atlassian.com/git/tutorials/dotfiles) tutorial to setup dotfiles on local machine
-2. All apps are managed by brew and are located inside [Brewfile](https://docs.brew.sh/Brew-Bundle-and-Brewfile). To install everything: `brew bundle install --file .config/brew/Brewfile`
-3. All secrets are stored in `.env.zsh`, which is loaded dynamically in `.zshrc`
+# Setup
 
-## Optional
+1. **Dotfiles management**
+   All configs are managed via a Git “alias repository.”
+   Follow this tutorial: [https://www.atlassian.com/git/tutorials/dotfiles](https://www.atlassian.com/git/tutorials/dotfiles)
 
-Run [defaults.sh](.config/scripts/macos-shortcuts.sh). Or run only selected commands:
+2. **Apps installed via Homebrew**
+   All apps, fonts, and CLI packages are listed in the `Brewfile`:
 
-- Set color to stone grey:
-```
+   ```
+   brew bundle install --file .config/brew/Brewfile
+   ```
+
+3. **Secrets**
+   Stored in `.env.zsh` and loaded dynamically from `.zshrc`.
+
+---
+
+# Optional Tweaks (macOS only)
+
+Run the full script:
+`bash .config/scripts/macos-shortcuts.sh`
+
+Or execute individual commands:
+
+### Desktop & UI
+
+* Set macOS wallpaper to Stone Grey:
+
+```sh
 osascript -e 'tell application "System Events" to tell every desktop to set picture to POSIX file "/System/Library/Desktop Pictures/Solid Colors/Stone.png"'
 ```
 
-- Configure screenshots to always get saved to a clipboard:
-```
+* Save screenshots directly to clipboard:
+
+```sh
 defaults write com.apple.screencapture target clipboard
 killall SystemUIServer
 ```
 
-- Make UI animations instant:
-```
+* Make UI animations instant:
+
+```sh
 defaults write -g NSAutomaticWindowAnimationsEnabled -bool false
 defaults write -g NSWindowResizeTime -float 0.001
 defaults write com.apple.dock expose-animation-duration -float 0
@@ -55,47 +76,57 @@ defaults write com.apple.dock autohide-time-modifier -float 0
 defaults write com.apple.dock autohide-delay -float 0
 ```
 
-- Set Dock to autohide:
-```
+* Autohide the Dock:
+
+```sh
 defaults write com.apple.dock autohide -bool true
 killall Dock
 ```
 
-- Disable opening of applications on shutdown or restart:
-```
+* Disable reopening apps after restart:
+
+```sh
 defaults write com.apple.loginwindow TALLogoutSavesState -bool false
 defaults write com.apple.loginwindow LoginwindowLaunchesRelaunchApps -bool false
 ```
 
-- Move windows by dragging any part of the window:
-```
+* Move windows by dragging any part of them:
+
+```sh
 defaults write -g NSWindowShouldDragOnGesture -bool true
 ```
 
-- Make trackpad right click a primary click:
-```
+### Input & Trackpad
+
+* Make right-click the primary click:
+
+```sh
 defaults write com.apple.AppleMultitouchTrackpad TrackpadRightClick -bool true
 defaults write com.apple.AppleMultitouchTrackpad TrackpadCornerSecondaryClick -int 2
-defaults write com.apple.AppleMultitouchTrackpad TrackpadRightClick -bool true
 killall SystemUIServer
 ```
 
-- Set sleep time to 30 minutes for all modes (batter, power, etc):
-```
+### Power & Privacy
+
+* Set sleep to 30 min for all power modes:
+
+```sh
 sudo pmset -a sleep 30
 ```
 
-- Restrict AirDrop to 'No One':
-```
+* Disable AirDrop:
+
+```sh
 defaults write com.apple.sharingd AirDrop -int 0
 ```
 
-- Configure useful shortcuts:
-```
+### Keybindings & Simulator
+
+```sh
 # Mail: Ctrl-F to Search
 defaults write com.apple.mail NSUserKeyEquivalents -dict "Mailbox Search" "^f"
 
-# Simulator: Ctrl-H and Ctrl-L to Rotate
+# Simulator: Rotate left/right with Ctrl-H / Ctrl-L
 defaults write com.apple.iphonesimulator NSUserKeyEquivalents -dict \
     "Rotate Left" "^h" \
     "Rotate Right" "^l"
