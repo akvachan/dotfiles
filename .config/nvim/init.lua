@@ -226,10 +226,10 @@ require('lazy').setup({
         git = {
           status = {
             actions = {
-              ["ctrl-a"] = { fn = require("fzf-lua.actions").git_stage,   reload = true },
+              ["ctrl-a"] = { fn = require("fzf-lua.actions").git_stage, reload = true },
               ["ctrl-u"] = { fn = require("fzf-lua.actions").git_unstage, reload = true },
-              ["right"] = false,
-              ["left"]  = false,
+              ["right"]  = false,
+              ["left"]   = false,
             },
           },
         },
@@ -455,14 +455,106 @@ require('lazy').setup({
 
 -- {{{ Custom Functions
 
--- {{{ Delete terminal buffers
-api.nvim_create_user_command('RmTerms', function()
-  for _, buf in ipairs(api.nvim_list_bufs()) do
-    if api.nvim_buf_get_option(buf, 'buftype') == 'terminal' then
-      api.nvim_buf_delete(buf, { force = true })
+-- {{{ Better terminal buffers
+
+api.nvim_create_user_command('RmTerms',
+  function()
+    for _, buf in ipairs(api.nvim_list_bufs()) do
+      if api.nvim_buf_get_option(buf, 'buftype') == 'terminal' then
+        api.nvim_buf_delete(buf, { force = true })
+      end
+    end
+  end, {})
+
+local function term_buf_name(_cmd)
+  local max_len = 40
+  if #_cmd > max_len then
+    _cmd = _cmd:sub(1, max_len - 3) .. "..."
+  end
+  return "term: " .. _cmd
+end
+
+local function is_running(buf)
+  local job = tonumber(vim.fn.getbufvar(buf, "terminal_job_id"))
+  if not job or job <= 0 then
+    return false
+  end
+  return vim.fn.jobwait({ job }, 0)[1] == -1
+end
+
+local function find_terminals(_cmd)
+  local matches = {}
+  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+    if vim.bo[buf].buftype == "terminal" then
+      local ok, saved = pcall(vim.api.nvim_buf_get_var, buf, "term_cmd")
+      if ok and saved == _cmd then
+        table.insert(matches, buf)
+      end
     end
   end
-end, {})
+  return matches
+end
+
+vim.api.nvim_create_autocmd("TermClose", {
+  callback = function(args)
+    local buf = args.buf
+
+    vim.defer_fn(function()
+      if not vim.api.nvim_buf_is_valid(buf) then return end
+      if vim.bo[buf].buftype ~= "terminal" then return end
+
+      local was_modifiable = vim.bo[buf].modifiable
+      vim.bo[buf].modifiable = true
+
+      local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+      local last_nonempty = 0
+
+      for i = #lines, 1, -1 do
+        if lines[i] ~= "" then
+          last_nonempty = i
+          break
+        end
+      end
+
+      if last_nonempty > 0 and last_nonempty < #lines then
+        vim.api.nvim_buf_set_lines(buf, last_nonempty, -1, false, {})
+      end
+
+      vim.bo[buf].modifiable = was_modifiable
+    end, 50)
+  end,
+})
+
+api.nvim_create_user_command("Term", function(opts)
+  local _cmd = table.concat(opts.fargs, " ")
+  if _cmd == "" then _cmd = vim.o.shell end
+
+  local matches = find_terminals(_cmd)
+  local running, dead = {}, {}
+
+  for _, buf in ipairs(matches) do
+    if is_running(buf) then
+      table.insert(running, buf)
+    else
+      table.insert(dead, buf)
+    end
+  end
+
+  if #running > 0 then
+    local buf = running[1]
+    for _, b in ipairs(dead) do vim.api.nvim_buf_delete(b, { force = true }) end
+    vim.cmd("buffer " .. buf)
+    return
+  end
+
+  for _, b in ipairs(dead) do vim.api.nvim_buf_delete(b, { force = true }) end
+
+  vim.cmd("term " .. _cmd)
+  local buf = vim.api.nvim_get_current_buf()
+  vim.api.nvim_buf_set_var(buf, "term_cmd", _cmd)
+  vim.api.nvim_buf_set_name(buf, term_buf_name(_cmd))
+end, { nargs = "*" })
+
 -- }}}
 
 -- {{{ Resize vim automatically
@@ -547,7 +639,7 @@ map({ 'n' }, '<leader>h', ':noh<CR>', silent_opts)
 map({ 'n' }, '<leader>q', ':q!<CR>', silent_opts)
 map({ 'n' }, '<leader>rm', ':RmTerms<CR>', silent_opts)
 map({ 'n' }, '<leader>rn', lsp.rename, silent_opts)
-map({ 'n' }, '<leader>t', ':<C-u>term ', opts)
+map({ 'n' }, '<leader>t', ':Term ', opts)
 map({ 'n' }, '<leader>w', ':w<CR>', silent_opts)
 map({ 'n' }, '<leader>x', ':%bd|e#|bd#<CR>', silent_opts)
 map({ 'n' }, '<leader>z', ':u0<CR>', silent_opts)
