@@ -3,10 +3,10 @@
 
 |                     |                                                                                   | Config                                           |
 | ------------------- | --------------------------------------------------------------------------------- | ------------------------------------------------ |
-| **Editor**          | [Neovim](https://github.com/neovim/neovim)                                        | [`config/nvim`](./config/nvim)                   |
-| **Terminal**        | [Kitty](https://github.com/kovidgoyal/kitty)                                      | [`config/kitty`](./config/kitty)                 |
-| **Window Manager**  | [AeroSpace](https://github.com/nikitabobko/AeroSpace)                             | [`config/aerospace`](./config/aerospace)         |
-| **Package Manager** | [Brew](https://brew.sh/)                                                          | [`config/brew/Brewfile`](./config/brew/Brewfile) |
+| **Editor**          | [Neovim](https://github.com/neovim/neovim)                                        | [`config/nvim`](./.config/nvim)                   |
+| **Terminal**        | [Kitty](https://github.com/kovidgoyal/kitty)                                      | [`config/kitty`](./.config/kitty)                 |
+| **Window Manager**  | [AeroSpace](https://github.com/nikitabobko/AeroSpace)                             | [`config/aerospace`](./.config/aerospace)         |
+| **Package Manager** | [Brew](https://brew.sh/)                                                          | [`config/brew/Brewfile`](./.config/brew/Brewfile) |
 | **Shell**           | Zsh via [zsh4humans](https://github.com/romkatv/zsh4humans)                       | [`.zshrc`](./.zshrc)                             |
 | **Keyboard**        | [Custom Dactyl Manuform](https://cyboard.digital/products/custom-dactyl-manuform) | —                                                |
 | **Layout**          | [Colemak](https://en.wikipedia.org/wiki/Colemak)                                  | —                                                |
