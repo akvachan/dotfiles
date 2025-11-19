@@ -56,6 +56,7 @@ on-focus-changed = ['move-mouse window-lazy-center']
     cmd-alt-ctrl-a = 'mode apps'
     cmd-alt-ctrl-f = 'mode raycast'
     cmd-alt-ctrl-z = 'mode resize'
+    cmd-alt-ctrl-d = 'mode display'
 
 [gaps]
     inner.horizontal = 5
@@ -64,6 +65,23 @@ on-focus-changed = ['move-mouse window-lazy-center']
     outer.bottom     = 5
     outer.top        = 5
     outer.right      = 5
+
+[mode.display.binding]
+    # Focus monitors
+    h = "focus-monitor left"
+    j = "focus-monitor down"
+    k = "focus-monitor up"
+    l = "focus-monitor right"
+
+    # Move window between monitors
+    shift-h = "move-node-to-monitor left --focus-follows-window"
+    shift-j = "move-node-to-monitor down --focus-follows-window"
+    shift-k = "move-node-to-monitor up --focus-follows-window"
+    shift-l = "move-node-to-monitor right --focus-follows-window"
+
+    # Exit mode
+    esc = "mode main"
+    enter = "mode main"
 
 # Resize mode
 [mode.resize.binding]
