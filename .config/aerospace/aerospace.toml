@@ -68,16 +68,16 @@ on-focus-changed = ['move-mouse window-lazy-center']
 
 [mode.display.binding]
     # Focus monitors
-    h = "focus-monitor left"
-    j = "focus-monitor down"
-    k = "focus-monitor up"
-    l = "focus-monitor right"
+    h = ["focus-monitor left", "mode main"]
+    j = ["focus-monitor down", "mode main"]
+    k = ["focus-monitor up", "mode main"]
+    l = ["focus-monitor right", "mode main"]
 
     # Move window between monitors
-    shift-h = "move-node-to-monitor left --focus-follows-window"
-    shift-j = "move-node-to-monitor down --focus-follows-window"
-    shift-k = "move-node-to-monitor up --focus-follows-window"
-    shift-l = "move-node-to-monitor right --focus-follows-window"
+    shift-h = ["move-node-to-monitor left --focus-follows-window", "mode main"]
+    shift-j = ["move-node-to-monitor down --focus-follows-window", "mode main"]
+    shift-k = ["move-node-to-monitor up --focus-follows-window", "mode main"]
+    shift-l = ["move-node-to-monitor right --focus-follows-window", "mode main"]
 
     # Exit mode
     esc = "mode main"
