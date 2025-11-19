@@ -35,19 +35,6 @@ g.mapleader = ' '
 g.maplocalleader = ' '
 g.matchparen_insert_timeout = 20
 g.matchparen_timeout = 20
-g.rustaceanvim = {
-  server = {
-    cmd = { "rustup", "run", "stable", "rust-analyzer" },
-    cmd_env = { RA_LOG = "rust_analyzer=error" },
-    default_settings = {
-      ["rust-analyzer"] = {
-        cargo = { buildScripts = { enable = true } },
-        procMacro = { enable = true },
-        files = { excludeDirs = { "target", ".git", "node_modules" } },
-      },
-    },
-  },
-}
 
 -- }}}
 
@@ -112,12 +99,6 @@ require('lazy').setup({
   },
   -- }}}
 
-  -- {{{ Copilot
-  {
-    'github/copilot.vim',
-  },
-  -- }}}
-
   -- {{{ File explorer
   {
     'stevearc/oil.nvim',
@@ -137,7 +118,7 @@ require('lazy').setup({
             desc = 'Copy filepath to system clipboard',
             callback = function()
               require('oil.actions').copy_entry_path.callback()
-              vim.fn.setreg("+", vim.fn.getreg(vim.v.register))
+              vim.fn.setreg('+', vim.fn.getreg(vim.v.register))
             end,
           },
           -- Copy relative path
@@ -148,8 +129,8 @@ require('lazy').setup({
               if not entry or not dir then
                 return
               end
-              local relpath = vim.fn.fnamemodify(dir, ":.")
-              vim.fn.setreg("+", relpath .. entry.name)
+              local relpath = vim.fn.fnamemodify(dir, ':.')
+              vim.fn.setreg('+', relpath .. entry.name)
             end,
           },
           -- Discard all filesystem changes
@@ -157,29 +138,6 @@ require('lazy').setup({
         },
       })
     end
-  },
-  -- }}}
-
-  -- {{{ Flutter
-  {
-    'nvim-flutter/flutter-tools.nvim',
-    lazy = true,
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-    },
-    config = function()
-      require("flutter-tools").setup {
-        closing_tags = {
-          enabled = false,
-        },
-        dev_log = {
-          open_cmd = "10split",
-        },
-        settings = {
-          enableSnippets = false,
-        },
-      }
-    end,
   },
   -- }}}
 
@@ -194,81 +152,32 @@ require('lazy').setup({
       { '<leader>fr', function() require('fzf-lua').resume() end,                desc = 'Resume work' },
       { '<leader>sd', function() require('fzf-lua').lsp_document_symbols() end,  desc = 'Symbols (document)' },
       { '<leader>sw', function() require('fzf-lua').lsp_workspace_symbols() end, desc = 'Symbols (workspace)' },
-      { '<leader>st', function() require('fzf-lua').treesitter() end,            desc = 'Treesitter symbols (document)' },
-      { '<leader>gs', function() require('fzf-lua').git_status() end,            desc = 'Git status (stage/unstage)' },
-      { '<leader>gf', function() require('fzf-lua').git_files() end,             desc = 'Git files' },
-      { '<leader>gc', function() require('fzf-lua').git_commits() end,           desc = 'Git commits' },
-      { '<leader>gC', function() require('fzf-lua').git_bcommits() end,          desc = 'Git commits (buffer)' },
-      { '<leader>gb', function() require('fzf-lua').git_branches() end,          desc = 'Git branches' },
-      { '<leader>gS', function() require('fzf-lua').git_stash() end,             desc = 'Git stash' },
-      { '<leader>gB', function() require('fzf-lua').git_blame() end,             desc = 'Git blame (current file)' },
     },
     config = function()
       require('fzf-lua').setup({
         'border-fused',
         files = {
           cmd = 'fd --type f --hidden --follow --exclude .git',
+          actions = {
+            -- Copy file path
+            ["ctrl-y"] = function(selected)
+              local path = selected[1]
+              vim.fn.setreg("+", path)
+              print("Copied: " .. path)
+            end,
+          },
         },
         grep = {
           cmd = 'rg --column --color=never --no-heading --line-number --hidden --smart-case',
         },
         keymap = {
           fzf = {
+            -- Send selection to quickfix list
             ['ctrl-q'] = 'select-all+accept',
           },
         },
-        lsp = {
-          symbols = {
-            symbol_style = 1,
-            path_shorten = 1,
-          },
-        },
-        git = {
-          status = {
-            actions = {
-              ["ctrl-a"] = { fn = require("fzf-lua.actions").git_stage, reload = true },
-              ["ctrl-u"] = { fn = require("fzf-lua.actions").git_unstage, reload = true },
-              ["right"]  = false,
-              ["left"]   = false,
-            },
-          },
-        },
-
       })
     end,
-  },
-  -- }}}
-
-  -- {{{ Latex
-  {
-    "lervag/vimtex",
-    lazy = false,
-    init = function()
-      -- g.vimtex_view_method = "skim"
-      g.vimtex_view_enabled = 0
-    end
-  },
-  -- }}}
-
-  -- {{{ Leetcode stuff
-  {
-    "kawre/leetcode.nvim",
-    cmd = "Leet",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "MunifTanjim/nui.nvim",
-    },
-    opts = {
-      lang = "cpp",
-      keys = {
-        toggle = { "q" },
-        confirm = { "<CR>" },
-        reset_testcases = "r",
-        use_testcase = "U",
-        focus_testcases = "H",
-        focus_result = "L",
-      },
-    },
   },
   -- }}}
 
@@ -277,6 +186,22 @@ require('lazy').setup({
     'mrcjkb/rustaceanvim',
     version = '^6',
     lazy = false,
+    fmt = { 'rust' },
+    config = function()
+      g.rustaceanvim = {
+        server = {
+          cmd = { 'rustup', 'run', 'stable', 'rust-analyzer' },
+          cmd_env = { RA_LOG = 'rust_analyzer=error' },
+          default_settings = {
+            ['rust-analyzer'] = {
+              cargo = { buildScripts = { enable = true } },
+              procMacro = { enable = true },
+              files = { excludeDirs = { 'target', '.git', 'node_modules' } },
+            },
+          },
+        },
+      }
+    end
   },
   -- }}}
 
@@ -304,17 +229,6 @@ require('lazy').setup({
   },
   -- }}}
 
-  -- {{{ Markdown
-  {
-    'MeanderingProgrammer/render-markdown.nvim',
-    keys = {
-      { '<leader>me', function() require('render-markdown').enable() end, desc = 'Turn on' },
-    },
-    dependencies = { 'nvim-treesitter/nvim-treesitter' },
-    opts = {},
-  },
-  -- }}}
-
   -- {{{ Surround editing
   {
     'kylechui/nvim-surround',
@@ -328,7 +242,6 @@ require('lazy').setup({
   -- {{{ Treesitter
   {
     'nvim-treesitter/nvim-treesitter',
-    -- build = ':TSUpdate',
     event = 'VeryLazy',
     dependencies = {
       {
@@ -338,22 +251,13 @@ require('lazy').setup({
     config = function()
       require('nvim-treesitter.configs').setup {
         ensure_installed = {
-          'dart',
           'bash',
           'c',
           'cpp',
-          'html',
           'javascript',
-          'json',
           'lua',
           'rust',
-          'markdown',
-          'markdown_inline',
           'python',
-          'typescript',
-          'xml',
-          'yaml',
-          'toml'
         },
         highlight = { enable = true },
         indent = { enable = true },
@@ -464,109 +368,87 @@ api.nvim_create_user_command('RmTerms',
         api.nvim_buf_delete(buf, { force = true })
       end
     end
-end, {})
+  end, {})
 
 -- }}}
 
 -- {{{ Resize vim automatically
+
 api.nvim_create_autocmd('VimResized', {
   callback = function()
     cmd('wincmd =')
   end,
 })
+
 -- }}}
 
--- {{{ Toggle copilot
-local function toggle_copilot()
-  if g.copilot_enabled then
-    cmd('Copilot disable')
-    print('Copilot disabled')
-    g.copilot_enabled = false
+-- {{{ Oil
+
+local function open_oil_vsplit(path)
+  vim.cmd('vsplit')
+  if path then
+    require('oil').open(path)
   else
-    cmd('Copilot enable')
-    print('Copilot enabled')
-    g.copilot_enabled = true
+    require('oil').open()
   end
 end
--- }}}
 
--- {{{ Launch Flutter
-local function launch_flutter()
-  print('Launching Flutter...');
-  cmd('FlutterDevices');
+-- Open Oil in a horizontal split
+local function open_oil_split(path)
+  vim.cmd('split')
+  if path then
+    require('oil').open(path)
+  else
+    require('oil').open()
+  end
 end
+
+-- Open Oil in Downloads directory in a horizontal split
+local function open_oil_downloads_split()
+  local home = vim.fn.expand('~')
+  local downloads = home .. '/Downloads'
+  open_oil_split(downloads)
+end
+
 -- }}}
 
 -- }}}
 
 -- {{{ Keymaps
 
-local copilot_opts = { expr = true, replace_keycodes = false }
 local diag = vim.diagnostic
 local lsp = vim.lsp.buf
 local map = vim.keymap.set
 local opts = { noremap = true, silent = false }
 local silent_opts = { noremap = true, silent = true }
 
-map({ 'c' }, '<C-h>', '<C-Left>', opts)
-map({ 'c' }, '<C-l>', '<C-Right>', opts)
-map({ 'i' }, '<C-a>', '<C-o>^', silent_opts)
-map({ 'i' }, '<C-c>', '<Plug>(copilot-dismiss)', silent_opts)
-map({ 'i' }, '<C-e>', '<C-o>$', silent_opts)
-map({ 'i' }, '<C-f>', 'copilot#Accept("\\<CR>")', copilot_opts)
-map({ 'i' }, '<C-j>', '<Plug>(copilot-next)', silent_opts)
-map({ 'i' }, '<C-k>', '<Plug>(copilot-previous)', silent_opts)
-map({ 'i' }, '<C-l>', '<Plug>(copilot-accept-word)', silent_opts)
 map({ 'n' }, '-', ':Oil<CR>', silent_opts)
-map({ 'n' }, '<C-g>', toggle_copilot, silent_opts)
 map({ 'n' }, '<leader>Q', ':qa!<CR>', silent_opts)
-map({ 'n' }, '<leader>a', ':Lazy<CR>', silent_opts)
-map({ 'n' }, '<leader>bd', ':bp|bd #<CR>', silent_opts)
 map({ 'n' }, '<leader>ca', lsp.code_action, silent_opts)
-map({ 'n' }, '<leader>cc', ':ccl<CR>', silent_opts)
 map({ 'n' }, '<leader>cd', diag.open_float, silent_opts)
-map({ 'n' }, '<leader>cf', ':cnf<CR>', silent_opts)
-map({ 'n' }, '<leader>cn', ':cn<CR>', silent_opts)
-map({ 'n' }, '<leader>co', ':copen<CR>', silent_opts)
-map({ 'n' }, '<leader>cp', ':cp<CR>', silent_opts)
-map({ 'n' }, '<leader>cu', ':.cc<CR>', silent_opts)
-map({ 'n' }, '<leader>dc', '<cmd>DiffviewClose<cr>', { desc = 'Diffview Close' })
-map({ 'n' }, '<leader>df', '<cmd>DiffviewFileHistory %<cr>', { desc = 'File History (current file)' })
-map({ 'n' }, '<leader>do', '<cmd>DiffviewOpen<cr>', { desc = 'Diffview Open' })
-map({ 'n' }, '<leader>dr', '<cmd>DiffviewFileHistory<cr>', { desc = 'File History (project)' })
-map({ 'n' }, '<leader>dt', '<cmd>DiffviewToggleFiles<cr>', { desc = 'Diffview Toggle Files' })
 map({ 'n' }, '<leader>fo', lsp.format, silent_opts)
 map({ 'n' }, '<leader>gd', lsp.definition, silent_opts)
 map({ 'n' }, '<leader>gf', diag.setqflist, silent_opts)
 map({ 'n' }, '<leader>gg', ':<C-u>!git ', opts)
 map({ 'n' }, '<leader>gh', lsp.hover, silent_opts)
-map({ 'n' }, '<leader>gi', lsp.implementation, silent_opts)
 map({ 'n' }, '<leader>gl', lsp.declaration, silent_opts)
 map({ 'n' }, '<leader>gn', diag.goto_next, silent_opts)
 map({ 'n' }, '<leader>go', lsp.document_symbol, silent_opts)
 map({ 'n' }, '<leader>gp', diag.goto_prev, silent_opts)
 map({ 'n' }, '<leader>gr', lsp.references, silent_opts)
-map({ 'n' }, '<leader>h', ':noh<CR>', silent_opts)
+map({ 'n' }, '<leader>la', ':Lazy<CR>', silent_opts)
+map({ 'n' }, '<leader>nh', ':noh<CR>', silent_opts)
 map({ 'n' }, '<leader>q', ':q!<CR>', silent_opts)
 map({ 'n' }, '<leader>rm', ':RmTerms<CR>', silent_opts)
 map({ 'n' }, '<leader>rn', lsp.rename, silent_opts)
 map({ 'n' }, '<leader>t', ':<C-u>term ', opts)
 map({ 'n' }, '<leader>w', ':w<CR>', silent_opts)
-map({ 'n' }, '<leader>x', ':%bd|e#|bd#<CR>', silent_opts)
-map({ 'n' }, '<leader>z', ':u0<CR>', silent_opts)
 map({ 'n' }, 'j', 'gj', silent_opts)
 map({ 'n' }, 'k', 'gk', silent_opts)
-map({ 't' }, '<Esc>', '<C-\\><C-n>', opts)
-map({ 'n', 'v' }, '<leader>mt', ':RenderMarkdown toggle<CR>', silent_opts)
 map({ 'n', 'v' }, '<leader>p', '"+p', silent_opts)
 map({ 'n', 'v' }, '<leader>y', '"+y', silent_opts)
-map({ 'n' }, '<leader>ls', launch_flutter, silent_opts)
-map({ 'n' }, '<leader>ld', '<cmd>FlutterLogToggle<CR>', silent_opts)
-map({ 'n' }, '<leader>lc', '<cmd>FlutterLogClear<CR>', opts)
-map({ 'n' }, '<leader>ll', '<cmd>FlutterLspRestart<CR>', silent_opts)
-map({ 'n' }, '<leader>lr', '<cmd>FlutterRestart<CR>', silent_opts)
-map({ 'n' }, '<leader>lo', '<cmd>FlutterReload<CR>', silent_opts)
-map({ 'n' }, '<leader>lv', '<cmd>FlutterVisualDebug<CR>', silent_opts)
-map({ 'n' }, '<leader>lq', '<cmd>FlutterQuit<CR>', silent_opts)
+map({ 'n' }, '<leader>ov', open_oil_vsplit, silent_opts)
+map({ 'n' }, '<leader>oh', open_oil_split, silent_opts)
+map({ 'n' }, '<leader>od', open_oil_downloads_split, silent_opts)
 
 --: }}}
