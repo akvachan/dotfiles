@@ -53,6 +53,16 @@ require('lazy').setup({
 
   -- }}}
 
+  -- {{{ Sessions
+  {
+    "rmagatti/auto-session",
+    lazy = false,
+    opts = {
+      suppressed_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
+    },
+  },
+  -- }}}
+
   -- {{{ Autopair
   {
     'windwp/nvim-autopairs',
@@ -88,6 +98,8 @@ require('lazy').setup({
           ['<C-p>'] = cmp.mapping.select_prev_item(),
           ['<C-c>'] = cmp.mapping.close(),
           ['<Tab>'] = cmp.mapping.confirm({ select = true }),
+          ["<C-b>"] = cmp.mapping.scroll_docs(-4),
+          ["<C-f>"] = cmp.mapping.scroll_docs(4),
         },
         sources = {
           { name = 'nvim_lsp' },
@@ -429,13 +441,13 @@ map({ 'n' }, '<leader>cd', diag.open_float, silent_opts)
 map({ 'n' }, '<leader>fo', lsp.format, silent_opts)
 map({ 'n' }, '<leader>gd', lsp.definition, silent_opts)
 map({ 'n' }, '<leader>gf', diag.setqflist, silent_opts)
-map({ 'n' }, '<leader>gg', ':<C-u>!git ', opts)
 map({ 'n' }, '<leader>gh', lsp.hover, silent_opts)
 map({ 'n' }, '<leader>gl', lsp.declaration, silent_opts)
 map({ 'n' }, '<leader>gn', diag.goto_next, silent_opts)
 map({ 'n' }, '<leader>go', lsp.document_symbol, silent_opts)
 map({ 'n' }, '<leader>gp', diag.goto_prev, silent_opts)
 map({ 'n' }, '<leader>gr', lsp.references, silent_opts)
+map({ 'n' }, '<leader>gg', ':<C-u>!git ', opts)
 map({ 'n' }, '<leader>la', ':Lazy<CR>', silent_opts)
 map({ 'n' }, '<leader>nh', ':noh<CR>', silent_opts)
 map({ 'n' }, '<leader>q', ':q!<CR>', silent_opts)
@@ -450,5 +462,6 @@ map({ 'n', 'v' }, '<leader>y', '"+y', silent_opts)
 map({ 'n' }, '<leader>ov', open_oil_vsplit, silent_opts)
 map({ 'n' }, '<leader>oh', open_oil_split, silent_opts)
 map({ 'n' }, '<leader>od', open_oil_downloads_split, silent_opts)
+map({ 't' }, '<Esc>', '<C-\\><C-n>', silent_opts)
 
 --: }}}
