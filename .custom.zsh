@@ -38,15 +38,20 @@ zle -N fancy-ctrl-z
 bindkey '^Z' fancy-ctrl-z
 
 # z 
-. /opt/homebrew/etc/profile.d/z.sh
+if [[ "$(uname -s)" == "Darwin" ]]; then
+  . /opt/homebrew/etc/profile.d/z.sh
+elif [[ "$(uname -s)" == "Linux" ]]; then
+  source /home/arseniikvachan/.config/zsh/zsh-z.plugin.zsh
+fi
 
 # Custom sources 
 autoload -Uz compinit
+zstyle ':completion:*' menu select
 compinit
-source <(kubectl completion zsh)
 
 # Custom aliases
 alias zshrc="nvim ~/.custom.zsh"
+alias swayrc="nvim ~/.config/sway/config"
 alias asrc="nvim ~/.config/aerospace/aerospace.toml"
 alias nvimrc="nvim ~/.config/nvim/init.lua"
 alias kittyrc="nvim ~/.config/kitty/kitty.conf"
@@ -71,3 +76,6 @@ export EDITOR='nvim'
 export PATH=$HOME/Development/Flutter/SDK/flutter/bin:$PATH
 export PATH="/Users/arseniikvachan/.rbenv/shims:${PATH}"
 export RBENV_SHELL=zsh
+
+# Sway + waybar
+[ "$(tty)" = "/dev/tty1" ] && exec sway
