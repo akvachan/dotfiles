@@ -87,7 +87,7 @@ input * {
 # Wallpaper
 output * bg ~/.config/wallpapers/earth.jpg fill
 
-# External monitor shows the same logical area, but scaled
+# External monitor
 output HDMI-A-1 {
     mode 3840x2160@60Hz
     scale 2
