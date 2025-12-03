@@ -1,3 +1,7 @@
+default_border none 
+for_window [title="^.*"] title_format ""
+default_floating_border normal 0
+
 set $mod Mod4
 set $term kitty
 
@@ -81,7 +85,14 @@ input * {
 }
 
 # Wallpaper
-output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
+output * bg ~/.config/wallpapers/earth.jpg fill
+
+# External monitor shows the same logical area, but scaled
+output HDMI-A-1 {
+    mode 3840x2160@60Hz
+    scale 2
+    pos 0 0
+}
 
 # Status Bar Configuration
 bar {
