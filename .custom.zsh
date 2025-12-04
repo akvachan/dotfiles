@@ -79,3 +79,4 @@ export RBENV_SHELL=zsh
 
 # Sway + waybar
 [ "$(tty)" = "/dev/tty1" ] && exec sway
+eval "$(/opt/homebrew/bin/brew shellenv)"
