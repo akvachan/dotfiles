@@ -53,16 +53,6 @@ require('lazy').setup({
 
   -- }}}
 
-  -- {{{ Sessions
-  {
-    "rmagatti/auto-session",
-    lazy = false,
-    opts = {
-      suppressed_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
-    },
-  },
-  -- }}}
-
   -- {{{ Autopair
   {
     'windwp/nvim-autopairs',
