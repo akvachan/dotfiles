@@ -111,6 +111,7 @@ alias qwen-server="llama-server -m ~/Library/Caches/llama.cpp/unsloth_Qwen2.5-Om
 alias phi="llama-cli -m ~/Library/Caches/llama.cpp/unsloth_Phi-4-reasoning-plus-GGUF_Phi-4-reasoning-plus-Q4_K_M.gguf"
 alias phi-server="llama-server -m ~/Library/Caches/llama.cpp/unsloth_Phi-4-reasoning-plus-GGUF_Phi-4-reasoning-plus-Q4_K_M.gguf"
 alias l="ls -la"
+alias lg="lazygit"
 alias kubectl="minikube kubectl --"
 
 # linux scheisse
