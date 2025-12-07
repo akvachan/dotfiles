@@ -3,7 +3,7 @@
 set -euo pipefail
 
 # Get all tabs, including their ids and focused status
-tab_info=$(kitty @ ls | /opt/homebrew/bin/jq -r '.[].tabs[] | "\(.id)|\(.is_focused)|\(.title)"')
+tab_info=$(kitty @ ls --match=session:. | /opt/homebrew/bin/jq -r '.[].tabs[] | "\(.id)|\(.is_focused)|\(.title)"')
  
 # Filter out the focused tab and prepare the list for fzf
 # Format: "last_directory (id: tab_id) | full_path | tab_id"
