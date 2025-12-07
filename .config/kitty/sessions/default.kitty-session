@@ -1,0 +1,10 @@
+new_tab
+layout splits
+enabled_layouts splits
+set_layout_state {"pairs": {"one": 43}, "opts": {"default_axis_is_horizontal": true}, "class": "Splits", "all_windows": {"active_group_idx": 0, "active_group_history": [43], "window_groups": [{"id": 43, "window_ids": [139]}]}}
+cd ~
+
+launch 'kitty-unserialize-data={"id": 139}'
+focus
+
+focus_tab 0

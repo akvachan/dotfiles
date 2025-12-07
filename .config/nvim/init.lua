@@ -53,6 +53,16 @@ require('lazy').setup({
 
   -- }}}
 
+  -- {{{ Sessions
+  {
+    "rmagatti/auto-session",
+    lazy = false,
+    opts = {
+      suppressed_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
+    },
+  },
+  -- }}}
+
   -- {{{ Autopair
   {
     'windwp/nvim-autopairs',
@@ -183,30 +193,6 @@ require('lazy').setup({
   },
   -- }}}
 
-  -- {{{ Rust
-  {
-    'mrcjkb/rustaceanvim',
-    version = '^6',
-    lazy = false,
-    fmt = { 'rust' },
-    config = function()
-      g.rustaceanvim = {
-        server = {
-          cmd = { 'rustup', 'run', 'stable', 'rust-analyzer' },
-          cmd_env = { RA_LOG = 'rust_analyzer=error' },
-          default_settings = {
-            ['rust-analyzer'] = {
-              cargo = { buildScripts = { enable = true } },
-              procMacro = { enable = true },
-              files = { excludeDirs = { 'target', '.git', 'node_modules' } },
-            },
-          },
-        },
-      }
-    end
-  },
-  -- }}}
-
   -- {{{ LSP
   {
     'nvim-lspconfig',
@@ -222,6 +208,7 @@ require('lazy').setup({
       vim.lsp.enable({
         'bashls',
         'clangd',
+        'rust_analyzer',
         'lua_ls',
         'pyright',
         'ruff',
