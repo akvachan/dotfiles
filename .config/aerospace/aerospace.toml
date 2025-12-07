@@ -140,7 +140,7 @@ on-focus-changed = ['move-mouse window-lazy-center']
 
 [[on-window-detected]]
     if.app-id = 'com.apple.FaceTime'
-    run = 'move-node-to-workspace 3'
+    run = ['layout floating', 'move-node-to-workspace 3']
 
 [[on-window-detected]]
     if.app-id = 'com.apple.mail'
@@ -149,10 +149,6 @@ on-focus-changed = ['move-mouse window-lazy-center']
 [[on-window-detected]]
     if.app-id = 'com.apple.iCal'
     run = 'move-node-to-workspace 4'
-
-[[on-window-detected]]
-    if.app-id = 'io.freetubeapp.freetube'
-    run = 'move-node-to-workspace 5'
 
 [[on-window-detected]]
     if.app-id = 'com.docker.docker'
@@ -172,4 +168,4 @@ on-focus-changed = ['move-mouse window-lazy-center']
 
 [[on-window-detected]]
     if.app-id = 'com.apple.systempreferences'
-    run = 'move-node-to-workspace 10'
+    run = ['layout floating', 'move-node-to-workspace 10']
