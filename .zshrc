@@ -1,96 +1,117 @@
-#!/usr/bin/zsh
+# basics
+export VISUAL=nvim
+export EDITOR=nvim
 
-# Personal Zsh configuration file. It is strongly recommended to keep all
-# shell customization and configuration (including exported environment
-# variables such as PATH) in this file or in files sourced from it.
-#
-# Documentation: https://github.com/romkatv/zsh4humans/blob/v5/README.md.
+# brew
+eval "$(/opt/homebrew/bin/brew shellenv)"
 
-# Periodic auto-update on Zsh startup: 'ask' or 'no'.
-# You can manually run `z4h update` to update everything.
-zstyle ':z4h:' auto-update      'no'
-# Ask whether to auto-update this often; has no effect if auto-update is 'no'.
-zstyle ':z4h:' auto-update-days '28'
+# path
+export PATH="$HOME/Development/Flutter/SDK/flutter/bin:$PATH"
+export PATH="$HOME/.rbenv/shims:$PATH"
+export RBENV_SHELL=zsh
 
-# Keyboard type: 'mac' or 'pc'.
-zstyle ':z4h:bindkey' keyboard  'mac'
+# plugins
+source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
-# Don't start tmux.
-zstyle ':z4h:' start-tmux       no
+# history
+bindkey '^P' up-line-or-history
+bindkey '^N' down-line-or-history
 
-# Mark up shell's output with semantic information.
-zstyle ':z4h:' term-shell-integration 'yes'
+# vi mode
+bindkey -v
+function zle-keymap-select {
+  case $KEYMAP in
+    vicmd)      print -n "\e[1 q" ;;
+    viins|main) print -n "\e[5 q" ;;
+  esac
+}
+zle -N zle-keymap-select
+print -n "\e[5 q"  
 
-# Right-arrow key accepts one character ('partial-accept') from
-# command autosuggestions or the whole thing ('accept')?
-zstyle ':z4h:autosuggestions' forward-char 'accept'
+# perf optimization / caching
+export KEYTIMEOUT=1
+autoload -Uz compinit
+if [[ ! -d "$HOME/.zcompcache" ]]; then
+  mkdir "$HOME/.zcompcache"
+fi
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path "$HOME/.zcompcache"
+zstyle ':completion:*' menu select
+compinit
 
-# Recursively traverse directories when TAB-completing files.
-zstyle ':z4h:fzf-complete' recurse-dirs 'no'
+# prompt
+fpath+=("/opt/homebrew/share/zsh/site-functions")
+autoload -U promptinit; promptinit
+prompt pure
 
-# Enable direnv to automatically source .envrc files.
-zstyle ':z4h:direnv'         enable 'no'
-# Show "loading" and "unloading" notifications from direnv.
-zstyle ':z4h:direnv:success' notify 'yes'
+# open nvim in cwd
+function nvim_cwd() {
+  BUFFER="nvim ."
+  zle accept-line
+}
+zle -N nvim_cwd
+bindkey '^O' nvim_cwd
 
-# Enable ('yes') or disable ('no') automatic teleportation of z4h over
-# SSH when connecting to these hosts.
-zstyle ':z4h:ssh:example-hostname1'   enable 'yes'
-zstyle ':z4h:ssh:*.example-hostname2' enable 'no'
-# The default value if none of the overrides above match the hostname.
-zstyle ':z4h:ssh:*'                   enable 'no'
+# project selector
+function fzf-proj() {
+  local selected_dir
+  selected_dir=$(find ~/Development -maxdepth 4 \
+    -type d \( -name ".venv" -o -name ".git" -o -name "node_modules" \) -prune \
+    -o -type d -print 2>/dev/null \
+    | fzf --prompt="Select directory: " --height=40%)
+  
+  if [[ -n "$selected_dir" ]]; then
+    BUFFER="cd \"$selected_dir\""
+    zle accept-line
+  else
+    zle push-input
+    zle clear-screen
+  fi
+}
+zle -N fzf-proj
+bindkey '^G' fzf-proj
 
-# Send these files over to the remote host when connecting over SSH to the
-# enabled hosts.
-zstyle ':z4h:ssh:*' send-extra-files '~/.nanorc' '~/.env.zsh'
+# fancy Ctrl-Z
+function fancy-ctrl-z() {
+  if [[ $#BUFFER -eq 0 ]]; then
+    BUFFER="fg"
+    zle accept-line
+  else
+    zle push-input
+    zle clear-screen
+  fi
+}
+zle -N fancy-ctrl-z
+bindkey '^Z' fancy-ctrl-z
 
-# Clone additional Git repositories from GitHub.
-#
-# This doesn't do anything apart from cloning the repository and keeping it
-# up-to-date. Cloned files can be used after `z4h init`. This is just an
-# example. If you don't plan to use Oh My Zsh, delete this line.
-z4h install ohmyzsh/ohmyzsh || return
+# z scheisse
+if [[ "$(uname -s)" == "Darwin" ]]; then
+  source /opt/homebrew/etc/profile.d/z.sh
+elif [[ "$(uname -s)" == "Linux" ]]; then
+  source ~/.config/zsh/zsh-z.plugin.zsh
+fi
 
-# Install or update core components (fzf, zsh-autosuggestions, etc.) and
-# initialize Zsh. After this point console I/O is unavailable until Zsh
-# is fully initialized. Everything that requires user interaction or can
-# perform network I/O must be done above. Everything else is best done below.
-z4h init || return
+# aliases
+alias zshrc="nvim ~/.zshrc"
+alias swayrc="nvim ~/.config/sway/config"
+alias asrc="nvim ~/.config/aerospace/aerospace.toml"
+alias nvimrc="nvim ~/.config/nvim/init.lua"
+alias kittyrc="nvim ~/.config/kitty/kitty.conf"
+alias brewrc="nvim ~/.config/brew/Brewfile"
+alias qtbrc="nvim ~/.qutebrowser/config.py"
+alias config="/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME"
+alias icat="kitten icat"
+alias ssh="kitten ssh"
+alias diff="kitten diff"
+alias cf="kitten choose-files"
+alias gdiff="git difftool --no-symlinks --dir-diff"
+alias qwen="llama-cli -m ~/Library/Caches/llama.cpp/unsloth_Qwen2.5-Omni-7B-GGUF_Qwen2.5-Omni-7B-Q4_K_M.gguf"
+alias qwen-server="llama-server -m ~/Library/Caches/llama.cpp/unsloth_Qwen2.5-Omni-7B-GGUF_Qwen2.5-Omni-7B-Q4_K_M.gguf --mmproj ~/Library/Caches/llama.cpp/unsloth_Qwen2.5-Omni-7B-GGUF_mmproj-F16.gguf"
+alias phi="llama-cli -m ~/Library/Caches/llama.cpp/unsloth_Phi-4-reasoning-plus-GGUF_Phi-4-reasoning-plus-Q4_K_M.gguf"
+alias phi-server="llama-server -m ~/Library/Caches/llama.cpp/unsloth_Phi-4-reasoning-plus-GGUF_Phi-4-reasoning-plus-Q4_K_M.gguf"
+alias l="ls -la"
+alias kubectl="minikube kubectl --"
 
-# Extend PATH.
-path=(~/bin $path)
-
-# Source additional local files if they exist.
-z4h source ~/.env.zsh
-
-# Define key bindings.
-z4h bindkey undo Ctrl+/   Shift+Tab  # undo the last command line change
-z4h bindkey redo Option+/            # redo the last undone command line change
-
-z4h bindkey z4h-cd-back    Shift+Left   # cd into the previous directory
-z4h bindkey z4h-cd-forward Shift+Right  # cd into the next directory
-z4h bindkey z4h-cd-up      Shift+Up     # cd into the parent directory
-z4h bindkey z4h-cd-down    Shift+Down   # cd into a child directory
-
-# Autoload functions.
-autoload -Uz zmv
-
-# Define functions and completions.
-function md() { [[ $# == 1 ]] && mkdir -p -- "$1" && cd -- "$1" }
-compdef _directories md
-
-# Define named directories: ~w <=> Windows home directory on WSL.
-[[ -z $z4h_win_home ]] || hash -d w=$z4h_win_home
-
-# Define aliases.
-alias tree='tree -a -I .git'
-
-# Add flags to existing aliases.
-alias ls="${aliases[ls]:-ls} -A"
-
-# Set shell options: http://zsh.sourceforge.net/Doc/Release/Options.html.
-setopt glob_dots     # no special treatment for file names with a leading dot
-setopt no_auto_menu  # require an extra TAB press to open the completion menu
-
-# Source additional custom configuration
-z4h source ~/.custom.zsh
+# linux scheisse
+[ "$(tty)" = "/dev/tty1" ] && exec sway
