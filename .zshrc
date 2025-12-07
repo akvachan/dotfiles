@@ -13,21 +13,11 @@ export RBENV_SHELL=zsh
 # plugins
 source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source /opt/homebrew/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
 
 # history
 bindkey '^P' up-line-or-history
 bindkey '^N' down-line-or-history
-
-# vi mode
-bindkey -v
-function zle-keymap-select {
-  case $KEYMAP in
-    vicmd)      print -n "\e[1 q" ;;
-    viins|main) print -n "\e[5 q" ;;
-  esac
-}
-zle -N zle-keymap-select
-print -n "\e[5 q"  
 
 # perf optimization / caching
 export KEYTIMEOUT=1
