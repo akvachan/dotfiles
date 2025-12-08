@@ -106,3 +106,6 @@ alias kubectl="minikube kubectl --"
 
 # linux scheisse
 [ "$(tty)" = "/dev/tty1" ] && exec sway
+
+# Created by `pipx` on 2025-12-08 20:29:28
+export PATH="$PATH:/Users/arseniikvachan/.local/bin"
