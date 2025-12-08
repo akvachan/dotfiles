@@ -1,6 +1,5 @@
 tap "felixkratz/formulae"
 tap "homebrew-zathura/zathura"
-tap "homebrew/command-not-found"
 tap "ivan-volnov/tap"
 tap "koekeishiya/formulae"
 tap "nikitabobko/tap"
@@ -64,8 +63,6 @@ brew "haskell-stack"
 brew "helm"
 # Tools and libraries to manipulate images in many formats
 brew "imagemagick"
-# Interior point optimizer
-brew "ipopt"
 # Feature-rich interactive Jira CLI
 brew "jira-cli"
 # Lightweight and flexible command-line JSON processor
@@ -74,6 +71,8 @@ brew "jq"
 brew "jupytext"
 # Kubernetes command-line interface
 brew "kubernetes-cli"
+# Simple terminal UI for git commands
+brew "lazygit"
 # LLM inference in C/C++
 brew "llama.cpp"
 # Language Server for the Lua language
@@ -98,6 +97,8 @@ brew "openssl@1.1"
 brew "pkgconf"
 # Theme for zsh
 brew "powerlevel10k"
+# Pretty, minimal and fast ZSH prompt
+brew "pure"
 # Static type checker for Python
 brew "pyright"
 # Ruby version manager
@@ -110,10 +111,14 @@ brew "ruby"
 brew "ruff"
 # Safe, concurrent, practical language
 brew "rust"
+# Experimental Rust compiler front-end for IDEs
+brew "rust-analyzer"
 # Rust toolchain installer
 brew "rustup"
 # Code-search similar to ack
 brew "the_silver_searcher"
+# Lightweight BitTorrent client
+brew "transmission-cli"
 # Display directories as trees (with optional color/HTML output)
 brew "tree"
 # Language Server Protocol implementation for TypeScript wrapping tsserver
@@ -130,8 +135,18 @@ brew "xcode-build-server"
 brew "z"
 # Programming language designed for robustness, optimality, and clarity
 brew "zig"
+# Real-time type-ahead completion for Zsh
+brew "zsh-autocomplete"
+# Fish-like fast/unobtrusive autosuggestions for zsh
+brew "zsh-autosuggestions"
+# Fish shell like syntax highlighting for zsh
+brew "zsh-syntax-highlighting"
+# Better and friendly vi(vim) mode plugin for ZSH
+brew "zsh-vi-mode"
 # AeroSpace is an i3-like tiling window manager for macOS
 cask "aerospace"
+# Display management tool
+cask "betterdisplay"
 # OpenAI's coding agent that runs in your terminal
 cask "codex"
 # Voice and text chat software
@@ -140,31 +155,38 @@ cask "discord"
 cask "docker-desktop"
 cask "font-hack-nerd-font"
 cask "font-mona-sans"
+cask "font-sf-mono"
 # Client for the Google Drive storage service
 cask "google-drive"
+# Free and Open Source Video Editor
+cask "kdenlive"
 # Open-source keystroke visualiser
 cask "keycastr"
 # GPU-based terminal emulator
-cask "kitty"
+cask "kitty@nightly"
 # Free and open-source painting and sketching program
 cask "krita"
 # Free cross-platform office suite, fresh version
 cask "libreoffice"
-# Full TeX Live distribution without GUI applications
-cask "mactex-no-gui"
+# Knowledge base that works on top of a local folder of plain text Markdown files
+cask "obsidian"
 # Control your tools with a few keystrokes
 cask "raycast"
 # Online multiplayer game platform
 cask "roblox"
 # System monitor for the menu bar
 cask "stats"
+# Video game digital distribution service
+cask "steam"
 # Messaging app with a focus on speed and security
 cask "telegram"
 # Web browser focusing on security
 cask "tor-browser"
+# Open-source BitTorrent client
+cask "transmission"
 # Google Chromium, sans integration with Google
 cask "ungoogled-chromium"
 # Virtual machines UI using QEMU
 cask "utm"
-# Virtualiser for arm64 hardware
-cask "virtualbox"
+# Multimedia player
+cask "vlc"
