@@ -1,2 +1,11 @@
-cd ~
-launch --title "home"
+
+new_tab
+layout splits
+enabled_layouts splits
+set_layout_state {"pairs": {"one": 36}, "opts": {"default_axis_is_horizontal": true}, "class": "Splits", "all_windows": {"active_group_idx": 0, "active_group_history": [], "window_groups": [{"id": 36, "window_ids": [102]}]}}
+cd ../../..
+
+launch 'kitty-unserialize-data={"id": 102}' --title=home
+focus
+
+focus_tab 9
