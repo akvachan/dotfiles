@@ -24,6 +24,8 @@
 
   // delete word before cursor
   "^w" = (deleteWordBackward:);
+  // delete word before cursor
+  "^d" = (deleteWordForward:);
   // select word
   "~w" = (selectWord:);
   // select word backward and modify selection

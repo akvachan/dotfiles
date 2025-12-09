@@ -1,10 +1,15 @@
+# vim:fileencoding=utf-8:foldmethod=marker
+
+#: Global settings {{{
 accordion-padding = 0
 start-at-login = true
 enable-normalization-flatten-containers = true
 enable-normalization-opposite-orientation-for-nested-containers = true
 on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 on-focus-changed = ['move-mouse window-lazy-center']
+#: }}}
 
+#: Main mode bindings {{{
 [mode.main.binding]
     # General
     cmd-alt-ctrl-b = 'balance-sizes'
@@ -52,12 +57,14 @@ on-focus-changed = ['move-mouse window-lazy-center']
     cmd-alt-ctrl-shift-o = 'move-node-to-workspace 9 --focus-follows-window'
     cmd-alt-ctrl-shift-p = 'move-node-to-workspace 10 --focus-follows-window'
 
-    # Modal 
+    # Modal switching
     cmd-alt-ctrl-a = 'mode apps'
     cmd-alt-ctrl-f = 'mode raycast'
     cmd-alt-ctrl-z = 'mode resize'
     cmd-alt-ctrl-d = 'mode display'
+#: }}}
 
+#: Gaps {{{
 [gaps]
     inner.horizontal = 5
     inner.vertical   = 5
@@ -65,7 +72,9 @@ on-focus-changed = ['move-mouse window-lazy-center']
     outer.bottom     = 5
     outer.top        = 5
     outer.right      = 5
+#: }}}
 
+#: Display mode {{{
 [mode.display.binding]
     # Focus monitors
     h = ["focus-monitor left", "mode main"]
@@ -82,8 +91,9 @@ on-focus-changed = ['move-mouse window-lazy-center']
     # Exit mode
     esc = "mode main"
     enter = "mode main"
+#: }}}
 
-# Resize mode
+#: Resize mode {{{
 [mode.resize.binding]
     h = 'resize width -50'
     j = 'resize height +50'
@@ -91,18 +101,19 @@ on-focus-changed = ['move-mouse window-lazy-center']
     l = 'resize width +50'
     enter = 'mode main'
     esc = 'mode main'
+#: }}}
 
-# Apps mode 
+#: Apps mode {{{
 [mode.apps.binding]
     b = ['exec-and-forget open -a "Chromium"', 'mode main']
     shift-b = ['exec-and-forget open -na "Chromium"', 'mode main']
     t = ['exec-and-forget open -a "kitty"', 'mode main']
     s = ['exec-and-forget open -a "System Settings"', 'mode main']
-
     esc = 'mode main'
     enter = 'mode main'
+#: }}}
 
-# Raycast mode
+#: Raycast mode {{{
 [mode.raycast.binding]
     c = ['exec-and-forget open "raycast://extensions/raycast/clipboard-history/clipboard-history"', 'mode main']
     l = ['exec-and-forget open "raycast://extensions/raycast/system/sleep"', 'mode main']
@@ -113,11 +124,11 @@ on-focus-changed = ['move-mouse window-lazy-center']
     o = ['exec-and-forget open "raycast://extensions/raycast/system/shut-down"', 'mode main']
     v = ['exec-and-forget open "raycast://extensions/raycast/screenshots/paste-recent-screenshot"', 'mode main']
     n = ['exec-and-forget open "raycast://extensions/raycast/navigation/search-menu-items"', 'mode main']
-
     esc = 'mode main'
     enter = 'mode main'
+#: }}}
 
-# Automatic window routing
+#: Automatic window routing {{{
 [[on-window-detected]]
     if.app-id = 'net.kovidgoyal.kitty'
     run = 'move-node-to-workspace 1'
@@ -159,6 +170,10 @@ on-focus-changed = ['move-mouse window-lazy-center']
     run = 'move-node-to-workspace 8'
 
 [[on-window-detected]]
+    if.app-id = 'org.videolan.vlc'
+    run = 'move-node-to-workspace 8'
+
+[[on-window-detected]]
     if.app-id = 'com.valvesoftware.steam'
     run = 'move-node-to-workspace 9'
 
@@ -169,3 +184,8 @@ on-focus-changed = ['move-mouse window-lazy-center']
 [[on-window-detected]]
     if.app-id = 'com.apple.systempreferences'
     run = ['layout floating', 'move-node-to-workspace 10']
+
+[[on-window-detected]]
+    if.app-id = 'com.apple.systempreferences'
+    run = ['layout floating', 'move-node-to-workspace 10']
+#: }}}
