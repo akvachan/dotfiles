@@ -56,7 +56,7 @@ require('lazy').setup({
   -- {{{ XCode DevOps
   {
     "wojciech-kulik/xcodebuild.nvim",
-    event = "VeryLazy",
+    ft = "swift",
     dependencies = {
       "ibhagwan/fzf-lua",
       "MunifTanjim/nui.nvim",
@@ -73,7 +73,7 @@ require('lazy').setup({
   {
     'saghen/blink.cmp',
     dependencies = { 'rafamadriz/friendly-snippets' },
-    event = "VeryLazy",
+    event = "InsertEnter",
     version = '1.*',
     opts = {
       -- C-space: Open menu or open docs if already open
