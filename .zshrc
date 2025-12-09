@@ -108,4 +108,7 @@ alias kubectl="minikube kubectl --"
 [ "$(tty)" = "/dev/tty1" ] && exec sway
 
 # Created by `pipx` on 2025-12-08 20:29:28
-export PATH="$PATH:/Users/arseniikvachan/.local/bin"
+export PATH="$PATH:$HOME/.local/bin"
+
+# Rust
+fpath+=("$HOME/.cargo/bin")
