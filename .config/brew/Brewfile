@@ -1,36 +1,10 @@
-tap "felixkratz/formulae"
-tap "homebrew-zathura/zathura"
-tap "ivan-volnov/tap"
-tap "koekeishiya/formulae"
 tap "nikitabobko/tap"
-# Message bus system, providing inter-application communication
-brew "dbus"
-# Automatic configure script builder
-brew "autoconf"
-# Tool for generating GNU Standards-compliant Makefiles
-brew "automake"
-# OpenType text shaping engine
-brew "harfbuzz"
-# Google's own build tool
-brew "bazel"
-# Manipulates BibTeX databases
-brew "bib-tool"
 # Linux/OSX/FreeBSD resource monitor
 brew "bpytop"
-# Cross-platform make
-brew "cmake"
-# Documentation for CMake
-brew "cmake-docs"
-# Console Matrix
-brew "cmatrix"
 # GNU File, Shell, and Text utilities
 brew "coreutils"
 # Pack, ship and run any application as a lightweight container
-brew "docker", link: false
-# Generate documentation for several programming languages
-brew "doxygen"
-# GNU Emacs text editor
-brew "emacs"
+brew "docker"
 # Like neofetch, but much faster because written mostly in C
 brew "fastfetch"
 # Simple, fast and user-friendly alternative to find
@@ -41,70 +15,38 @@ brew "fzf"
 brew "gh"
 # Distributed revision control system
 brew "git"
-# Quickly rewrite git repository history
-brew "git-filter-repo"
-# OpenGL Extension Wrangler Library
-brew "glew"
-# Multi-platform library for OpenGL applications
-brew "glfw"
-# C++ mathematics library for graphics software
-brew "glm"
-# GNU implementation of the famous stream editor
-brew "gnu-sed"
 # GNU version of the tar archiving utility
 brew "gnu-tar"
 # Open source programming language to build simple/reliable/efficient software
 brew "go"
-# Toolkit for creating graphical user interfaces
-brew "gtk+3"
-# Cross-platform program for developing Haskell projects
-brew "haskell-stack"
 # Kubernetes package manager
 brew "helm"
 # Tools and libraries to manipulate images in many formats
 brew "imagemagick"
-# Feature-rich interactive Jira CLI
-brew "jira-cli"
 # Lightweight and flexible command-line JSON processor
 brew "jq"
 # Jupyter notebooks as Markdown documents, Julia, Python or R scripts
 brew "jupytext"
 # Kubernetes command-line interface
 brew "kubernetes-cli"
-# Simple terminal UI for git commands
-brew "lazygit"
 # LLM inference in C/C++
 brew "llama.cpp"
 # Language Server for the Lua language
 brew "lua-language-server"
 # Package manager for the Lua programming language
 brew "luarocks"
-# Run a Kubernetes cluster locally
-brew "minikube"
-# Media player based on MPlayer and mplayer2
-brew "mpv"
-# Lightweight PDF and XPS viewer
-brew "mupdf-tools"
 # Ambitious Vim-fork focused on extensibility and agility
 brew "neovim"
 # Open-source, cross-platform JavaScript runtime environment
 brew "node"
 # Create, run, and share large language models (LLMs)
 brew "ollama"
-# Cryptography and SSL/TLS Toolkit
-brew "openssl@1.1"
 # Execute binaries from Python packages in isolated environments
 brew "pipx"
-# Package compiler and linker metadata toolkit
-brew "pkgconf"
-# Theme for zsh
-brew "powerlevel10k"
 # Pretty, minimal and fast ZSH prompt
 brew "pure"
 # Static type checker for Python
 brew "pyright"
-# Ruby version manager
-brew "rbenv"
 # Search tool like grep and The Silver Searcher
 brew "ripgrep"
 # Powerful, clean, object-oriented scripting language
@@ -117,10 +59,6 @@ brew "rust"
 brew "rust-analyzer"
 # Rust toolchain installer
 brew "rustup"
-# Code-search similar to ack
-brew "the_silver_searcher"
-# Lightweight BitTorrent client
-brew "transmission-cli"
 # Display directories as trees (with optional color/HTML output)
 brew "tree"
 # Language Server Protocol implementation for TypeScript wrapping tsserver
@@ -145,8 +83,6 @@ brew "zsh-autocomplete"
 brew "zsh-autosuggestions"
 # Fish shell like syntax highlighting for zsh
 brew "zsh-syntax-highlighting"
-# Better and friendly vi(vim) mode plugin for ZSH
-brew "zsh-vi-mode"
 # AeroSpace is an i3-like tiling window manager for macOS
 cask "aerospace"
 # Display management tool
@@ -158,18 +94,12 @@ cask "discord"
 # App to build and share containerised applications and microservices
 cask "docker-desktop"
 cask "font-hack-nerd-font"
-cask "font-mona-sans"
-cask "font-sf-mono"
 # Client for the Google Drive storage service
 cask "google-drive"
-# Free and Open Source Video Editor
-cask "kdenlive"
 # Open-source keystroke visualiser
 cask "keycastr"
 # GPU-based terminal emulator
 cask "kitty@nightly"
-# Free and open-source painting and sketching program
-cask "krita"
 # Free cross-platform office suite, fresh version
 cask "libreoffice"
 # Knowledge base that works on top of a local folder of plain text Markdown files
@@ -188,8 +118,6 @@ cask "telegram"
 cask "tor-browser"
 # Open-source BitTorrent client
 cask "transmission"
-# Google Chromium, sans integration with Google
-cask "ungoogled-chromium"
 # Virtual machines UI using QEMU
 cask "utm"
 # Multimedia player

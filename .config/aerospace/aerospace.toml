@@ -105,8 +105,16 @@ on-focus-changed = ['move-mouse window-lazy-center']
 
 #: Apps mode {{{
 [mode.apps.binding]
-    b = ['exec-and-forget open -a "Chromium"', 'mode main']
-    shift-b = ['exec-and-forget open -na "Chromium"', 'mode main']
+    b = ['exec-and-forget open -a "Safari"', 'mode main']
+    shift-b = [
+      '''exec-and-forget osascript -e '
+      tell application "Safari"
+        make new document at end of documents
+      activate
+      end tell'
+      ''', 
+      'mode main'
+    ]
     t = ['exec-and-forget open -a "kitty"', 'mode main']
     s = ['exec-and-forget open -a "System Settings"', 'mode main']
     esc = 'mode main'
@@ -160,6 +168,10 @@ on-focus-changed = ['move-mouse window-lazy-center']
 [[on-window-detected]]
     if.app-id = 'com.apple.iCal'
     run = 'move-node-to-workspace 4'
+
+[[on-window-detected]]
+    if.app-id = 'md.obsidian'
+    run = 'move-node-to-workspace 5'
 
 [[on-window-detected]]
     if.app-id = 'com.docker.docker'
