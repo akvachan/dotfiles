@@ -201,6 +201,20 @@ require('lazy').setup({
         update_in_insert = false,
         severity_sort = true,
       })
+      vim.lsp.config("gopls", {
+        settings = {
+          gopls = {
+            gofumpt = true,
+            usePlaceholders = true,
+            completeUnimported = true,
+            staticcheck = true,
+            analyses = {
+              unusedparams = true,
+              shadow = true,
+            },
+          },
+        },
+      })
       vim.lsp.enable({
         'bashls',
         'clangd',
@@ -209,6 +223,7 @@ require('lazy').setup({
         'pyright',
         'ruff',
         'sourcekit',
+        'gopls',
       })
     end,
   },
@@ -243,6 +258,10 @@ require('lazy').setup({
           'lua',
           'rust',
           'python',
+          'go',
+          'gomod',
+          'gowork',
+          'gosum',
         },
         highlight = { enable = true },
         indent = { enable = true },

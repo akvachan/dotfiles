@@ -89,8 +89,6 @@ brew "zsh-syntax-highlighting"
 cask "aerospace"
 # Display management tool
 cask "betterdisplay"
-# Web browser focusing on privacy
-cask "brave-browser"
 # OpenAI's coding agent that runs in your terminal
 cask "codex"
 # Voice and text chat software
@@ -128,3 +126,6 @@ cask "utm"
 cask "virtualbox"
 # Multimedia player
 cask "vlc"
+go "github.com/go-delve/delve/cmd/dlv"
+go "golang.org/x/tools/gopls"
+go "honnef.co/go/tools/cmd/staticcheck"

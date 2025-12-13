@@ -5,11 +5,6 @@ export EDITOR=nvim
 # brew
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
-# path
-export PATH="$HOME/Development/Flutter/SDK/flutter/bin:$PATH"
-export PATH="$HOME/.rbenv/shims:$PATH"
-export RBENV_SHELL=zsh
-
 # plugins
 source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
@@ -107,8 +102,27 @@ alias kubectl="minikube kubectl --"
 # linux scheisse
 [ "$(tty)" = "/dev/tty1" ] && exec sway
 
-# Created by `pipx` on 2025-12-08 20:29:28
-export PATH="$PATH:$HOME/.local/bin"
+# Ensure path is an array (safe even if already is)
+typeset -U path PATH
 
-# Rust
-fpath+=("$HOME/.cargo/bin")
+path=(
+  # Flutter
+  "$HOME/Development/Flutter/SDK/flutter/bin"
+
+  # Ruby (rbenv)
+  "$HOME/.rbenv/shims"
+
+  # Rust
+  "$HOME/.cargo/bin"
+
+  # Python / pipx
+  "$HOME/.local/bin"
+
+  # Go
+  "$(go env GOPATH)/bin"
+
+  # Homebrew (added via brew shellenv)
+  $path
+)
+
+export PATH
