@@ -43,6 +43,8 @@ brew "node"
 brew "ollama"
 # Execute binaries from Python packages in isolated environments
 brew "pipx"
+# Package compiler and linker metadata toolkit
+brew "pkgconf"
 # Pretty, minimal and fast ZSH prompt
 brew "pure"
 # Static type checker for Python
@@ -87,6 +89,8 @@ brew "zsh-syntax-highlighting"
 cask "aerospace"
 # Display management tool
 cask "betterdisplay"
+# Web browser focusing on privacy
+cask "brave-browser"
 # OpenAI's coding agent that runs in your terminal
 cask "codex"
 # Voice and text chat software
@@ -120,5 +124,7 @@ cask "tor-browser"
 cask "transmission"
 # Virtual machines UI using QEMU
 cask "utm"
+# Virtualiser for arm64 hardware
+cask "virtualbox"
 # Multimedia player
 cask "vlc"
