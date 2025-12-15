@@ -1,3 +1,5 @@
+# vim:fileencoding=utf-8:foldmethod=marker
+
 -- {{{ Basic Settings
 
 local g, opt, cmd, fn, api = vim.g, vim.opt, vim.cmd, vim.fn, vim.api
@@ -193,6 +195,16 @@ require('lazy').setup({
   {
     'nvim-lspconfig',
     event = 'VeryLazy',
+    init = function()
+      local make_client_capabilities = vim.lsp.protocol.make_client_capabilities
+      function vim.lsp.protocol.make_client_capabilities()
+        local caps = make_client_capabilities()
+        if caps.workspace then
+          caps.workspace.didChangeWatchedFiles = nil
+        end
+        return caps
+      end
+    end,
     config = function()
       vim.diagnostic.config({
         virtual_text = false,
@@ -201,22 +213,55 @@ require('lazy').setup({
         update_in_insert = false,
         severity_sort = true,
       })
-      vim.lsp.config("gopls", {
+      vim.lsp.config('gopls', {
         settings = {
           gopls = {
-            gofumpt = true,
-            usePlaceholders = true,
-            completeUnimported = true,
-            staticcheck = true,
             analyses = {
               unusedparams = true,
+              unusedwrite = true,
+              unusedvariable = true,
+              useany = true,
               shadow = true,
+              nilness = true,
+              printf = true,
+              composites = true,
+              httpresponse = true,
+              infertypeargs = true,
+              loopclosure = true,
+              lostcancel = true,
+              nonewvars = true,
+              shift = true,
+              simplifycompositelit = true,
+              simplifyrange = true,
+              simplifyslice = true,
+              slog = true,
+              sortslice = true,
+              stdmethods = true,
+              stringintconv = true,
+              testinggoroutine = true,
+              timeformat = true,
+              undeclaredname = true,
+              unmarshal = true,
+              unreachable = true,
+              unsafeptr = true,
+              fillstruct = true,
+              fillreturns = true,
+            },
+            staticcheck = true,
+            gofumpt = true,
+            hints = {
+              assignVariableTypes = true,
+              compositeLiteralFields = true,
+              compositeLiteralTypes = true,
+              constantValues = true,
+              functionTypeParameters = true,
+              parameterNames = true,
+              rangeVariableTypes = true,
             },
           },
         },
       })
       vim.lsp.enable({
-        'bashls',
         'clangd',
         'rust_analyzer',
         'lua_ls',
@@ -413,6 +458,28 @@ local function open_oil_downloads_split()
   local downloads = home .. '/Downloads'
   open_oil_split(downloads)
 end
+
+-- }}}
+
+-- {{{ Go formatting
+
+api.nvim_create_autocmd("BufWritePre", {
+  pattern = "*.go",
+  callback = function()
+    local params = vim.lsp.util.make_range_params()
+    params.context = { only = { "source.organizeImports" } }
+    local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params)
+    for cid, res in pairs(result or {}) do
+      for _, r in pairs(res.result or {}) do
+        if r.edit then
+          local enc = (vim.lsp.get_client_by_id(cid) or {}).offset_encoding or "utf-16"
+          vim.lsp.util.apply_workspace_edit(r.edit, enc)
+        end
+      end
+    end
+    vim.lsp.buf.format({ async = false })
+  end
+})
 
 -- }}}
 
