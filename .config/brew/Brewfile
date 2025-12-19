@@ -45,6 +45,8 @@ brew "ollama"
 brew "pipx"
 # Package compiler and linker metadata toolkit
 brew "pkgconf"
+# Theme for zsh
+brew "powerlevel10k"
 # Pretty, minimal and fast ZSH prompt
 brew "pure"
 # Static type checker for Python
@@ -120,6 +122,8 @@ cask "telegram"
 cask "tor-browser"
 # Open-source BitTorrent client
 cask "transmission"
+# Google Chromium, sans integration with Google
+cask "ungoogled-chromium"
 # Virtual machines UI using QEMU
 cask "utm"
 # Virtualiser for arm64 hardware
