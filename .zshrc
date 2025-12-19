@@ -25,11 +25,6 @@ zstyle ':completion:*' cache-path "$HOME/.zcompcache"
 zstyle ':completion:*' menu select
 compinit
 
-# prompt
-fpath+=("/opt/homebrew/share/zsh/site-functions")
-autoload -U promptinit; promptinit
-prompt pure
-
 # open nvim in cwd
 function nvim_cwd() {
   BUFFER="nvim ."
