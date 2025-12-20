@@ -43,7 +43,6 @@ g.matchparen_timeout = 20
 -- {{{ Plugins
 
 -- {{{ Lazy Setup
-
 local lazypath = fn.stdpath('data') .. '/lazy/lazy.nvim'
 if not vim.loop.fs_stat(lazypath) then
   fn.system({ 'git', 'clone', '--filter=blob:none', 'https://github.com/folke/lazy.nvim', '--branch=stable',
@@ -52,7 +51,6 @@ end
 opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
-
   -- }}}
 
   -- {{{ XCode DevOps
@@ -213,6 +211,8 @@ require('lazy').setup({
         update_in_insert = false,
         severity_sort = true,
       })
+
+      -- {{{ Go LSP config
       vim.lsp.config('gopls', {
         settings = {
           gopls = {
@@ -261,13 +261,23 @@ require('lazy').setup({
           },
         },
       })
+
+      -- }}}
+
       vim.lsp.enable({
+        -- C (type checker)
         'clangd',
+        -- Rust (type checker)
         'rust_analyzer',
+        -- Lua (type checker)
         'lua_ls',
-        'pyright',
+        -- Python (type checker)
+        'ty',
+        -- Python (formatter)
         'ruff',
+        -- Swift (type checker)
         'sourcekit',
+        -- Go (type checker)
         'gopls',
       })
     end,
@@ -365,7 +375,7 @@ require('lazy').setup({
   },
   -- }}}
 
-  -- {{{ Disable RTP Plugins
+-- {{{ Disable RTP Plugins
 }, {
   performance = {
     rtp = {
