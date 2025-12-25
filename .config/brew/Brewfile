@@ -45,12 +45,10 @@ brew "ollama"
 brew "pipx"
 # Package compiler and linker metadata toolkit
 brew "pkgconf"
+# Object-relational database system
+brew "postgresql@18", restart_service: :changed
 # Theme for zsh
 brew "powerlevel10k"
-# Pretty, minimal and fast ZSH prompt
-brew "pure"
-# Static type checker for Python
-brew "pyright"
 # Search tool like grep and The Silver Searcher
 brew "ripgrep"
 # Powerful, clean, object-oriented scripting language
@@ -91,6 +89,8 @@ brew "zsh-syntax-highlighting"
 cask "aerospace"
 # Display management tool
 cask "betterdisplay"
+# Web browser focusing on privacy
+cask "brave-browser"
 # OpenAI's coding agent that runs in your terminal
 cask "codex"
 # Voice and text chat software
@@ -122,14 +122,11 @@ cask "telegram"
 cask "tor-browser"
 # Open-source BitTorrent client
 cask "transmission"
-# Google Chromium, sans integration with Google
-cask "ungoogled-chromium"
 # Virtual machines UI using QEMU
 cask "utm"
-# Virtualiser for arm64 hardware
-cask "virtualbox"
 # Multimedia player
 cask "vlc"
 go "github.com/go-delve/delve/cmd/dlv"
 go "golang.org/x/tools/gopls"
 go "honnef.co/go/tools/cmd/staticcheck"
+cargo "tdf-viewer"
