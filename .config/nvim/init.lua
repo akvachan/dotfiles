@@ -53,22 +53,6 @@ opt.rtp:prepend(lazypath)
 require('lazy').setup({
   -- }}}
 
-  -- {{{ XCode DevOps
-  {
-    "wojciech-kulik/xcodebuild.nvim",
-    ft = "swift",
-    dependencies = {
-      "ibhagwan/fzf-lua",
-      "MunifTanjim/nui.nvim",
-      "stevearc/oil.nvim",
-      "nvim-treesitter/nvim-treesitter",
-    },
-    config = function()
-      require("xcodebuild").setup({})
-    end,
-  },
-  -- }}}
-
   -- {{{ Completion
   {
     'saghen/blink.cmp',
@@ -531,34 +515,28 @@ local opts = { noremap = true, silent = false }
 local silent_opts = { noremap = true, silent = true }
 
 map({ 'n' }, '-', ':Oil<CR>', silent_opts)
-map({ 'n' }, '<leader>Q', ':qa!<CR>', silent_opts)
 map({ 'n' }, '<leader>ca', lsp.code_action, silent_opts)
 map({ 'n' }, '<leader>cd', diag.open_float, silent_opts)
 map({ 'n' }, '<leader>fo', lsp.format, silent_opts)
 map({ 'n' }, '<leader>gd', lsp.definition, silent_opts)
 map({ 'n' }, '<leader>gf', diag.setqflist, silent_opts)
+map({ 'n' }, '<leader>gf', open_file_with_template, silent_opts)
+map({ 'n' }, '<leader>gg', ':<C-u>!git ', opts)
 map({ 'n' }, '<leader>gh', lsp.hover, silent_opts)
 map({ 'n' }, '<leader>gl', lsp.declaration, silent_opts)
 map({ 'n' }, '<leader>gn', diag.goto_next, silent_opts)
 map({ 'n' }, '<leader>go', lsp.document_symbol, silent_opts)
 map({ 'n' }, '<leader>gp', diag.goto_prev, silent_opts)
 map({ 'n' }, '<leader>gr', lsp.references, silent_opts)
-map({ 'n' }, '<leader>gg', ':<C-u>!git ', opts)
+map({ 'n' }, '<leader>it', insert_time, { desc = 'Insert date/time (DDMMYY-HHMMSS)' })
 map({ 'n' }, '<leader>la', ':Lazy<CR>', silent_opts)
-map({ 'n' }, '<leader>q', ':q!<CR>', silent_opts)
+map({ 'n' }, '<leader>od', open_oil_downloads_split, silent_opts)
+map({ 'n' }, '<leader>oh', open_oil_split, silent_opts)
+map({ 'n' }, '<leader>ov', open_oil_vsplit, silent_opts)
 map({ 'n' }, '<leader>rm', ':RmTerms<CR>', silent_opts)
 map({ 'n' }, '<leader>rn', lsp.rename, silent_opts)
-map({ 'n' }, '<leader>t', ':<C-u>term ', opts)
-map({ 'n' }, '<leader>w', ':w<CR>', silent_opts)
-map({ 'n' }, 'j', 'gj', silent_opts)
-map({ 'n' }, 'k', 'gk', silent_opts)
 map({ 'n', 'v' }, '<leader>p', '"+p', silent_opts)
 map({ 'n', 'v' }, '<leader>y', '"+y', silent_opts)
-map({ 'n' }, '<leader>ov', open_oil_vsplit, silent_opts)
-map({ 'n' }, '<leader>oh', open_oil_split, silent_opts)
-map({ 'n' }, '<leader>od', open_oil_downloads_split, silent_opts)
 map({ 't' }, '<Esc>', '<C-\\><C-n>', silent_opts)
-map({ 'n' }, '<leader>it', insert_time, { desc = 'Insert date/time (DDMMYY-HHMMSS)' })
-map({ 'n' }, '<leader>gf', open_file_with_template, silent_opts)
 
 --: }}}
