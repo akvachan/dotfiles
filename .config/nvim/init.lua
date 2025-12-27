@@ -83,7 +83,18 @@ require('lazy').setup({
       keymap = { preset = 'super-tab' },
       appearance = { nerd_font_variant = 'mono' },
       completion = { documentation = { auto_show = true } },
-      sources = { default = { 'lsp', 'path', 'snippets', 'buffer' }, },
+      sources = {
+        default = { 'lsp', 'path', 'snippets', 'buffer' },
+        providers = {
+          path = {
+            opts = {
+              get_cwd = function(_)
+                return vim.fn.getcwd()
+              end,
+            },
+          },
+        },
+      },
       fuzzy = { implementation = "prefer_rust" },
     },
     opts_extend = { "sources.default" }
@@ -220,6 +231,8 @@ require('lazy').setup({
               unusedparams = true,
               unusedwrite = true,
               unusedvariable = true,
+              unusedfunc = true,
+              unusedresult = true,
               useany = true,
               shadow = true,
               nilness = true,
@@ -306,6 +319,7 @@ require('lazy').setup({
     config = function()
       require('nvim-treesitter.configs').setup {
         ensure_installed = {
+          'sql',
           'bash',
           'c',
           'cpp',
@@ -375,7 +389,7 @@ require('lazy').setup({
   },
   -- }}}
 
--- {{{ Disable RTP Plugins
+  -- {{{ Disable RTP Plugins
 }, {
   performance = {
     rtp = {
@@ -471,6 +485,41 @@ end
 
 -- }}}
 
+-- {{{ Insert time
+local function insert_time()
+  local timestamp = os.date("%d%m%y-%H%M%S")
+  vim.api.nvim_put({ timestamp }, "c", true, true)
+end
+-- }}}
+
+-- {{{ Open file with template
+local function open_file_with_template()
+  local file = vim.fn.expand('<cfile>')
+  vim.cmd('edit ' .. file)
+
+  -- Insert template only if file is empty
+  if vim.fn.line('$') == 1 and vim.fn.getline(1) == '' then
+    local date = os.date('%Y-%m-%d')
+    local title = vim.fn.fnamemodify(file, ':t:r')
+
+    vim.api.nvim_buf_set_lines(0, 0, -1, false, {
+      '---',
+      'date: "' .. date .. '"',
+      'tags:',
+      'status: Active',
+      '---',
+      '',
+      '# ' .. title,
+      '',
+      '## Description',
+      ''
+    })
+
+    vim.cmd('normal! G')
+  end
+end
+-- }}}
+
 -- }}}
 
 -- {{{ Keymaps
@@ -496,7 +545,6 @@ map({ 'n' }, '<leader>gp', diag.goto_prev, silent_opts)
 map({ 'n' }, '<leader>gr', lsp.references, silent_opts)
 map({ 'n' }, '<leader>gg', ':<C-u>!git ', opts)
 map({ 'n' }, '<leader>la', ':Lazy<CR>', silent_opts)
-map({ 'n' }, '<leader>nh', ':noh<CR>', silent_opts)
 map({ 'n' }, '<leader>q', ':q!<CR>', silent_opts)
 map({ 'n' }, '<leader>rm', ':RmTerms<CR>', silent_opts)
 map({ 'n' }, '<leader>rn', lsp.rename, silent_opts)
@@ -510,5 +558,7 @@ map({ 'n' }, '<leader>ov', open_oil_vsplit, silent_opts)
 map({ 'n' }, '<leader>oh', open_oil_split, silent_opts)
 map({ 'n' }, '<leader>od', open_oil_downloads_split, silent_opts)
 map({ 't' }, '<Esc>', '<C-\\><C-n>', silent_opts)
+map({ 'n' }, '<leader>it', insert_time, { desc = 'Insert date/time (DDMMYY-HHMMSS)' })
+map({ 'n' }, '<leader>gf', open_file_with_template, silent_opts)
 
 --: }}}
