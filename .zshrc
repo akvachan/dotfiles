@@ -6,6 +6,11 @@ setopt SHARE_HISTORY
 setopt hist_ignore_dups
 setopt hist_expire_dups_first
 
+# z 
+source /opt/homebrew/etc/profile.d/z.sh
+autoload -U compinit; compinit
+zstyle ':completion:*' menu select
+
 typeset -U path PATH
 path=(
   # Ruby (rbenv)
