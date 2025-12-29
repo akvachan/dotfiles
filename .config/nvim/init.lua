@@ -4,12 +4,15 @@
 
 local g, opt, cmd, fn, api = vim.g, vim.opt, vim.cmd, vim.fn, vim.api
 opt.autoindent = true
+opt.completeopt = { "menuone", "noselect", "noinsert" }
+opt.pumheight = 10
 opt.background = 'dark'
 opt.backup = false
 opt.equalalways = true
 opt.expandtab = true
 opt.foldenable = true
-opt.foldmethod = 'marker'
+opt.foldmethod = 'expr'
+opt.foldexpr = 'nvim_treesitter#foldexpr()'
 opt.grepformat = '%f:%l:%c:%m,%f:%l:%m'
 opt.grepprg = 'rg --vimgrep --no-heading --smart-case'
 opt.hlsearch = true
@@ -19,7 +22,6 @@ opt.lazyredraw = true
 opt.mouse = 'a'
 opt.number = true
 opt.relativenumber = true
-opt.scrolloff = 1000
 opt.shiftwidth = 2
 opt.signcolumn = 'yes'
 opt.smartcase = true
@@ -31,12 +33,158 @@ opt.termguicolors = true
 opt.updatetime = 100
 opt.wrap = false
 opt.writebackup = false
-g.copilot_enabled = false
-g.copilot_no_tab_map = true
 g.mapleader = ' '
 g.maplocalleader = ' '
 g.matchparen_insert_timeout = 20
 g.matchparen_timeout = 20
+
+-- }}}
+
+-- {{{ LSP
+
+-- {{{ Lua
+vim.lsp.config['lua_ls'] = {
+  cmd = { 'lua-language-server' },
+  filetypes = { 'lua' },
+  root_markers = { { '.luarc.json', '.luarc.jsonc' }, '.git' },
+  capabilities = {
+    textDocument = {
+      completion = {
+        completionItem = {
+          snippetSupport = false,
+        }
+      }
+    }
+  },
+  settings = {
+    Lua = {
+      runtime = {
+        version = 'LuaJIT',
+      },
+      diagnostics = {
+        globals = { 'vim' },
+      },
+      workspace = {
+        checkThirdParty = false,
+      },
+    },
+  },
+}
+vim.lsp.enable('lua_ls')
+-- }}}
+
+-- {{{ Go
+vim.lsp.config['gopls'] = {
+  cmd = { 'gopls' },
+  filetypes = { 'go', 'gomod', 'gowork', 'gotmpl' },
+  root_markers = { 'go.work', 'go.mod', '.git' },
+  capabilities = {
+    textDocument = {
+      completion = {
+        completionItem = {
+          snippetSupport = false,
+        }
+      }
+    }
+  },
+  settings = {
+    gopls = {
+      gofumpt = true,
+      analyses = {
+        unusedparams = true,
+      },
+      staticcheck = true,
+    },
+  },
+}
+vim.lsp.enable('gopls')
+-- }}}
+
+-- {{{ Python (ty)
+vim.lsp.config['ty'] = {
+  cmd = { 'ty' },
+  filetypes = { 'python' },
+  root_markers = { 'pyproject.toml', 'setup.py', '.git' },
+  capabilities = {
+    textDocument = {
+      completion = {
+        completionItem = {
+          snippetSupport = false,
+        }
+      }
+    }
+  }
+}
+vim.lsp.enable('ty')
+-- }}}
+
+-- {{{ Rust
+vim.lsp.config['rust_analyzer'] = {
+  cmd = { 'rust-analyzer' },
+  filetypes = { 'rust' },
+  root_markers = { 'Cargo.toml', '.git' },
+  capabilities = {
+    textDocument = {
+      completion = {
+        completionItem = {
+          snippetSupport = false,
+        }
+      }
+    }
+  },
+  settings = {
+    ['rust-analyzer'] = {
+      cargo = {
+        allFeatures = true,
+      },
+      checkOnSave = {
+        command = 'clippy',
+      },
+    },
+  },
+}
+vim.lsp.enable('rust_analyzer')
+-- }}}
+
+-- {{{ Swift
+vim.lsp.config['sourcekit'] = {
+  cmd = { 'sourcekit-lsp' },
+  filetypes = { 'swift', 'objective-c', 'objective-cpp' },
+  root_markers = { 'Package.swift', '.git' },
+  capabilities = {
+    textDocument = {
+      completion = {
+        completionItem = {
+          snippetSupport = false,
+        }
+      }
+    }
+  }
+}
+vim.lsp.enable('sourcekit')
+-- }}}
+
+-- {{{ C / C++
+vim.lsp.config['clangd'] = {
+  cmd = { 'clangd' },
+  filetypes = { 'c', 'cpp', 'objc', 'objcpp' },
+  root_markers = {
+    'compile_commands.json',
+    'compile_flags.txt',
+    '.git',
+  },
+  capabilities = {
+    textDocument = {
+      completion = {
+        completionItem = {
+          snippetSupport = false,
+        }
+      }
+    }
+  }
+}
+vim.lsp.enable('clangd')
+-- }}}
 
 -- }}}
 
@@ -51,38 +199,6 @@ end
 opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
-  -- }}}
-
-  -- {{{ Completion
-  {
-    'saghen/blink.cmp',
-    dependencies = { 'rafamadriz/friendly-snippets' },
-    event = "InsertEnter",
-    version = '1.*',
-    opts = {
-      -- C-space: Open menu or open docs if already open
-      -- C-n/C-p or Up/Down: Select next/previous item
-      -- C-e: Hide menu
-      -- C-k: Toggle signature help (if signature.enabled = true)
-      keymap = { preset = 'super-tab' },
-      appearance = { nerd_font_variant = 'mono' },
-      completion = { documentation = { auto_show = true } },
-      sources = {
-        default = { 'lsp', 'path', 'snippets', 'buffer' },
-        providers = {
-          path = {
-            opts = {
-              get_cwd = function(_)
-                return vim.fn.getcwd()
-              end,
-            },
-          },
-        },
-      },
-      fuzzy = { implementation = "prefer_rust" },
-    },
-    opts_extend = { "sources.default" }
-  },
   -- }}}
 
   -- {{{ Autopair
@@ -184,103 +300,6 @@ require('lazy').setup({
   },
   -- }}}
 
-  -- {{{ LSP
-  {
-    'nvim-lspconfig',
-    event = 'VeryLazy',
-    init = function()
-      local make_client_capabilities = vim.lsp.protocol.make_client_capabilities
-      function vim.lsp.protocol.make_client_capabilities()
-        local caps = make_client_capabilities()
-        if caps.workspace then
-          caps.workspace.didChangeWatchedFiles = nil
-        end
-        return caps
-      end
-    end,
-    config = function()
-      vim.diagnostic.config({
-        virtual_text = false,
-        signs = true,
-        underline = false,
-        update_in_insert = false,
-        severity_sort = true,
-      })
-
-      -- {{{ Go LSP config
-      vim.lsp.config('gopls', {
-        settings = {
-          gopls = {
-            analyses = {
-              unusedparams = true,
-              unusedwrite = true,
-              unusedvariable = true,
-              unusedfunc = true,
-              unusedresult = true,
-              useany = true,
-              shadow = true,
-              nilness = true,
-              printf = true,
-              composites = true,
-              httpresponse = true,
-              infertypeargs = true,
-              loopclosure = true,
-              lostcancel = true,
-              nonewvars = true,
-              shift = true,
-              simplifycompositelit = true,
-              simplifyrange = true,
-              simplifyslice = true,
-              slog = true,
-              sortslice = true,
-              stdmethods = true,
-              stringintconv = true,
-              testinggoroutine = true,
-              timeformat = true,
-              undeclaredname = true,
-              unmarshal = true,
-              unreachable = true,
-              unsafeptr = true,
-              fillstruct = true,
-              fillreturns = true,
-            },
-            staticcheck = true,
-            gofumpt = true,
-            hints = {
-              assignVariableTypes = true,
-              compositeLiteralFields = true,
-              compositeLiteralTypes = true,
-              constantValues = true,
-              functionTypeParameters = true,
-              parameterNames = true,
-              rangeVariableTypes = true,
-            },
-          },
-        },
-      })
-
-      -- }}}
-
-      vim.lsp.enable({
-        -- C (type checker)
-        'clangd',
-        -- Rust (type checker)
-        'rust_analyzer',
-        -- Lua (type checker)
-        'lua_ls',
-        -- Python (type checker)
-        'ty',
-        -- Python (formatter)
-        'ruff',
-        -- Swift (type checker)
-        'sourcekit',
-        -- Go (type checker)
-        'gopls',
-      })
-    end,
-  },
-  -- }}}
-
   -- {{{ Surround editing
   {
     'kylechui/nvim-surround',
@@ -303,18 +322,19 @@ require('lazy').setup({
     config = function()
       require('nvim-treesitter.configs').setup {
         ensure_installed = {
-          'sql',
           'bash',
           'c',
           'cpp',
-          'javascript',
-          'lua',
-          'rust',
-          'python',
           'go',
           'gomod',
-          'gowork',
           'gosum',
+          'gowork',
+          'javascript',
+          'lua',
+          'python',
+          'rust',
+          'sql',
+          'swift',
         },
         highlight = { enable = true },
         indent = { enable = true },
@@ -416,8 +436,25 @@ require('lazy').setup({
 
 -- {{{ Custom Functions
 
--- {{{ Better terminal buffers
+-- {{{ Completion
+vim.api.nvim_create_autocmd('LspAttach', {
+  group = vim.api.nvim_create_augroup('my.lsp', {}),
+  callback = function(args)
+    local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
 
+    if client:supports_method('textDocument/completion') then
+      -- local chars = {}; for i = 32, 126 do table.insert(chars, string.char(i)) end
+      vim.lsp.completion.enable(true, client.id, args.buf, {
+        autotrigger = true,
+      })
+    end
+
+    vim.api.nvim_buf_set_option(args.buf, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+  end,
+})
+-- }}}
+
+-- {{{ Better terminal buffers
 api.nvim_create_user_command('RmTerms',
   function()
     for _, buf in ipairs(api.nvim_list_bufs()) do
@@ -426,21 +463,17 @@ api.nvim_create_user_command('RmTerms',
       end
     end
   end, {})
-
 -- }}}
 
 -- {{{ Resize vim automatically
-
 api.nvim_create_autocmd('VimResized', {
   callback = function()
     cmd('wincmd =')
   end,
 })
-
 -- }}}
 
 -- {{{ Oil
-
 local function open_oil_vsplit(path)
   vim.cmd('vsplit')
   if path then
@@ -466,7 +499,6 @@ local function open_oil_downloads_split()
   local downloads = home .. '/Downloads'
   open_oil_split(downloads)
 end
-
 -- }}}
 
 -- {{{ Insert time
@@ -520,7 +552,7 @@ map({ 'n' }, '<leader>cd', diag.open_float, silent_opts)
 map({ 'n' }, '<leader>fo', lsp.format, silent_opts)
 map({ 'n' }, '<leader>gd', lsp.definition, silent_opts)
 map({ 'n' }, '<leader>gf', diag.setqflist, silent_opts)
-map({ 'n' }, '<leader>gf', open_file_with_template, silent_opts)
+map({ 'n' }, '<leader>of', open_file_with_template, silent_opts)
 map({ 'n' }, '<leader>gg', ':<C-u>!git ', opts)
 map({ 'n' }, '<leader>gh', lsp.hover, silent_opts)
 map({ 'n' }, '<leader>gl', lsp.declaration, silent_opts)
@@ -535,6 +567,10 @@ map({ 'n' }, '<leader>oh', open_oil_split, silent_opts)
 map({ 'n' }, '<leader>ov', open_oil_vsplit, silent_opts)
 map({ 'n' }, '<leader>rm', ':RmTerms<CR>', silent_opts)
 map({ 'n' }, '<leader>rn', lsp.rename, silent_opts)
+map({ 'n' }, '<leader>q', ':q!<CR>', silent_opts)
+map({ 'n' }, '<leader>w', ':w!<CR>', silent_opts)
+map({ 'n' }, '<leader>t', ':<C-u>te ', opts)
+map({ 'n' }, '<leader>xc', ':<C-u>Xcodebuild', opts)
 map({ 'n', 'v' }, '<leader>p', '"+p', silent_opts)
 map({ 'n', 'v' }, '<leader>y', '"+y', silent_opts)
 map({ 't' }, '<Esc>', '<C-\\><C-n>', silent_opts)
