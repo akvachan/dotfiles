@@ -209,6 +209,22 @@ require('lazy').setup({
   },
   -- }}}
 
+  -- {{{ Neogit
+  {
+    "NeogitOrg/neogit",
+    lazy = true,
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "sindrets/diffview.nvim",
+      "ibhagwan/fzf-lua",
+    },
+    cmd = "Neogit",
+    keys = {
+      { "<leader>gg", "<cmd>Neogit<cr>", desc = "Show Neogit UI" }
+    }
+  },
+  -- }}}
+
   -- {{{ Colorscheme
   {
     'projekt0n/github-nvim-theme',
@@ -552,8 +568,6 @@ map({ 'n' }, '<leader>cd', diag.open_float, silent_opts)
 map({ 'n' }, '<leader>fo', lsp.format, silent_opts)
 map({ 'n' }, '<leader>gd', lsp.definition, silent_opts)
 map({ 'n' }, '<leader>gf', diag.setqflist, silent_opts)
-map({ 'n' }, '<leader>of', open_file_with_template, silent_opts)
-map({ 'n' }, '<leader>gg', ':<C-u>!git ', opts)
 map({ 'n' }, '<leader>gh', lsp.hover, silent_opts)
 map({ 'n' }, '<leader>gl', lsp.declaration, silent_opts)
 map({ 'n' }, '<leader>gn', diag.goto_next, silent_opts)
@@ -563,13 +577,14 @@ map({ 'n' }, '<leader>gr', lsp.references, silent_opts)
 map({ 'n' }, '<leader>it', insert_time, { desc = 'Insert date/time (DDMMYY-HHMMSS)' })
 map({ 'n' }, '<leader>la', ':Lazy<CR>', silent_opts)
 map({ 'n' }, '<leader>od', open_oil_downloads_split, silent_opts)
+map({ 'n' }, '<leader>of', open_file_with_template, silent_opts)
 map({ 'n' }, '<leader>oh', open_oil_split, silent_opts)
 map({ 'n' }, '<leader>ov', open_oil_vsplit, silent_opts)
+map({ 'n' }, '<leader>q', ':q!<CR>', silent_opts)
 map({ 'n' }, '<leader>rm', ':RmTerms<CR>', silent_opts)
 map({ 'n' }, '<leader>rn', lsp.rename, silent_opts)
-map({ 'n' }, '<leader>q', ':q!<CR>', silent_opts)
-map({ 'n' }, '<leader>w', ':w!<CR>', silent_opts)
 map({ 'n' }, '<leader>t', ':<C-u>te ', opts)
+map({ 'n' }, '<leader>w', ':w!<CR>', silent_opts)
 map({ 'n' }, '<leader>xc', ':<C-u>Xcodebuild', opts)
 map({ 'n', 'v' }, '<leader>p', '"+p', silent_opts)
 map({ 'n', 'v' }, '<leader>y', '"+y', silent_opts)
