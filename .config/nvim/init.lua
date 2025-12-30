@@ -11,8 +11,7 @@ opt.backup = false
 opt.equalalways = true
 opt.expandtab = true
 opt.foldenable = true
-opt.foldmethod = 'expr'
-opt.foldexpr = 'nvim_treesitter#foldexpr()'
+opt.scrolloff = 1000
 opt.grepformat = '%f:%l:%c:%m,%f:%l:%m'
 opt.grepprg = 'rg --vimgrep --no-heading --smart-case'
 opt.hlsearch = true
@@ -102,9 +101,9 @@ vim.lsp.enable('gopls')
 
 -- {{{ Python (ty)
 vim.lsp.config['ty'] = {
-  cmd = { 'ty' },
-  filetypes = { 'python' },
-  root_markers = { 'pyproject.toml', 'setup.py', '.git' },
+  cmd = { 'ty', 'server' },
+  filetypes = { 'python', 'pyproject.toml' },
+  root_markers = { '.git', 'pyproject.toml', },
   capabilities = {
     textDocument = {
       completion = {
@@ -116,6 +115,12 @@ vim.lsp.config['ty'] = {
   }
 }
 vim.lsp.enable('ty')
+
+vim.lsp.config('ruff', {
+  cmd = { 'ruff', 'server' },
+})
+
+vim.lsp.enable('ruff')
 -- }}}
 
 -- {{{ Rust
