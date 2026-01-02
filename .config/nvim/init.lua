@@ -2,7 +2,7 @@
 
 -- {{{ Basic Settings
 
-local g, opt, cmd, fn, api = vim.g, vim.opt, vim.cmd, vim.fn, vim.api
+local g, opt, cmd, fn, api, lsp = vim.g, vim.opt, vim.cmd, vim.fn, vim.api, vim.lsp
 opt.autoindent = true
 opt.completeopt = { "menuone", "noselect", "noinsert" }
 opt.pumheight = 10
@@ -11,7 +11,6 @@ opt.backup = false
 opt.equalalways = true
 opt.expandtab = true
 opt.foldenable = true
-opt.scrolloff = 1000
 opt.grepformat = '%f:%l:%c:%m,%f:%l:%m'
 opt.grepprg = 'rg --vimgrep --no-heading --smart-case'
 opt.hlsearch = true
@@ -42,7 +41,7 @@ g.matchparen_timeout = 20
 -- {{{ LSP
 
 -- {{{ Lua
-vim.lsp.config['lua_ls'] = {
+lsp.config['lua_ls'] = {
   cmd = { 'lua-language-server' },
   filetypes = { 'lua' },
   root_markers = { { '.luarc.json', '.luarc.jsonc' }, '.git' },
@@ -69,11 +68,11 @@ vim.lsp.config['lua_ls'] = {
     },
   },
 }
-vim.lsp.enable('lua_ls')
+lsp.enable('lua_ls')
 -- }}}
 
 -- {{{ Go
-vim.lsp.config['gopls'] = {
+lsp.config['gopls'] = {
   cmd = { 'gopls' },
   filetypes = { 'go', 'gomod', 'gowork', 'gotmpl' },
   root_markers = { 'go.work', 'go.mod', '.git' },
@@ -96,11 +95,11 @@ vim.lsp.config['gopls'] = {
     },
   },
 }
-vim.lsp.enable('gopls')
+lsp.enable('gopls')
 -- }}}
 
 -- {{{ Python (ty)
-vim.lsp.config['ty'] = {
+lsp.config['ty'] = {
   cmd = { 'ty', 'server' },
   filetypes = { 'python', 'pyproject.toml' },
   root_markers = { '.git', 'pyproject.toml', },
@@ -114,17 +113,19 @@ vim.lsp.config['ty'] = {
     }
   }
 }
-vim.lsp.enable('ty')
+lsp.enable('ty')
 
-vim.lsp.config('ruff', {
+lsp.config('ruff', {
   cmd = { 'ruff', 'server' },
+  filetypes = { 'python', 'pyproject.toml' },
+  root_markers = { '.git', 'pyproject.toml', },
 })
 
-vim.lsp.enable('ruff')
+lsp.enable('ruff')
 -- }}}
 
 -- {{{ Rust
-vim.lsp.config['rust_analyzer'] = {
+lsp.config['rust_analyzer'] = {
   cmd = { 'rust-analyzer' },
   filetypes = { 'rust' },
   root_markers = { 'Cargo.toml', '.git' },
@@ -148,14 +149,20 @@ vim.lsp.config['rust_analyzer'] = {
     },
   },
 }
-vim.lsp.enable('rust_analyzer')
+lsp.enable('rust_analyzer')
 -- }}}
 
 -- {{{ Swift
-vim.lsp.config['sourcekit'] = {
+lsp.config['sourcekit'] = {
   cmd = { 'sourcekit-lsp' },
-  filetypes = { 'swift', 'objective-c', 'objective-cpp' },
-  root_markers = { 'Package.swift', '.git' },
+  filetypes = { 'swift' },
+  root_markers = {
+    'Package.swift',
+    'buildServer.json',
+    '*.xcworkspace',
+    '*.xcodeproj',
+    '.git',
+  },
   capabilities = {
     textDocument = {
       completion = {
@@ -166,11 +173,11 @@ vim.lsp.config['sourcekit'] = {
     }
   }
 }
-vim.lsp.enable('sourcekit')
+lsp.enable('sourcekit')
 -- }}}
 
 -- {{{ C / C++
-vim.lsp.config['clangd'] = {
+lsp.config['clangd'] = {
   cmd = { 'clangd' },
   filetypes = { 'c', 'cpp', 'objc', 'objcpp' },
   root_markers = {
@@ -188,7 +195,7 @@ vim.lsp.config['clangd'] = {
     }
   }
 }
-vim.lsp.enable('clangd')
+lsp.enable('clangd')
 -- }}}
 
 -- }}}
@@ -214,27 +221,11 @@ require('lazy').setup({
   },
   -- }}}
 
-  -- {{{ Neogit
-  {
-    "NeogitOrg/neogit",
-    lazy = true,
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "sindrets/diffview.nvim",
-      "ibhagwan/fzf-lua",
-    },
-    cmd = "Neogit",
-    keys = {
-      { "<leader>gg", "<cmd>Neogit<cr>", desc = "Show Neogit UI" }
-    }
-  },
-  -- }}}
-
   -- {{{ Colorscheme
   {
     'projekt0n/github-nvim-theme',
     config = function()
-      vim.cmd.colorscheme('github_dark_dimmed')
+      cmd.colorscheme('github_dark_dimmed')
     end
   },
   -- }}}
@@ -258,7 +249,7 @@ require('lazy').setup({
             desc = 'Copy filepath to system clipboard',
             callback = function()
               require('oil.actions').copy_entry_path.callback()
-              vim.fn.setreg('+', vim.fn.getreg(vim.v.register))
+              fn.setreg('+', fn.getreg(vim.v.register))
             end,
           },
           -- Copy relative path
@@ -269,8 +260,8 @@ require('lazy').setup({
               if not entry or not dir then
                 return
               end
-              local relpath = vim.fn.fnamemodify(dir, ':.')
-              vim.fn.setreg('+', relpath .. entry.name)
+              local relpath = fn.fnamemodify(dir, ':.')
+              fn.setreg('+', relpath .. entry.name)
             end,
           },
           -- Discard all filesystem changes
@@ -302,7 +293,7 @@ require('lazy').setup({
             -- Copy file path
             ["ctrl-y"] = function(selected)
               local path = selected[1]
-              vim.fn.setreg("+", path)
+              fn.setreg("+", path)
               print("Copied: " .. path)
             end,
           },
@@ -409,6 +400,15 @@ require('lazy').setup({
             },
           },
         },
+        incremental_selection = {
+          enable = false,
+          keymaps = {
+            init_selection = '<leader>si',    -- Start selection
+            node_incremental = '<leader>ni',  -- Expand selection
+            scope_incremental = '<leader>si', -- Expand to scope
+            node_decremental = '<leader>nd',  -- Shrink selection
+          },
+        }
       }
     end,
   },
@@ -458,19 +458,19 @@ require('lazy').setup({
 -- {{{ Custom Functions
 
 -- {{{ Completion
-vim.api.nvim_create_autocmd('LspAttach', {
-  group = vim.api.nvim_create_augroup('my.lsp', {}),
+api.nvim_create_autocmd('LspAttach', {
+  group = api.nvim_create_augroup('my.lsp', {}),
   callback = function(args)
-    local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
+    local client = assert(lsp.get_client_by_id(args.data.client_id))
 
     if client:supports_method('textDocument/completion') then
       -- local chars = {}; for i = 32, 126 do table.insert(chars, string.char(i)) end
-      vim.lsp.completion.enable(true, client.id, args.buf, {
-        autotrigger = true,
+      lsp.completion.enable(true, client.id, args.buf, {
+        autotrigger = false,
       })
     end
 
-    vim.api.nvim_buf_set_option(args.buf, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+    api.nvim_buf_set_option(args.buf, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
   end,
 })
 -- }}}
@@ -496,7 +496,7 @@ api.nvim_create_autocmd('VimResized', {
 
 -- {{{ Oil
 local function open_oil_vsplit(path)
-  vim.cmd('vsplit')
+  cmd('vsplit')
   if path then
     require('oil').open(path)
   else
@@ -506,7 +506,7 @@ end
 
 -- Open Oil in a horizontal split
 local function open_oil_split(path)
-  vim.cmd('split')
+  cmd('split')
   if path then
     require('oil').open(path)
   else
@@ -516,7 +516,7 @@ end
 
 -- Open Oil in Downloads directory in a horizontal split
 local function open_oil_downloads_split()
-  local home = vim.fn.expand('~')
+  local home = fn.expand('~')
   local downloads = home .. '/Downloads'
   open_oil_split(downloads)
 end
@@ -525,21 +525,21 @@ end
 -- {{{ Insert time
 local function insert_time()
   local timestamp = os.date("%d%m%y-%H%M%S")
-  vim.api.nvim_put({ timestamp }, "c", true, true)
+  api.nvim_put({ timestamp }, "c", true, true)
 end
 -- }}}
 
 -- {{{ Open file with template
 local function open_file_with_template()
-  local file = vim.fn.expand('<cfile>')
-  vim.cmd('edit ' .. file)
+  local file = fn.expand('<cfile>')
+  cmd('edit ' .. file)
 
   -- Insert template only if file is empty
-  if vim.fn.line('$') == 1 and vim.fn.getline(1) == '' then
+  if fn.line('$') == 1 and fn.getline(1) == '' then
     local date = os.date('%Y-%m-%d')
-    local title = vim.fn.fnamemodify(file, ':t:r')
+    local title = fn.fnamemodify(file, ':t:r')
 
-    vim.api.nvim_buf_set_lines(0, 0, -1, false, {
+    api.nvim_buf_set_lines(0, 0, -1, false, {
       '---',
       'date: "' .. date .. '"',
       'tags:',
@@ -552,7 +552,7 @@ local function open_file_with_template()
       ''
     })
 
-    vim.cmd('normal! G')
+    cmd('normal! G')
   end
 end
 -- }}}
@@ -562,24 +562,25 @@ end
 -- {{{ Keymaps
 
 local diag = vim.diagnostic
-local lsp = vim.lsp.buf
+local buf = lsp.buf
 local map = vim.keymap.set
 local opts = { noremap = true, silent = false }
 local silent_opts = { noremap = true, silent = true }
 
 map({ 'n' }, '-', ':Oil<CR>', silent_opts)
-map({ 'n' }, '<leader>ca', lsp.code_action, silent_opts)
+map({ 'n' }, '<leader>ca', buf.code_action, silent_opts)
 map({ 'n' }, '<leader>cd', diag.open_float, silent_opts)
-map({ 'n' }, '<leader>fo', lsp.format, silent_opts)
-map({ 'n' }, '<leader>gd', lsp.definition, silent_opts)
+map({ 'n' }, '<leader>fo', buf.format, silent_opts)
+map({ 'n' }, '<leader>gd', buf.definition, silent_opts)
 map({ 'n' }, '<leader>gf', diag.setqflist, silent_opts)
-map({ 'n' }, '<leader>gh', lsp.hover, silent_opts)
-map({ 'n' }, '<leader>gl', lsp.declaration, silent_opts)
+map({ 'n' }, '<leader>gg', ':<C-u>!git ', opts)
+map({ 'n' }, '<leader>gh', buf.hover, silent_opts)
+map({ 'n' }, '<leader>gl', buf.declaration, silent_opts)
 map({ 'n' }, '<leader>gn', diag.goto_next, silent_opts)
-map({ 'n' }, '<leader>go', lsp.document_symbol, silent_opts)
+map({ 'n' }, '<leader>go', buf.document_symbol, silent_opts)
 map({ 'n' }, '<leader>gp', diag.goto_prev, silent_opts)
-map({ 'n' }, '<leader>gr', lsp.references, silent_opts)
-map({ 'n' }, '<leader>it', insert_time, { desc = 'Insert date/time (DDMMYY-HHMMSS)' })
+map({ 'n' }, '<leader>gr', buf.references, silent_opts)
+map({ 'n' }, '<leader>it', insert_time, silent_opts)
 map({ 'n' }, '<leader>la', ':Lazy<CR>', silent_opts)
 map({ 'n' }, '<leader>od', open_oil_downloads_split, silent_opts)
 map({ 'n' }, '<leader>of', open_file_with_template, silent_opts)
@@ -587,10 +588,9 @@ map({ 'n' }, '<leader>oh', open_oil_split, silent_opts)
 map({ 'n' }, '<leader>ov', open_oil_vsplit, silent_opts)
 map({ 'n' }, '<leader>q', ':q!<CR>', silent_opts)
 map({ 'n' }, '<leader>rm', ':RmTerms<CR>', silent_opts)
-map({ 'n' }, '<leader>rn', lsp.rename, silent_opts)
+map({ 'n' }, '<leader>rn', buf.rename, silent_opts)
 map({ 'n' }, '<leader>t', ':<C-u>te ', opts)
 map({ 'n' }, '<leader>w', ':w!<CR>', silent_opts)
-map({ 'n' }, '<leader>xc', ':<C-u>Xcodebuild', opts)
 map({ 'n', 'v' }, '<leader>p', '"+p', silent_opts)
 map({ 'n', 'v' }, '<leader>y', '"+y', silent_opts)
 map({ 't' }, '<Esc>', '<C-\\><C-n>', silent_opts)

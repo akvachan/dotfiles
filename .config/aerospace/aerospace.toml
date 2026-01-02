@@ -105,8 +105,8 @@ on-focus-changed = ['move-mouse window-lazy-center']
 
 #: Apps mode {{{
 [mode.apps.binding]
-    b = ['exec-and-forget open -a "Chromium"', 'mode main']
-    shift-b = ['exec-and-forget open -na "Chromium" --args --new-window', 'mode main']
+    b = ['exec-and-forget open -a "Brave Browser"', 'mode main']
+    shift-b = ['exec-and-forget open -na "Brave Browser" --args --new-window', 'mode main']
     t = ['exec-and-forget open -a "kitty"', 'mode main']
     s = ['exec-and-forget open -a "System Settings"', 'mode main']
     esc = 'mode main'
@@ -167,7 +167,7 @@ on-focus-changed = ['move-mouse window-lazy-center']
 
 [[on-window-detected]]
     if.app-id = 'com.apple.dt.Xcode'
-    run = 'move-node-to-workspace 6'
+    run = ['layout accordion', 'move-node-to-workspace 6']
 
 [[on-window-detected]]
     if.app-id = 'org.videolan.vlc'
