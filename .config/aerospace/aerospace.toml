@@ -130,32 +130,32 @@ on-focus-changed = ['move-mouse window-lazy-center']
 
 #: Automatic window routing {{{
 [[on-window-detected]]
-    if.app-id = 'net.kovidgoyal.kitty'
+    if.app-id = 'com.apple.mail'
+    run = 'move-node-to-workspace 1'
+
+[[on-window-detected]]
+    if.app-id = 'com.apple.iCal'
     run = 'move-node-to-workspace 1'
 
 [[on-window-detected]]
     if.app-id = 'ru.keepcoder.Telegram'
-    run = 'move-node-to-workspace 3'
+    run = 'move-node-to-workspace 2'
 
 [[on-window-detected]]
     if.app-id = 'com.microsoft.teams2'
-    run = 'move-node-to-workspace 3'
+    run = 'move-node-to-workspace 2'
 
 [[on-window-detected]]
     if.app-id = 'com.hnc.Discord'
-    run = 'move-node-to-workspace 3'
+    run = 'move-node-to-workspace 2'
 
 [[on-window-detected]]
     if.app-id = 'com.apple.FaceTime'
-    run = ['layout floating', 'move-node-to-workspace 3']
+    run = ['layout floating', 'move-node-to-workspace 2']
 
 [[on-window-detected]]
-    if.app-id = 'com.apple.mail'
-    run = 'move-node-to-workspace 4'
-
-[[on-window-detected]]
-    if.app-id = 'com.apple.iCal'
-    run = 'move-node-to-workspace 4'
+    if.app-id = 'net.kovidgoyal.kitty'
+    run = 'move-node-to-workspace 3'
 
 [[on-window-detected]]
     if.app-id = 'md.obsidian'
@@ -167,10 +167,10 @@ on-focus-changed = ['move-mouse window-lazy-center']
 
 [[on-window-detected]]
     if.app-id = 'com.apple.dt.Xcode'
-    run = ['layout accordion', 'move-node-to-workspace 6']
+    run = 'move-node-to-workspace 6'
 
 [[on-window-detected]]
-    if.app-id = 'org.videolan.vlc'
+    if.app-id = 'com.google.android.studio'
     run = 'move-node-to-workspace 7'
 
 [[on-window-detected]]
@@ -183,5 +183,9 @@ on-focus-changed = ['move-mouse window-lazy-center']
 
 [[on-window-detected]]
     if.app-id = 'com.roblox.RobloxPlayer'
+    run = 'move-node-to-workspace 9'
+
+[[on-window-detected]]
+    if.app-id = 'org.videolan.vlc'
     run = 'move-node-to-workspace 9'
 #: }}}

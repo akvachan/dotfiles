@@ -222,12 +222,12 @@ require('lazy').setup({
   -- }}}
 
   -- {{{ Colorscheme
-  {
-    'projekt0n/github-nvim-theme',
-    config = function()
-      cmd.colorscheme('github_dark_dimmed')
-    end
-  },
+  -- {
+  --   'projekt0n/github-nvim-theme',
+  --   config = function()
+  --     cmd.colorscheme('github_dark_dimmed')
+  --   end
+  -- },
   -- }}}
 
   -- {{{ File explorer
@@ -282,7 +282,6 @@ require('lazy').setup({
       { '<leader>fl', function() require('fzf-lua').blines() end,                desc = 'Current buffer lines' },
       { '<leader>fr', function() require('fzf-lua').resume() end,                desc = 'Resume work' },
       { '<leader>sd', function() require('fzf-lua').lsp_document_symbols() end,  desc = 'Symbols (document)' },
-      { '<leader>sw', function() require('fzf-lua').lsp_workspace_symbols() end, desc = 'Symbols (workspace)' },
     },
     config = function()
       require('fzf-lua').setup({
