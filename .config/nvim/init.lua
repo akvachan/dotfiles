@@ -405,6 +405,19 @@ require('lazy').setup({
   },
   -- }}}
 
+  -- {{{ Treesitter
+  {
+    "wojciech-kulik/xcodebuild.nvim",
+    dependencies = {
+      "ibhagwan/fzf-lua",
+      "MunifTanjim/nui.nvim",
+    },
+    config = function()
+      require("xcodebuild").setup({})
+    end,
+  },
+  -- }}}
+
   -- {{{ Disable RTP Plugins
 }, {
   performance = {
