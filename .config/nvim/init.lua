@@ -31,6 +31,7 @@ opt.termguicolors = true
 opt.updatetime = 100
 opt.wrap = false
 opt.writebackup = false
+opt.winborder = "rounded"
 g.mapleader = ' '
 g.maplocalleader = ' '
 g.matchparen_insert_timeout = 20
@@ -219,15 +220,6 @@ require('lazy').setup({
     event = 'InsertEnter',
     config = true
   },
-  -- }}}
-
-  -- {{{ Colorscheme
-  -- {
-  --   'projekt0n/github-nvim-theme',
-  --   config = function()
-  --     cmd.colorscheme('github_dark_dimmed')
-  --   end
-  -- },
   -- }}}
 
   -- {{{ File explorer
@@ -436,7 +428,6 @@ require('lazy').setup({
         'rrhelper',
         'spellfile_plugin',
         'synmenu',
-        'syntax',
         'tar',
         'tarPlugin',
         'tohtml',
