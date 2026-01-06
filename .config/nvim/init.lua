@@ -3,46 +3,46 @@
 -- {{{ Basic Settings
 
 local g, opt, cmd, fn, api, lsp = vim.g, vim.opt, vim.cmd, vim.fn, vim.api, vim.lsp
-opt.autoindent = true
-opt.completeopt = { "menuone", "noselect", "noinsert" }
-opt.pumheight = 10
-opt.background = 'dark'
-opt.backup = false
-opt.equalalways = true
-opt.expandtab = true
-opt.foldenable = true
-opt.grepformat = '%f:%l:%c:%m,%f:%l:%m'
-opt.grepprg = 'rg --vimgrep --no-heading --smart-case'
-opt.hlsearch = true
-opt.ignorecase = true
-opt.incsearch = true
-opt.lazyredraw = true
-opt.mouse = 'a'
-opt.number = true
-opt.relativenumber = true
-opt.shiftwidth = 2
-opt.signcolumn = 'yes'
-opt.smartcase = true
-opt.splitbelow = true
-opt.splitright = true
-opt.swapfile = false
-opt.tabstop = 2
-opt.termguicolors = true
-opt.updatetime = 100
-opt.wrap = false
-opt.writebackup = false
-opt.winborder = "rounded"
-g.mapleader = ' '
-g.maplocalleader = ' '
-g.matchparen_insert_timeout = 20
-g.matchparen_timeout = 20
+opt.autoindent                  = true
+opt.completeopt                 = { "menuone", "noselect", "noinsert" }
+opt.pumheight                   = 10
+opt.background                  = 'dark'
+opt.backup                      = false
+opt.equalalways                 = true
+opt.expandtab                   = true
+opt.foldenable                  = true
+opt.grepformat                  = '%f:%l:%c:%m,%f:%l:%m'
+opt.grepprg                     = 'rg --vimgrep --no-heading --smart-case'
+opt.hlsearch                    = true
+opt.ignorecase                  = true
+opt.incsearch                   = true
+opt.lazyredraw                  = true
+opt.mouse                       = 'a'
+opt.number                      = true
+opt.relativenumber              = true
+opt.shiftwidth                  = 2
+opt.signcolumn                  = 'yes'
+opt.smartcase                   = true
+opt.splitbelow                  = true
+opt.splitright                  = true
+opt.swapfile                    = false
+opt.tabstop                     = 2
+opt.termguicolors               = true
+opt.updatetime                  = 100
+opt.wrap                        = false
+opt.writebackup                 = false
+opt.winborder                   = "rounded"
+g.mapleader                     = ' '
+g.maplocalleader                = ' '
+g.matchparen_insert_timeout     = 20
+g.matchparen_timeout            = 20
 
 -- }}}
 
 -- {{{ LSP
 
 -- {{{ Lua
-lsp.config['lua_ls'] = {
+lsp.config['lua_ls']            = {
   cmd = { 'lua-language-server' },
   filetypes = { 'lua' },
   root_markers = { { '.luarc.json', '.luarc.jsonc' }, '.git' },
@@ -268,12 +268,12 @@ require('lazy').setup({
   {
     'ibhagwan/fzf-lua',
     keys = {
-      { '<leader>ff', function() require('fzf-lua').files() end,                 desc = 'Find files' },
-      { '<leader>fg', function() require('fzf-lua').live_grep() end,             desc = 'Live grep' },
-      { '<leader>fb', function() require('fzf-lua').buffers() end,               desc = 'Buffers' },
-      { '<leader>fl', function() require('fzf-lua').blines() end,                desc = 'Current buffer lines' },
-      { '<leader>fr', function() require('fzf-lua').resume() end,                desc = 'Resume work' },
-      { '<leader>sd', function() require('fzf-lua').lsp_document_symbols() end,  desc = 'Symbols (document)' },
+      { '<leader>ff', function() require('fzf-lua').files() end,                desc = 'Find files' },
+      { '<leader>fg', function() require('fzf-lua').live_grep() end,            desc = 'Live grep' },
+      { '<leader>fb', function() require('fzf-lua').buffers() end,              desc = 'Buffers' },
+      { '<leader>fl', function() require('fzf-lua').blines() end,               desc = 'Current buffer lines' },
+      { '<leader>fr', function() require('fzf-lua').resume() end,               desc = 'Resume work' },
+      { '<leader>sd', function() require('fzf-lua').lsp_document_symbols() end, desc = 'Symbols (document)' },
     },
     config = function()
       require('fzf-lua').setup({
