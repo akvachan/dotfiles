@@ -408,6 +408,7 @@ require('lazy').setup({
   -- {{{ Treesitter
   {
     "wojciech-kulik/xcodebuild.nvim",
+    event = "VeryLazy",
     dependencies = {
       "ibhagwan/fzf-lua",
       "MunifTanjim/nui.nvim",
