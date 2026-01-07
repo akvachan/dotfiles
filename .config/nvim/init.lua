@@ -316,7 +316,7 @@ require('lazy').setup({
   -- {{{ Xcodebuild
   {
     "wojciech-kulik/xcodebuild.nvim",
-    event = "VeryLazy",
+    ft = "swift",
     dependencies = {
       "ibhagwan/fzf-lua",
       "MunifTanjim/nui.nvim",
