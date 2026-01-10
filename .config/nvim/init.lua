@@ -171,7 +171,12 @@ lsp.config['sourcekit'] = {
           snippetSupport = false,
         }
       }
-    }
+    },
+    workspace = {
+      didChangeWatchedFiles = {
+        dynamicRegistration = true,
+      },
+    },
   }
 }
 lsp.enable('sourcekit')
@@ -219,6 +224,90 @@ require('lazy').setup({
     'windwp/nvim-autopairs',
     event = 'InsertEnter',
     config = true
+  },
+  -- }}}
+
+  -- {{{ Treesitter
+  {
+    "nvim-treesitter/nvim-treesitter",
+    ft = { 'lua', 'python', 'javascript', 'typescript', 'rust', 'c', 'swift', 'markdown' },
+    build = ":TSUpdate",
+    config = function()
+      require('nvim-treesitter').setup {
+        install_dir = vim.fn.stdpath('data') .. '/site',
+      }
+      require('nvim-treesitter').install { 'lua', 'python', 'javascript', 'typescript', 'rust', 'c', 'swift', 'markdown' }
+    end,
+  },
+  {
+    "nvim-treesitter/nvim-treesitter-textobjects",
+    ft = { 'lua', 'python', 'javascript', 'typescript', 'rust', 'c', 'swift', 'markdown' },
+    branch = "main",
+    init = function()
+      vim.g.no_plugin_maps = true
+    end,
+    config = function()
+      local ts = require("nvim-treesitter-textobjects")
+      ts.setup {
+        select = {
+          lookahead = true,
+          selection_modes = {
+            ["@parameter.outer"] = "v",
+            ["@function.outer"]  = "V",
+            ["@class.outer"]     = "<c-v>",
+          },
+          include_surrounding_whitespace = false,
+        },
+        move = { set_jumps = true },
+      }
+      local select     = require("nvim-treesitter-textobjects.select")
+      local move       = require("nvim-treesitter-textobjects.move")
+      local swap       = require("nvim-treesitter-textobjects.swap")
+      local selections = {
+        f = "function",
+        c = "class",
+        a = "parameter",
+        v = "assignment",
+        i = "conditional",
+        l = "loop",
+      }
+      for key, obj in pairs(selections) do
+        vim.keymap.set({ "x", "o" }, "a" .. key, function()
+          select.select_textobject("@" .. obj .. ".outer", "textobjects")
+        end)
+        vim.keymap.set({ "x", "o" }, "i" .. key, function()
+          select.select_textobject("@" .. obj .. ".inner", "textobjects")
+        end)
+      end
+      vim.keymap.set("n", "<leader>a", function()
+        swap.swap_next("@parameter.inner")
+      end)
+      vim.keymap.set("n", "<leader>A", function()
+        swap.swap_previous("@parameter.outer")
+      end)
+      local moves = {
+        f = "function",
+        c = "class",
+        a = "parameter",
+        v = "assignment",
+        i = "conditional",
+        l = "loop",
+      }
+      for key, obj in pairs(moves) do
+        vim.keymap.set({ "n", "x", "o" }, "]" .. key, function()
+          move.goto_next_start("@" .. obj .. ".outer", "textobjects")
+        end)
+        vim.keymap.set({ "n", "x", "o" }, "[" .. key, function()
+          move.goto_previous_start("@" .. obj .. ".outer", "textobjects")
+        end)
+        vim.keymap.set({ "n", "x", "o" }, "]" .. key:upper(), function()
+          move.goto_next_end("@" .. obj .. ".outer", "textobjects")
+        end)
+        vim.keymap.set({ "n", "x", "o" }, "[" .. key:upper(), function()
+          move.goto_previous_end("@" .. obj .. ".outer", "textobjects")
+        end)
+      end
+    end,
   },
   -- }}}
 
