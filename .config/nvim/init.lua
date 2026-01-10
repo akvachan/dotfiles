@@ -22,7 +22,9 @@ opt.number                      = true
 opt.relativenumber              = true
 opt.shiftwidth                  = 2
 opt.signcolumn                  = 'yes'
+opt.scrolloff                   = 1000
 opt.smartcase                   = true
+opt.smartindent                 = true
 opt.splitbelow                  = true
 opt.splitright                  = true
 opt.swapfile                    = false
@@ -260,40 +262,25 @@ require('lazy').setup({
         },
         move = { set_jumps = true },
       }
-      local select     = require("nvim-treesitter-textobjects.select")
-      local move       = require("nvim-treesitter-textobjects.move")
-      local swap       = require("nvim-treesitter-textobjects.swap")
-      local selections = {
+      local select  = require("nvim-treesitter-textobjects.select")
+      local move    = require("nvim-treesitter-textobjects.move")
+      local swap    = require("nvim-treesitter-textobjects.swap")
+      local objects = {
         f = "function",
         c = "class",
         a = "parameter",
         v = "assignment",
         i = "conditional",
         l = "loop",
+        ["/"] = "comment",
       }
-      for key, obj in pairs(selections) do
+      for key, obj in pairs(objects) do
         vim.keymap.set({ "x", "o" }, "a" .. key, function()
           select.select_textobject("@" .. obj .. ".outer", "textobjects")
         end)
         vim.keymap.set({ "x", "o" }, "i" .. key, function()
           select.select_textobject("@" .. obj .. ".inner", "textobjects")
         end)
-      end
-      vim.keymap.set("n", "<leader>a", function()
-        swap.swap_next("@parameter.inner")
-      end)
-      vim.keymap.set("n", "<leader>A", function()
-        swap.swap_previous("@parameter.outer")
-      end)
-      local moves = {
-        f = "function",
-        c = "class",
-        a = "parameter",
-        v = "assignment",
-        i = "conditional",
-        l = "loop",
-      }
-      for key, obj in pairs(moves) do
         vim.keymap.set({ "n", "x", "o" }, "]" .. key, function()
           move.goto_next_start("@" .. obj .. ".outer", "textobjects")
         end)
@@ -307,6 +294,12 @@ require('lazy').setup({
           move.goto_previous_end("@" .. obj .. ".outer", "textobjects")
         end)
       end
+      vim.keymap.set("n", "<leader>a", function()
+        swap.swap_next("@parameter.inner")
+      end)
+      vim.keymap.set("n", "<leader>A", function()
+        swap.swap_previous("@parameter.outer")
+      end)
     end,
   },
   -- }}}
@@ -424,7 +417,6 @@ require('lazy').setup({
         '2html_plugin',
         'bugreport',
         'compiler',
-        'ftplugin',
         'getscript',
         'getscriptPlugin',
         'gzip',
@@ -592,6 +584,7 @@ map({ 'n' }, '<leader>rm', ':RmTerms<CR>', silent_opts)
 map({ 'n' }, '<leader>rn', buf.rename, silent_opts)
 map({ 'n' }, '<leader>t', ':<C-u>te ', opts)
 map({ 'n' }, '<leader>w', ':w!<CR>', silent_opts)
+map({ 'n' }, '<leader>xc', ':<C-u>Xcodebuild', opts)
 map({ 'n', 'v' }, '<leader>p', '"+p', silent_opts)
 map({ 'n', 'v' }, '<leader>y', '"+y', silent_opts)
 map({ 't' }, '<Esc>', '<C-\\><C-n>', silent_opts)
