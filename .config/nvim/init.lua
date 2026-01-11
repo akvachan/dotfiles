@@ -3,6 +3,7 @@
 -- {{{ Basic Settings
 
 local g, opt, cmd, fn, api, lsp = vim.g, vim.opt, vim.cmd, vim.fn, vim.api, vim.lsp
+local ts_filetypes              = { 'lua', 'python', 'javascript', 'typescript', 'rust', 'c', 'swift', 'markdown', 'go' }
 opt.autoindent                  = true
 opt.completeopt                 = { "menuone", "noselect", "noinsert" }
 opt.pumheight                   = 10
@@ -200,7 +201,12 @@ lsp.config['clangd'] = {
           snippetSupport = false,
         }
       }
-    }
+    },
+    workspace = {
+      didChangeWatchedFiles = {
+        dynamicRegistration = true,
+      },
+    },
   }
 }
 lsp.enable('clangd')
@@ -232,18 +238,25 @@ require('lazy').setup({
   -- {{{ Treesitter
   {
     "nvim-treesitter/nvim-treesitter",
-    ft = { 'lua', 'python', 'javascript', 'typescript', 'rust', 'c', 'swift', 'markdown' },
+    ft = ts_filetypes,
     build = ":TSUpdate",
     config = function()
       require('nvim-treesitter').setup {
         install_dir = vim.fn.stdpath('data') .. '/site',
       }
-      require('nvim-treesitter').install { 'lua', 'python', 'javascript', 'typescript', 'rust', 'c', 'swift', 'markdown' }
+      require('nvim-treesitter').install(ts_filetypes)
+      api.nvim_create_autocmd('FileType', {
+        pattern = ts_filetypes,
+        callback = function()
+          vim.treesitter.start()
+          vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+        end,
+      })
     end,
   },
   {
     "nvim-treesitter/nvim-treesitter-textobjects",
-    ft = { 'lua', 'python', 'javascript', 'typescript', 'rust', 'c', 'swift', 'markdown' },
+    ft = ts_filetypes,
     branch = "main",
     init = function()
       vim.g.no_plugin_maps = true
@@ -254,9 +267,20 @@ require('lazy').setup({
         select = {
           lookahead = true,
           selection_modes = {
-            ["@parameter.outer"] = "v",
-            ["@function.outer"]  = "V",
-            ["@class.outer"]     = "<c-v>",
+            ["@parameter.outer"]   = "v",
+            ["@parameter.inner"]   = "v",
+            ["@assignment.inner"]  = "v",
+            ["@conditional.inner"] = "v",
+            ["@comment.inner"]     = "v",
+            ["@function.outer"]    = "v",
+            ["@function.inner"]    = "v",
+            ["@class.outer"]       = "v",
+            ["@class.inner"]       = "v",
+            ["@assignment.outer"]  = "v",
+            ["@conditional.outer"] = "v",
+            ["@loop.outer"]        = "v",
+            ["@loop.inner"]        = "v",
+            ["@comment.outer"]     = "v",
           },
           include_surrounding_whitespace = false,
         },
@@ -275,12 +299,14 @@ require('lazy').setup({
         ["/"] = "comment",
       }
       for key, obj in pairs(objects) do
+        -- Selection
         vim.keymap.set({ "x", "o" }, "a" .. key, function()
           select.select_textobject("@" .. obj .. ".outer", "textobjects")
         end)
         vim.keymap.set({ "x", "o" }, "i" .. key, function()
           select.select_textobject("@" .. obj .. ".inner", "textobjects")
         end)
+        -- Goto
         vim.keymap.set({ "n", "x", "o" }, "]" .. key, function()
           move.goto_next_start("@" .. obj .. ".outer", "textobjects")
         end)
@@ -294,6 +320,7 @@ require('lazy').setup({
           move.goto_previous_end("@" .. obj .. ".outer", "textobjects")
         end)
       end
+      -- Swap
       vim.keymap.set("n", "<leader>a", function()
         swap.swap_next("@parameter.inner")
       end)
