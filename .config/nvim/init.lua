@@ -23,7 +23,8 @@ opt.number                      = true
 opt.relativenumber              = true
 opt.shiftwidth                  = 2
 opt.signcolumn                  = 'yes'
-opt.scrolloff                   = 1000
+opt.scrolloff                   = 10
+opt.confirm                     = true
 opt.smartcase                   = true
 opt.smartindent                 = true
 opt.splitbelow                  = true
@@ -520,7 +521,7 @@ local function open_oil_vsplit(path)
   if path then
     require('oil').open(path)
   else
-    require('oil').open()
+    require('oil').open(vim.fn.getcwd())
   end
 end
 
@@ -530,7 +531,7 @@ local function open_oil_split(path)
   if path then
     require('oil').open(path)
   else
-    require('oil').open()
+    require('oil').open(vim.fn.getcwd())
   end
 end
 
@@ -539,41 +540,6 @@ local function open_oil_downloads_split()
   local home = fn.expand('~')
   local downloads = home .. '/Downloads'
   open_oil_split(downloads)
-end
--- }}}
-
--- {{{ Insert time
-local function insert_time()
-  local timestamp = os.date("%d%m%y-%H%M%S")
-  api.nvim_put({ timestamp }, "c", true, true)
-end
--- }}}
-
--- {{{ Open file with template
-local function open_file_with_template()
-  local file = fn.expand('<cfile>')
-  cmd('edit ' .. file)
-
-  -- Insert template only if file is empty
-  if fn.line('$') == 1 and fn.getline(1) == '' then
-    local date = os.date('%Y-%m-%d')
-    local title = fn.fnamemodify(file, ':t:r')
-
-    api.nvim_buf_set_lines(0, 0, -1, false, {
-      '---',
-      'date: "' .. date .. '"',
-      'tags:',
-      'status: Active',
-      '---',
-      '',
-      '# ' .. title,
-      '',
-      '## Description',
-      ''
-    })
-
-    cmd('normal! G')
-  end
 end
 -- }}}
 
@@ -600,10 +566,8 @@ map({ 'n' }, '<leader>gn', diag.goto_next, silent_opts)
 map({ 'n' }, '<leader>go', buf.document_symbol, silent_opts)
 map({ 'n' }, '<leader>gp', diag.goto_prev, silent_opts)
 map({ 'n' }, '<leader>gr', buf.references, silent_opts)
-map({ 'n' }, '<leader>it', insert_time, silent_opts)
 map({ 'n' }, '<leader>la', ':Lazy<CR>', silent_opts)
 map({ 'n' }, '<leader>od', open_oil_downloads_split, silent_opts)
-map({ 'n' }, '<leader>of', open_file_with_template, silent_opts)
 map({ 'n' }, '<leader>oh', open_oil_split, silent_opts)
 map({ 'n' }, '<leader>ov', open_oil_vsplit, silent_opts)
 map({ 'n' }, '<leader>q', ':q!<CR>', silent_opts)
