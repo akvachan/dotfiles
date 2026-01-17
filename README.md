@@ -12,13 +12,7 @@
 | **Keyboard**        | [Custom Dactyl Manuform](https://cyboard.digital/products/custom-dactyl-manuform) | —                                                |
 | **Layout**          | [Colemak](https://en.wikipedia.org/wiki/Colemak)                                  | —                                                |
 
-
-1. Disable animations, Dock, AirDrop, SystemUIServer, set standard wallpaper:
-```
-sh .config/scripts/macos-setup.sh 
-````
-
-2. Setup config files ([Original tutorial](https://www.atlassian.com/git/tutorials/dotfiles)):
+1. Setup config files ([Original tutorial](https://www.atlassian.com/git/tutorials/dotfiles)):
 
 - Clone this repo:
 ```
@@ -49,6 +43,11 @@ config config --local status.showUntrackedFiles no
 ```
 config status
 ```
+
+2. Disable animations, Dock, AirDrop, SystemUIServer, set standard wallpaper:
+```
+sh .config/scripts/macos-setup.sh 
+````
 
 3. Install homebrew:
 ```
