@@ -18,7 +18,7 @@
 sh .config/scripts/macos-setup.sh 
 ````
 
-2. Setup config files:
+2. Setup config files ([Original tutorial](https://www.atlassian.com/git/tutorials/dotfiles)):
 
 - Clone this repo:
 ```
@@ -50,8 +50,6 @@ config config --local status.showUntrackedFiles no
 config status
 ```
 
-[Original tutorial](https://www.atlassian.com/git/tutorials/dotfiles).
-
 3. Install homebrew:
 ```
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -62,8 +60,13 @@ config status
 brew bundle install --file .config/brew/Brewfile
 ```
 
-4. Create local secrets file:
+5. Create local secrets file:
 Stored in `.env.zsh` and loaded dynamically from `.zshrc`, so:
 ```
 touch ~/.env.zsh
+```
+
+6. Reboot:
+```
+sudo reboot
 ```
