@@ -57,9 +57,8 @@ source .env.zsh
 
 # }}}
 
-# {{{ Theme
+# {{{ Prompt
 
-source /opt/homebrew/share/powerlevel10k/powerlevel10k.zsh-theme
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+PROMPT='%F{blue}%d%f %# '
 
 # }}}
