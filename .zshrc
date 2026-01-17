@@ -53,12 +53,13 @@ alias config="/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME"
 
 # {{{ Secrets
 
-source .env.zsh
+source $HOME/.env.zsh
 
 # }}}
 
 # {{{ Prompt
 
-PROMPT='%F{blue}%d%f %# '
+PROMPT='%F{blue}%d%f
+%# '
 
 # }}}
