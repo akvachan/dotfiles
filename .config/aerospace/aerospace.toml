@@ -1,15 +1,18 @@
 # vim:fileencoding=utf-8:foldmethod=marker
 
-#: Global settings {{{
+# {{{ Basic settings 
+
 accordion-padding = 0
 start-at-login = true
 enable-normalization-flatten-containers = true
 enable-normalization-opposite-orientation-for-nested-containers = true
 on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 on-focus-changed = ['move-mouse window-lazy-center']
-#: }}}
 
-#: Main mode bindings {{{
+# }}}
+
+# {{{ Main mode bindings 
+
 [mode.main.binding]
     # General
     cmd-alt-ctrl-b = 'balance-sizes'
@@ -62,9 +65,11 @@ on-focus-changed = ['move-mouse window-lazy-center']
     cmd-alt-ctrl-f = 'mode raycast'
     cmd-alt-ctrl-z = 'mode resize'
     cmd-alt-ctrl-d = 'mode display'
-#: }}}
 
-#: Gaps {{{
+# }}}
+
+# {{{ Gaps 
+
 [gaps]
     inner.horizontal = 5
     inner.vertical   = 5
@@ -72,9 +77,11 @@ on-focus-changed = ['move-mouse window-lazy-center']
     outer.bottom     = 5
     outer.top        = 5
     outer.right      = 5
-#: }}}
 
-#: Display mode {{{
+# }}}
+
+# {{{ Display mode 
+
 [mode.display.binding]
     # Focus monitors
     h = ["focus-monitor left", "mode main"]
@@ -91,9 +98,11 @@ on-focus-changed = ['move-mouse window-lazy-center']
     # Exit mode
     esc = "mode main"
     enter = "mode main"
-#: }}}
 
-#: Resize mode {{{
+# }}}
+
+# {{{ Resize mode 
+
 [mode.resize.binding]
     h = 'resize width -50'
     j = 'resize height +50'
@@ -101,9 +110,11 @@ on-focus-changed = ['move-mouse window-lazy-center']
     l = 'resize width +50'
     enter = 'mode main'
     esc = 'mode main'
-#: }}}
 
-#: Apps mode {{{
+# }}}
+
+# {{{ Apps mode 
+
 [mode.apps.binding]
     b = ['exec-and-forget open -a "Brave Browser"', 'mode main']
     shift-b = ['exec-and-forget open -na "Brave Browser" --args --new-window', 'mode main']
@@ -111,9 +122,11 @@ on-focus-changed = ['move-mouse window-lazy-center']
     s = ['exec-and-forget open -a "System Settings"', 'mode main']
     esc = 'mode main'
     enter = 'mode main'
-#: }}}
 
-#: Raycast mode {{{
+# }}}
+
+# {{{ Raycast mode 
+
 [mode.raycast.binding]
     c = ['exec-and-forget open "raycast://extensions/raycast/clipboard-history/clipboard-history"', 'mode main']
     l = ['exec-and-forget open "raycast://extensions/raycast/system/sleep"', 'mode main']
@@ -126,9 +139,11 @@ on-focus-changed = ['move-mouse window-lazy-center']
     n = ['exec-and-forget open "raycast://extensions/raycast/navigation/search-menu-items"', 'mode main']
     esc = 'mode main'
     enter = 'mode main'
-#: }}}
 
-#: Automatic window routing {{{
+# }}}
+
+# {{{ Automatic window routing 
+
 [[on-window-detected]]
     if.app-id = 'com.apple.mail'
     run = 'move-node-to-workspace 1'
@@ -189,4 +204,4 @@ on-focus-changed = ['move-mouse window-lazy-center']
     if.app-id = 'org.videolan.vlc'
     run = 'move-node-to-workspace 9'
 
-#: }}}
+# }}}

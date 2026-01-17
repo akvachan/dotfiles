@@ -1,4 +1,6 @@
-# Software and Hardware
+# dotfiles
+
+## macOS
 
 |                     |                                                                                   | Config                                           |
 | ------------------- | --------------------------------------------------------------------------------- | ------------------------------------------------ |
@@ -11,39 +13,57 @@
 | **Layout**          | [Colemak](https://en.wikipedia.org/wiki/Colemak)                                  | —                                                |
 
 
-<img width="1582" height="743" alt="Screenshot 2025-08-14 at 17 00 04" src="https://github.com/user-attachments/assets/a0952fc9-1b44-4b88-bebd-c7de42cf9c21" />
-<img width="1569" height="735" alt="Screenshot 2025-08-14 at 17 00 32" src="https://github.com/user-attachments/assets/d4acef75-3106-4118-b4a1-bbc0b7ffd426" />
-
----
-
-# Goodies
-
-* **Text manipulation across Cocoa-based apps** [KeyBindings](https://github.com/ttscoff/KeyBindings)
-* **Reserved Hyper key** (mapped to `RAlt`) for window manager control and launching apps: [Raycast Hyper Key](https://manual.raycast.com/hyperkey)
-* **Menu bar system monitor (RAM / CPU / GPU):** [Stats](https://github.com/exelban/stats)
-
----
-
-# Setup
-
-1. **Dotfiles management**
-   All configs are managed via a Git "alias repository".
-   Follow this tutorial: [https://www.atlassian.com/git/tutorials/dotfiles](https://www.atlassian.com/git/tutorials/dotfiles)
-
-2. **Apps installed via Homebrew**
-   All apps, fonts, and CLI packages are listed in the `Brewfile`:
-   ```
-   brew bundle install --file .config/brew/Brewfile
-   ```
-
-3. **Secrets**
-   Stored in `.env.zsh` and loaded dynamically from `.zshrc`.
-
----
-
-# Optional Tweaks (macOS only)
-
-Run the full script:
+1. Disable animations, Dock, AirDrop, SystemUIServer, set standard wallpaper:
 ```
-sh .config/scripts/macos-shortcuts.sh 
+sh .config/scripts/macos-setup.sh 
 ````
+
+2. Setup config files:
+
+- Clone this repo:
+```
+git clone --bare https://github.com/akvachan/dotfiles $HOME/.cfg
+```
+
+- Create alias:
+```
+alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
+```
+
+- Create `.gitignore`:
+```
+echo ".cfg" >> .gitignore
+```
+
+- Checkout everything:
+```
+config checkout
+```
+
+- Do not track anything besides what is already in the repo:
+```
+config config --local status.showUntrackedFiles no
+```
+
+- Check status and you are done:
+```
+config status
+```
+
+[Original tutorial](https://www.atlassian.com/git/tutorials/dotfiles).
+
+3. Install homebrew:
+```
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+4. Install all packages:
+```
+brew bundle install --file .config/brew/Brewfile
+```
+
+4. Create local secrets file:
+Stored in `.env.zsh` and loaded dynamically from `.zshrc`, so:
+```
+touch ~/.env.zsh
+```

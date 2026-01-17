@@ -1,6 +1,6 @@
 # vim:fileencoding=utf-8:foldmethod=marker
 
--- {{{ Basic Settings
+-- {{{ Basic settings
 
 local g, opt, cmd, fn, api, lsp = vim.g, vim.opt, vim.cmd, vim.fn, vim.api, vim.lsp
 local ts_filetypes              = { 'lua', 'python', 'javascript', 'typescript', 'rust', 'c', 'swift', 'markdown', 'go' }
@@ -46,6 +46,7 @@ g.matchparen_timeout            = 20
 -- {{{ LSP
 
 -- {{{ Lua
+
 lsp.config['lua_ls']            = {
   cmd = { 'lua-language-server' },
   filetypes = { 'lua' },
@@ -74,9 +75,11 @@ lsp.config['lua_ls']            = {
   },
 }
 lsp.enable('lua_ls')
+
 -- }}}
 
 -- {{{ Go
+
 lsp.config['gopls'] = {
   cmd = { 'gopls' },
   filetypes = { 'go', 'gomod', 'gowork', 'gotmpl' },
@@ -101,9 +104,11 @@ lsp.config['gopls'] = {
   },
 }
 lsp.enable('gopls')
+
 -- }}}
 
 -- {{{ Python (ty)
+
 lsp.config['ty'] = {
   cmd = { 'ty', 'server' },
   filetypes = { 'python', 'pyproject.toml' },
@@ -127,9 +132,11 @@ lsp.config('ruff', {
 })
 
 lsp.enable('ruff')
+
 -- }}}
 
 -- {{{ Rust
+
 lsp.config['rust_analyzer'] = {
   cmd = { 'rust-analyzer' },
   filetypes = { 'rust' },
@@ -155,9 +162,11 @@ lsp.config['rust_analyzer'] = {
   },
 }
 lsp.enable('rust_analyzer')
+
 -- }}}
 
 -- {{{ Swift
+
 lsp.config['sourcekit'] = {
   cmd = { 'sourcekit-lsp' },
   filetypes = { 'swift' },
@@ -184,9 +193,11 @@ lsp.config['sourcekit'] = {
   }
 }
 lsp.enable('sourcekit')
+
 -- }}}
 
 -- {{{ C / C++
+
 lsp.config['clangd'] = {
   cmd = { 'clangd' },
   filetypes = { 'c', 'cpp', 'objc', 'objcpp' },
@@ -211,6 +222,7 @@ lsp.config['clangd'] = {
   }
 }
 lsp.enable('clangd')
+
 -- }}}
 
 -- }}}
@@ -218,6 +230,7 @@ lsp.enable('clangd')
 -- {{{ Plugins
 
 -- {{{ Lazy Setup
+
 local lazypath = fn.stdpath('data') .. '/lazy/lazy.nvim'
 if not vim.loop.fs_stat(lazypath) then
   fn.system({ 'git', 'clone', '--filter=blob:none', 'https://github.com/folke/lazy.nvim', '--branch=stable',
@@ -226,17 +239,21 @@ end
 opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
-  -- }}}
 
-  -- {{{ Autopair
+-- }}}
+
+-- {{{ Autopair
+
   {
     'windwp/nvim-autopairs',
     event = 'InsertEnter',
     config = true
   },
-  -- }}}
 
-  -- {{{ Treesitter
+-- }}}
+
+-- {{{ Treesitter
+
   {
     "nvim-treesitter/nvim-treesitter",
     ft = ts_filetypes,
@@ -330,9 +347,11 @@ require('lazy').setup({
       end)
     end,
   },
-  -- }}}
 
-  -- {{{ File explorer
+-- }}}
+
+-- {{{ File explorer
+
   {
     'stevearc/oil.nvim',
     event = 'VimEnter',
@@ -372,9 +391,11 @@ require('lazy').setup({
       })
     end
   },
-  -- }}}
 
-  -- {{{ Fuzzy finder
+-- }}}
+
+-- {{{ Fuzzy finder
+
   {
     'ibhagwan/fzf-lua',
     keys = {
@@ -411,9 +432,11 @@ require('lazy').setup({
       })
     end,
   },
-  -- }}}
 
-  -- {{{ Surround editing
+-- }}}
+
+-- {{{ Surround editing
+
   {
     'kylechui/nvim-surround',
     event = 'VeryLazy',
@@ -421,9 +444,11 @@ require('lazy').setup({
       require('nvim-surround').setup()
     end
   },
-  -- }}}
 
-  -- {{{ Xcodebuild
+-- }}}
+
+-- {{{ Xcodebuild
+
   {
     "wojciech-kulik/xcodebuild.nvim",
     ft = "swift",
@@ -435,9 +460,11 @@ require('lazy').setup({
       require("xcodebuild").setup({})
     end,
   },
-  -- }}}
 
-  -- {{{ Disable RTP Plugins
+-- }}}
+
+-- {{{ Disable RTP Plugins
+
 }, {
   performance = {
     rtp = {
@@ -472,13 +499,15 @@ require('lazy').setup({
   },
   checker = { enabled = false },
 })
--- }}}
 
 -- }}}
 
--- {{{ Custom Functions
+-- }}}
+
+-- {{{ Custom functions
 
 -- {{{ Completion
+
 api.nvim_create_autocmd('LspAttach', {
   group = api.nvim_create_augroup('my.lsp', {}),
   callback = function(args)
@@ -494,9 +523,11 @@ api.nvim_create_autocmd('LspAttach', {
     api.nvim_buf_set_option(args.buf, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
   end,
 })
+
 -- }}}
 
 -- {{{ Better terminal buffers
+
 api.nvim_create_user_command('RmTerms',
   function()
     for _, buf in ipairs(api.nvim_list_bufs()) do
@@ -505,17 +536,21 @@ api.nvim_create_user_command('RmTerms',
       end
     end
   end, {})
+
 -- }}}
 
 -- {{{ Resize vim automatically
+
 api.nvim_create_autocmd('VimResized', {
   callback = function()
     cmd('wincmd =')
   end,
 })
+
 -- }}}
 
 -- {{{ Oil
+
 local function open_oil_vsplit(path)
   cmd('vsplit')
   if path then
@@ -541,6 +576,7 @@ local function open_oil_downloads_split()
   local downloads = home .. '/Downloads'
   open_oil_split(downloads)
 end
+
 -- }}}
 
 -- }}}
@@ -580,4 +616,4 @@ map({ 'n', 'v' }, '<leader>p', '"+p', silent_opts)
 map({ 'n', 'v' }, '<leader>y', '"+y', silent_opts)
 map({ 't' }, '<Esc>', '<C-\\><C-n>', silent_opts)
 
---: }}}
+-- }}}

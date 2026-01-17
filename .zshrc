@@ -1,4 +1,7 @@
-# basics
+# vim:fileencoding=utf-8:foldmethod=marker
+
+# {{{ Basic settings
+
 export VISUAL=nvim
 export EDITOR=nvim
 setopt auto_cd
@@ -6,10 +9,18 @@ setopt SHARE_HISTORY
 setopt hist_ignore_dups
 setopt hist_expire_dups_first
 
+# }}}
+
+# {{{ Plugins 
+
 # z 
 source /opt/homebrew/etc/profile.d/z.sh
 autoload -U compinit; compinit
 zstyle ':completion:*' menu select
+
+# }}}
+
+# {{{ Path
 
 typeset -U path PATH
 path=(
@@ -32,9 +43,23 @@ path=(
 )
 export PATH
 
+# }}}
+
+# {{{ Dotfiles config
+
 alias config="/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME"
 
-source /opt/homebrew/share/powerlevel10k/powerlevel10k.zsh-theme
+# }}}
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+# {{{ Secrets
+
+source .env.zsh
+
+# }}}
+
+# {{{ Theme
+
+source /opt/homebrew/share/powerlevel10k/powerlevel10k.zsh-theme
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# }}}

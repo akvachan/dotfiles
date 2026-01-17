@@ -16,10 +16,7 @@ defaults write com.apple.AppleMultitouchTrackpad TrackpadRightClick -bool true
 defaults write com.apple.AppleMultitouchTrackpad TrackpadCornerSecondaryClick -int 2
 defaults write com.apple.AppleMultitouchTrackpad TrackpadRightClick -bool true
 defaults write com.apple.sharingd AirDrop -int 0
-defaults write com.apple.mail NSUserKeyEquivalents -dict "Mailbox Search" "^f"
-defaults write com.apple.iphonesimulator NSUserKeyEquivalents -dict \
-    "Rotate Left" "^h" \
-    "Rotate Right" "^l"
+defaults write com.apple.iphonesimulator NSUserKeyEquivalents -dict "Rotate Left" "^h" "Rotate Right" "^l"
 defaults write com.apple.universalaccess closeViewScrollWheelToggle -bool true
 defaults write com.apple.universalaccess HIDScrollZoomModifierMask -int 0
 killall Dock

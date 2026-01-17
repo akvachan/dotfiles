@@ -1,3 +1,4 @@
+tap "homebrew-zathura/zathura"
 tap "nikitabobko/tap"
 # Linux/OSX/FreeBSD resource monitor
 brew "bpytop"
@@ -19,6 +20,8 @@ brew "git"
 brew "gnu-tar"
 # Open source programming language to build simple/reliable/efficient software
 brew "go"
+# Version Control Visualization Tool
+brew "gource"
 # Kubernetes package manager
 brew "helm"
 # Tools and libraries to manipulate images in many formats
@@ -35,6 +38,8 @@ brew "llama.cpp"
 brew "lua-language-server"
 # Package manager for the Lua programming language
 brew "luarocks"
+# Lightweight PDF and XPS viewer
+brew "mupdf"
 # Ambitious Vim-fork focused on extensibility and agility
 brew "neovim"
 # Open-source, cross-platform JavaScript runtime environment
@@ -79,14 +84,12 @@ brew "xcp"
 brew "z"
 # Programming language designed for robustness, optimality, and clarity
 brew "zig"
-# Real-time type-ahead completion for Zsh
-brew "zsh-autocomplete"
-# Fish-like fast/unobtrusive autosuggestions for zsh
-brew "zsh-autosuggestions"
-# Fish shell like syntax highlighting for zsh
-brew "zsh-syntax-highlighting"
+# MuPDF backend plugin for zathura
+brew "homebrew-zathura/zathura/zathura-pdf-mupdf"
 # AeroSpace is an i3-like tiling window manager for macOS
 cask "aerospace"
+# Tools for building Android applications
+cask "android-studio"
 # Display management tool
 cask "betterdisplay"
 # Web browser focusing on privacy
@@ -97,6 +100,8 @@ cask "codex"
 cask "discord"
 # App to build and share containerised applications and microservices
 cask "docker-desktop"
+# Screen annotation tool
+cask "drawpen"
 cask "font-hack-nerd-font"
 # Client for the Google Drive storage service
 cask "google-drive"
