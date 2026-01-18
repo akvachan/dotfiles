@@ -13,10 +13,10 @@ setopt hist_expire_dups_first
 
 # {{{ Plugins 
 
-# z 
-source /opt/homebrew/etc/profile.d/z.sh
-autoload -U compinit; compinit
-zstyle ':completion:*' menu select
+# zoxide
+autoload -U compinit
+compinit
+eval "$(zoxide init zsh --cmd cd)"
 
 # }}}
 
