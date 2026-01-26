@@ -145,28 +145,16 @@ on-focus-changed = ['move-mouse window-lazy-center']
 # {{{ Automatic window routing 
 
 [[on-window-detected]]
-    if.app-id = 'com.apple.mail'
+    if.app-id = 'com.apple.Maps'
     run = 'move-node-to-workspace 1'
 
 [[on-window-detected]]
-    if.app-id = 'com.apple.iCal'
-    run = 'move-node-to-workspace 1'
-
-[[on-window-detected]]
-    if.app-id = 'ru.keepcoder.Telegram'
+    if.app-id = 'com.valvesoftware.steam'
     run = 'move-node-to-workspace 2'
 
 [[on-window-detected]]
-    if.app-id = 'com.microsoft.teams2'
+    if.app-id = 'com.roblox.RobloxPlayer'
     run = 'move-node-to-workspace 2'
-
-[[on-window-detected]]
-    if.app-id = 'com.hnc.Discord'
-    run = 'move-node-to-workspace 2'
-
-[[on-window-detected]]
-    if.app-id = 'com.apple.FaceTime'
-    run = ['layout floating', 'move-node-to-workspace 2']
 
 [[on-window-detected]]
     if.app-id = 'net.kovidgoyal.kitty'
@@ -186,19 +174,31 @@ on-focus-changed = ['move-mouse window-lazy-center']
 
 [[on-window-detected]]
     if.app-id = 'com.google.android.studio'
+    run = 'move-node-to-workspace 6'
+
+[[on-window-detected]]
+    if.app-id = 'com.apple.mail'
     run = 'move-node-to-workspace 7'
 
 [[on-window-detected]]
-    if.app-id = 'com.apple.Maps'
+    if.app-id = 'com.apple.iCal'
+    run = 'move-node-to-workspace 7'
+
+[[on-window-detected]]
+    if.app-id = 'ru.keepcoder.Telegram'
     run = 'move-node-to-workspace 8'
 
 [[on-window-detected]]
-    if.app-id = 'com.valvesoftware.steam'
-    run = 'move-node-to-workspace 9'
+    if.app-id = 'com.microsoft.teams2'
+    run = 'move-node-to-workspace 8'
 
 [[on-window-detected]]
-    if.app-id = 'com.roblox.RobloxPlayer'
-    run = 'move-node-to-workspace 9'
+    if.app-id = 'com.hnc.Discord'
+    run = 'move-node-to-workspace 8'
+
+[[on-window-detected]]
+    if.app-id = 'com.apple.FaceTime'
+    run = ['layout floating', 'move-node-to-workspace 8']
 
 [[on-window-detected]]
     if.app-id = 'org.videolan.vlc'

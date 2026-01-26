@@ -240,9 +240,9 @@ opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
 
--- }}}
+  -- }}}
 
--- {{{ Autopair
+  -- {{{ Autopair
 
   {
     'windwp/nvim-autopairs',
@@ -250,9 +250,9 @@ require('lazy').setup({
     config = true
   },
 
--- }}}
+  -- }}}
 
--- {{{ Treesitter
+  -- {{{ Treesitter
 
   {
     "nvim-treesitter/nvim-treesitter",
@@ -348,9 +348,9 @@ require('lazy').setup({
     end,
   },
 
--- }}}
+  -- }}}
 
--- {{{ File explorer
+  -- {{{ File explorer
 
   {
     'stevearc/oil.nvim',
@@ -392,9 +392,9 @@ require('lazy').setup({
     end
   },
 
--- }}}
+  -- }}}
 
--- {{{ Fuzzy finder
+  -- {{{ Fuzzy finder
 
   {
     'ibhagwan/fzf-lua',
@@ -433,9 +433,9 @@ require('lazy').setup({
     end,
   },
 
--- }}}
+  -- }}}
 
--- {{{ Surround editing
+  -- {{{ Surround editing
 
   {
     'kylechui/nvim-surround',
@@ -445,9 +445,9 @@ require('lazy').setup({
     end
   },
 
--- }}}
+  -- }}}
 
--- {{{ Xcodebuild
+  -- {{{ Xcodebuild
 
   {
     "wojciech-kulik/xcodebuild.nvim",
@@ -461,9 +461,9 @@ require('lazy').setup({
     end,
   },
 
--- }}}
+  -- }}}
 
--- {{{ Disable RTP Plugins
+  -- {{{ Disable RTP Plugins
 
 }, {
   performance = {
