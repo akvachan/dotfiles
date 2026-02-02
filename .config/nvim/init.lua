@@ -23,7 +23,7 @@ opt.number                      = true
 opt.relativenumber              = true
 opt.shiftwidth                  = 2
 opt.signcolumn                  = 'yes'
-opt.scrolloff                   = 10
+opt.scrolloff                   = 20
 opt.confirm                     = true
 opt.smartcase                   = true
 opt.smartindent                 = true
@@ -239,6 +239,14 @@ end
 opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
+
+  -- }}}
+
+  -- {{{ Copilot
+
+  {
+    'github/copilot.vim',
+  },
 
   -- }}}
 

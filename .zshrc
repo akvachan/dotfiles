@@ -59,7 +59,7 @@ source $HOME/.env.zsh
 
 # {{{ Prompt
 
-PROMPT='%F{blue}%d%f
+PROMPT='%F{cyan}%d%f
 %# '
 
 # }}}

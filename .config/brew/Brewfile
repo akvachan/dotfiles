@@ -24,7 +24,7 @@ brew "go"
 brew "gource"
 # Kubernetes package manager
 brew "helm"
-# Tools and libraries to manipulate images in many formats
+# Tools and libraries to manipulate images in select formats
 brew "imagemagick"
 # Lightweight and flexible command-line JSON processor
 brew "jq"
@@ -52,8 +52,6 @@ brew "pipx"
 brew "pkgconf"
 # Object-relational database system
 brew "postgresql@18", restart_service: :changed
-# Theme for zsh
-brew "powerlevel10k"
 # Search tool like grep and The Silver Searcher
 brew "ripgrep"
 # Powerful, clean, object-oriented scripting language
@@ -87,15 +85,13 @@ brew "zig"
 # MuPDF backend plugin for zathura
 brew "homebrew-zathura/zathura/zathura-pdf-mupdf"
 # AeroSpace is an i3-like tiling window manager for macOS
-cask "aerospace"
+cask "nikitabobko/tap/aerospace"
 # Tools for building Android applications
 cask "android-studio"
 # Display management tool
 cask "betterdisplay"
 # Web browser focusing on privacy
 cask "brave-browser"
-# OpenAI's coding agent that runs in your terminal
-cask "codex"
 # Voice and text chat software
 cask "discord"
 # App to build and share containerised applications and microservices
@@ -127,11 +123,10 @@ cask "telegram"
 cask "tor-browser"
 # Open-source BitTorrent client
 cask "transmission"
-# Virtual machines UI using QEMU
-cask "utm"
 # Multimedia player
 cask "vlc"
 go "github.com/go-delve/delve/cmd/dlv"
 go "golang.org/x/tools/gopls"
+go "github.com/cortesi/modd/cmd/modd"
 go "honnef.co/go/tools/cmd/staticcheck"
 cargo "tdf-viewer"
