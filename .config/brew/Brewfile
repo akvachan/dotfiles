@@ -82,6 +82,8 @@ brew "xcp"
 brew "z"
 # Programming language designed for robustness, optimality, and clarity
 brew "zig"
+# Shell extension to navigate your filesystem faster
+brew "zoxide"
 # MuPDF backend plugin for zathura
 brew "homebrew-zathura/zathura/zathura-pdf-mupdf"
 # AeroSpace is an i3-like tiling window manager for macOS
