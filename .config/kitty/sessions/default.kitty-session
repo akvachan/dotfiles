@@ -1,4 +1,3 @@
-
 new_tab
 layout splits
 enabled_layouts splits
@@ -7,5 +6,3 @@ cd ../../../
 
 launch 'kitty-unserialize-data={"id": 102}' --title=home
 focus
-
-focus_tab 9

@@ -3,8 +3,8 @@
 -- {{{ Basic settings
 
 local g, opt, cmd, fn, api, lsp = vim.g, vim.opt, vim.cmd, vim.fn, vim.api, vim.lsp
-local ts_filetypes              = { 'lua', 'python', 'javascript', 'typescript', 'rust', 'c', 'swift', 'markdown', 'go' }
-opt.autoindent                  = true
+local ts_filetypes              = { 'lua', 'python', 'javascript', 'typescript', 'rust', 'c', 'swift', 'markdown', 'go',
+  'yaml', 'dockerfile' }
 opt.completeopt                 = { "menuone", "noselect", "noinsert" }
 opt.pumheight                   = 10
 opt.background                  = 'dark'
@@ -14,11 +14,7 @@ opt.expandtab                   = true
 opt.foldenable                  = true
 opt.grepformat                  = '%f:%l:%c:%m,%f:%l:%m'
 opt.grepprg                     = 'rg --vimgrep --no-heading --smart-case'
-opt.hlsearch                    = true
 opt.ignorecase                  = true
-opt.incsearch                   = true
-opt.lazyredraw                  = true
-opt.mouse                       = 'a'
 opt.number                      = true
 opt.relativenumber              = true
 opt.shiftwidth                  = 2
@@ -31,7 +27,6 @@ opt.splitbelow                  = true
 opt.splitright                  = true
 opt.swapfile                    = false
 opt.tabstop                     = 2
-opt.termguicolors               = true
 opt.updatetime                  = 100
 opt.wrap                        = false
 opt.writebackup                 = false
@@ -47,19 +42,21 @@ g.matchparen_timeout            = 20
 
 -- {{{ Lua
 
+local no_snippets               = {
+  textDocument = {
+    completion = {
+      completionItem = {
+        snippetSupport = false,
+      }
+    }
+  }
+}
+
 lsp.config['lua_ls']            = {
   cmd = { 'lua-language-server' },
   filetypes = { 'lua' },
   root_markers = { { '.luarc.json', '.luarc.jsonc' }, '.git' },
-  capabilities = {
-    textDocument = {
-      completion = {
-        completionItem = {
-          snippetSupport = false,
-        }
-      }
-    }
-  },
+  capabilities = no_snippets,
   settings = {
     Lua = {
       runtime = {
@@ -84,15 +81,7 @@ lsp.config['gopls'] = {
   cmd = { 'gopls' },
   filetypes = { 'go', 'gomod', 'gowork', 'gotmpl' },
   root_markers = { 'go.work', 'go.mod', '.git' },
-  capabilities = {
-    textDocument = {
-      completion = {
-        completionItem = {
-          snippetSupport = false,
-        }
-      }
-    }
-  },
+  capabilities = no_snippets,
   settings = {
     gopls = {
       gofumpt = true,
@@ -113,15 +102,7 @@ lsp.config['ty'] = {
   cmd = { 'ty', 'server' },
   filetypes = { 'python', 'pyproject.toml' },
   root_markers = { '.git', 'pyproject.toml', },
-  capabilities = {
-    textDocument = {
-      completion = {
-        completionItem = {
-          snippetSupport = false,
-        }
-      }
-    }
-  }
+  capabilities = no_snippets,
 }
 lsp.enable('ty')
 
@@ -141,15 +122,7 @@ lsp.config['rust_analyzer'] = {
   cmd = { 'rust-analyzer' },
   filetypes = { 'rust' },
   root_markers = { 'Cargo.toml', '.git' },
-  capabilities = {
-    textDocument = {
-      completion = {
-        completionItem = {
-          snippetSupport = false,
-        }
-      }
-    }
-  },
+  capabilities = no_snippets,
   settings = {
     ['rust-analyzer'] = {
       cargo = {
@@ -232,7 +205,7 @@ lsp.enable('clangd')
 -- {{{ Lazy Setup
 
 local lazypath = fn.stdpath('data') .. '/lazy/lazy.nvim'
-if not vim.loop.fs_stat(lazypath) then
+if not vim.uv.fs_stat(lazypath) then
   fn.system({ 'git', 'clone', '--filter=blob:none', 'https://github.com/folke/lazy.nvim', '--branch=stable',
     lazypath })
 end
@@ -246,6 +219,7 @@ require('lazy').setup({
 
   {
     'github/copilot.vim',
+    event = 'InsertEnter',
   },
 
   -- }}}
@@ -255,7 +229,7 @@ require('lazy').setup({
   {
     'windwp/nvim-autopairs',
     event = 'InsertEnter',
-    config = true
+    config = true,
   },
 
   -- }}}
@@ -333,11 +307,12 @@ require('lazy').setup({
           select.select_textobject("@" .. obj .. ".inner", "textobjects")
         end)
         -- Goto
+        local goto_variant = (obj == "parameter") and ".inner" or ".outer"
         vim.keymap.set({ "n", "x", "o" }, "]" .. key, function()
-          move.goto_next_start("@" .. obj .. ".outer", "textobjects")
+          move.goto_next_start("@" .. obj .. goto_variant, "textobjects")
         end)
         vim.keymap.set({ "n", "x", "o" }, "[" .. key, function()
-          move.goto_previous_start("@" .. obj .. ".outer", "textobjects")
+          move.goto_previous_start("@" .. obj .. goto_variant, "textobjects")
         end)
         vim.keymap.set({ "n", "x", "o" }, "]" .. key:upper(), function()
           move.goto_next_end("@" .. obj .. ".outer", "textobjects")
@@ -351,7 +326,7 @@ require('lazy').setup({
         swap.swap_next("@parameter.inner")
       end)
       vim.keymap.set("n", "<leader>A", function()
-        swap.swap_previous("@parameter.outer")
+        swap.swap_previous("@parameter.inner")
       end)
     end,
   },
@@ -416,7 +391,6 @@ require('lazy').setup({
     },
     config = function()
       require('fzf-lua').setup({
-        'border-fused',
         files = {
           cmd = 'fd --type f --hidden --follow --exclude .git',
           actions = {
@@ -448,9 +422,7 @@ require('lazy').setup({
   {
     'kylechui/nvim-surround',
     event = 'VeryLazy',
-    config = function()
-      require('nvim-surround').setup()
-    end
+    config = true,
   },
 
   -- }}}
@@ -464,9 +436,7 @@ require('lazy').setup({
       "ibhagwan/fzf-lua",
       "MunifTanjim/nui.nvim",
     },
-    config = function()
-      require("xcodebuild").setup({})
-    end,
+    config = true,
   },
 
   -- }}}
@@ -522,13 +492,21 @@ api.nvim_create_autocmd('LspAttach', {
     local client = assert(lsp.get_client_by_id(args.data.client_id))
 
     if client:supports_method('textDocument/completion') then
-      -- local chars = {}; for i = 32, 126 do table.insert(chars, string.char(i)) end
       lsp.completion.enable(true, client.id, args.buf, {
-        autotrigger = false,
+        autotrigger = true,
       })
     end
 
-    api.nvim_buf_set_option(args.buf, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+    if not client:supports_method('textDocument/willSaveWaitUntil')
+        and client:supports_method('textDocument/formatting') then
+      api.nvim_create_autocmd('BufWritePre', {
+        group = api.nvim_create_augroup('my.lsp', { clear = false }),
+        buffer = args.buf,
+        callback = function()
+          lsp.buf.format({ bufnr = args.buf, id = client.id, timeout_ms = 1000 })
+        end,
+      })
+    end
   end,
 })
 
@@ -539,7 +517,7 @@ api.nvim_create_autocmd('LspAttach', {
 api.nvim_create_user_command('RmTerms',
   function()
     for _, buf in ipairs(api.nvim_list_bufs()) do
-      if api.nvim_buf_get_option(buf, 'buftype') == 'terminal' then
+      if vim.bo[buf].buftype == 'terminal' then
         api.nvim_buf_delete(buf, { force = true })
       end
     end
@@ -597,28 +575,25 @@ local map = vim.keymap.set
 local opts = { noremap = true, silent = false }
 local silent_opts = { noremap = true, silent = true }
 
-map({ 'n' }, '-', ':Oil<CR>', silent_opts)
+map({ 'n' }, '-', '<cmd>Oil<CR>', silent_opts)
 map({ 'n' }, '<leader>ca', buf.code_action, silent_opts)
 map({ 'n' }, '<leader>cd', diag.open_float, silent_opts)
 map({ 'n' }, '<leader>fo', buf.format, silent_opts)
 map({ 'n' }, '<leader>gd', buf.definition, silent_opts)
 map({ 'n' }, '<leader>gf', diag.setqflist, silent_opts)
 map({ 'n' }, '<leader>gg', ':<C-u>!git ', opts)
-map({ 'n' }, '<leader>gh', buf.hover, silent_opts)
 map({ 'n' }, '<leader>gl', buf.declaration, silent_opts)
-map({ 'n' }, '<leader>gn', diag.goto_next, silent_opts)
 map({ 'n' }, '<leader>go', buf.document_symbol, silent_opts)
-map({ 'n' }, '<leader>gp', diag.goto_prev, silent_opts)
 map({ 'n' }, '<leader>gr', buf.references, silent_opts)
-map({ 'n' }, '<leader>la', ':Lazy<CR>', silent_opts)
+map({ 'n' }, '<leader>la', '<cmd>Lazy<CR>', silent_opts)
 map({ 'n' }, '<leader>od', open_oil_downloads_split, silent_opts)
 map({ 'n' }, '<leader>oh', open_oil_split, silent_opts)
 map({ 'n' }, '<leader>ov', open_oil_vsplit, silent_opts)
-map({ 'n' }, '<leader>q', ':q!<CR>', silent_opts)
-map({ 'n' }, '<leader>rm', ':RmTerms<CR>', silent_opts)
+map({ 'n' }, '<leader>q', '<cmd>q!<CR>', silent_opts)
+map({ 'n' }, '<leader>rm', '<cmd>RmTerms<CR>', silent_opts)
 map({ 'n' }, '<leader>rn', buf.rename, silent_opts)
 map({ 'n' }, '<leader>t', ':<C-u>te ', opts)
-map({ 'n' }, '<leader>w', ':w!<CR>', silent_opts)
+map({ 'n' }, '<leader>w', '<cmd>w<CR>', silent_opts)
 map({ 'n' }, '<leader>xc', ':<C-u>Xcodebuild', opts)
 map({ 'n', 'v' }, '<leader>p', '"+p', silent_opts)
 map({ 'n', 'v' }, '<leader>y', '"+y', silent_opts)

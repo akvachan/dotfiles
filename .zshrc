@@ -51,6 +51,12 @@ alias config="/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME"
 
 # }}}
 
+# {{{
+
+alias ossl="/opt/homebrew/bin/openssl"
+
+# }}}
+
 # {{{ Secrets
 
 source $HOME/.env.zsh
