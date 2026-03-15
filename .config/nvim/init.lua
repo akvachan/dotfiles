@@ -578,7 +578,6 @@ local silent_opts = { noremap = true, silent = true }
 map({ 'n' }, '-', '<cmd>Oil<CR>', silent_opts)
 map({ 'n' }, '<leader>ca', buf.code_action, silent_opts)
 map({ 'n' }, '<leader>cd', diag.open_float, silent_opts)
-map({ 'n' }, '<leader>fo', buf.format, silent_opts)
 map({ 'n' }, '<leader>gd', buf.definition, silent_opts)
 map({ 'n' }, '<leader>gf', diag.setqflist, silent_opts)
 map({ 'n' }, '<leader>gg', ':<C-u>!git ', opts)
