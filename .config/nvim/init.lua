@@ -215,15 +215,6 @@ require('lazy').setup({
 
   -- }}}
 
-  -- {{{ Copilot
-
-  {
-    'github/copilot.vim',
-    event = 'InsertEnter',
-  },
-
-  -- }}}
-
   -- {{{ Autopair
 
   {
