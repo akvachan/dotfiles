@@ -138,37 +138,6 @@ lsp.enable('rust_analyzer')
 
 -- }}}
 
--- {{{ Swift
-
-lsp.config['sourcekit'] = {
-  cmd = { 'sourcekit-lsp' },
-  filetypes = { 'swift' },
-  root_markers = {
-    'Package.swift',
-    'buildServer.json',
-    '*.xcworkspace',
-    '*.xcodeproj',
-    '.git',
-  },
-  capabilities = {
-    textDocument = {
-      completion = {
-        completionItem = {
-          snippetSupport = false,
-        }
-      }
-    },
-    workspace = {
-      didChangeWatchedFiles = {
-        dynamicRegistration = true,
-      },
-    },
-  }
-}
-lsp.enable('sourcekit')
-
--- }}}
-
 -- {{{ C / C++
 
 lsp.config['clangd'] = {
@@ -418,20 +387,6 @@ require('lazy').setup({
 
   -- }}}
 
-  -- {{{ Xcodebuild
-
-  {
-    "wojciech-kulik/xcodebuild.nvim",
-    ft = "swift",
-    dependencies = {
-      "ibhagwan/fzf-lua",
-      "MunifTanjim/nui.nvim",
-    },
-    config = true,
-  },
-
-  -- }}}
-
   -- {{{ Disable RTP Plugins
 
 }, {
@@ -468,6 +423,7 @@ require('lazy').setup({
   },
   checker = { enabled = false },
 })
+
 
 -- }}}
 
@@ -584,7 +540,6 @@ map({ 'n' }, '<leader>rm', '<cmd>RmTerms<CR>', silent_opts)
 map({ 'n' }, '<leader>rn', buf.rename, silent_opts)
 map({ 'n' }, '<leader>t', ':<C-u>te ', opts)
 map({ 'n' }, '<leader>w', '<cmd>w<CR>', silent_opts)
-map({ 'n' }, '<leader>xc', ':<C-u>Xcodebuild', opts)
 map({ 'n', 'v' }, '<leader>p', '"+p', silent_opts)
 map({ 'n', 'v' }, '<leader>y', '"+y', silent_opts)
 map({ 't' }, '<Esc>', '<C-\\><C-n>', silent_opts)
