@@ -39,6 +39,8 @@ brew "lua-language-server"
 brew "luarocks"
 # Lightweight PDF and XPS viewer
 brew "mupdf"
+# Incremental parsing library
+brew "tree-sitter"
 # Ambitious Vim-fork focused on extensibility and agility
 brew "neovim"
 # Open-source, cross-platform JavaScript runtime environment
@@ -49,10 +51,14 @@ brew "ollama"
 brew "pgvector"
 # Execute binaries from Python packages in isolated environments
 brew "pipx"
+# Package compiler and linker metadata toolkit
+brew "pkgconf"
 # Object-relational database system
 brew "postgresql@18", restart_service: :changed
 # Persistent key-value database, with built-in net interface
 brew "redis", restart_service: :changed
+# Search tool like grep and The Silver Searcher
+brew "ripgrep"
 # Powerful, clean, object-oriented scripting language
 brew "ruby"
 # Extremely fast Python linter, written in Rust

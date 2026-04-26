@@ -4,6 +4,8 @@
 
 vim.loader.enable()
 
+vim.g.loaded_perl_provider      = 0
+vim.g.loaded_ruby_provider      = 0
 vim.g.mapleader                 = ' '
 vim.g.maplocalleader            = ' '
 vim.g.matchparen_insert_timeout = 20
@@ -11,8 +13,8 @@ vim.g.matchparen_timeout        = 20
 vim.opt.background              = 'dark'
 vim.opt.backup                  = false
 vim.opt.clipboard               = 'unnamedplus'
-vim.opt.completeopt             = { "menuone", "noselect", "noinsert" }
 vim.opt.colorcolumn             = '80'
+vim.opt.completeopt             = { "menuone", "noselect", "noinsert" }
 vim.opt.confirm                 = true
 vim.opt.equalalways             = true
 vim.opt.expandtab               = true
@@ -394,7 +396,7 @@ require('nvim-surround').setup()
 
 -- {{{ Completion
 
-vim.api.nvim_create_autocmd('vim.lspAttach', {
+vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('my.vim.lsp', {}),
   callback = function(args)
     local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
