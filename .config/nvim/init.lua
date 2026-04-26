@@ -38,6 +38,7 @@ vim.opt.updatetime              = 100
 vim.opt.winborder               = "rounded"
 vim.opt.wrap                    = false
 vim.opt.writebackup             = false
+vim.api.nvim_set_hl(0, "ColorColumn", { bg = "#1a1a1a", })
 
 -- }}}
 
@@ -45,7 +46,7 @@ vim.opt.writebackup             = false
 
 -- {{{ Lua
 
-local no_snippets               = {
+local no_snippets        = {
   textDocument = {
     completion = {
       completionItem = {
@@ -55,7 +56,7 @@ local no_snippets               = {
   }
 }
 
-vim.lsp.config['lua_ls']        = {
+vim.lsp.config['lua_ls'] = {
   cmd = { 'lua-language-server' },
   filetypes = { 'lua' },
   root_markers = { { '.luarc.json', '.luarc.jsonc' }, '.git' },
@@ -368,11 +369,6 @@ require('fzf-lua').setup({
       end,
     },
   },
-  grep = {
-    cmd = [[
-    rg --column --color=never --no-heading --line-number --hidden --smart-case
-    ]],
-  },
   keymap = {
     fzf = {
       -- Send selection to quickfix list
@@ -503,8 +499,6 @@ vim.keymap.set('n', '<leader>rm', '<cmd>RmTerms<CR>', silent_opts)
 vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, silent_opts)
 vim.keymap.set('n', '<leader>t', ':<C-u>te ', opts)
 vim.keymap.set('n', '<leader>w', '<cmd>w<CR>', silent_opts)
-vim.keymap.set({ 'n', 'v' }, '<leader>p', '"+p', silent_opts)
-vim.keymap.set({ 'n', 'v' }, '<leader>y', '"+y', silent_opts)
 vim.keymap.set({ 't' }, '<Esc>', '<C-\\><C-n>', silent_opts)
 
 
