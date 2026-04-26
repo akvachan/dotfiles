@@ -28,6 +28,9 @@ path=(
   # PGSQL
   "/opt/homebrew/opt/postgresql@18/bin"
 
+  # Qdrant
+  "$HOME/Development/Qdrant"
+
   $path
 )
 export PATH
