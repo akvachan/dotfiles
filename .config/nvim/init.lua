@@ -22,6 +22,8 @@ vim.opt.foldenable              = true
 vim.opt.grepformat              = '%f:%l:%c:%m,%f:%l:%m'
 vim.opt.grepprg                 = 'rg --vimgrep --no-heading --smart-case'
 vim.opt.ignorecase              = true
+vim.opt.infercase               = true
+vim.opt.smartcase               = true
 vim.opt.number                  = true
 vim.opt.pumheight               = 10
 vim.opt.relativenumber          = true
@@ -116,28 +118,6 @@ vim.lsp.config('ruff', {
   root_markers = { '.git', 'pyproject.toml', },
 })
 vim.lsp.enable('ruff')
-
--- }}}
-
--- {{{ Rust
-
-vim.lsp.config['rust_analyzer'] = {
-  cmd = { 'rust-analyzer' },
-  filetypes = { 'rust' },
-  root_markers = { 'Cargo.toml', '.git' },
-  capabilities = no_snippets,
-  settings = {
-    ['rust-analyzer'] = {
-      cargo = {
-        allFeatures = true,
-      },
-      checkOnSave = {
-        command = 'clippy',
-      },
-    },
-  },
-}
-vim.lsp.enable('rust_analyzer')
 
 -- }}}
 
