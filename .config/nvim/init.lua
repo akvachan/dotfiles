@@ -4,6 +4,7 @@
 
 vim.loader.enable()
 
+vim.api.nvim_set_hl(0, "ColorColumn", { bg = "#1a1a1a", })
 vim.g.loaded_perl_provider      = 0
 vim.g.loaded_ruby_provider      = 0
 vim.g.mapleader                 = ' '
@@ -22,8 +23,6 @@ vim.opt.foldenable              = true
 vim.opt.grepformat              = '%f:%l:%c:%m,%f:%l:%m'
 vim.opt.grepprg                 = 'rg --vimgrep --no-heading --smart-case'
 vim.opt.ignorecase              = true
-vim.opt.infercase               = true
-vim.opt.smartcase               = true
 vim.opt.number                  = true
 vim.opt.pumheight               = 10
 vim.opt.relativenumber          = true
@@ -36,11 +35,9 @@ vim.opt.splitbelow              = true
 vim.opt.splitright              = true
 vim.opt.swapfile                = false
 vim.opt.tabstop                 = 2
-vim.opt.updatetime              = 100
 vim.opt.winborder               = "rounded"
 vim.opt.wrap                    = false
 vim.opt.writebackup             = false
-vim.api.nvim_set_hl(0, "ColorColumn", { bg = "#1a1a1a", })
 
 -- }}}
 
@@ -48,7 +45,7 @@ vim.api.nvim_set_hl(0, "ColorColumn", { bg = "#1a1a1a", })
 
 -- {{{ Lua
 
-local no_snippets        = {
+local no_snippets               = {
   textDocument = {
     completion = {
       completionItem = {
@@ -58,7 +55,7 @@ local no_snippets        = {
   }
 }
 
-vim.lsp.config['lua_ls'] = {
+vim.lsp.config['lua_ls']        = {
   cmd = { 'lua-language-server' },
   filetypes = { 'lua' },
   root_markers = { { '.luarc.json', '.luarc.jsonc' }, '.git' },
@@ -85,7 +82,7 @@ vim.lsp.enable('lua_ls')
 
 vim.lsp.config['gopls'] = {
   cmd = { 'gopls' },
-  filetypes = { 'go', 'gomod', 'gowork', 'gotmpl' },
+  filetypes = { 'go', 'gomod', 'gowork' },
   root_markers = { 'go.work', 'go.mod', '.git' },
   capabilities = no_snippets,
   settings = {
@@ -102,11 +99,11 @@ vim.lsp.enable('gopls')
 
 -- }}}
 
--- {{{ Python (ty)
+-- {{{ Python
 
 vim.lsp.config['ty'] = {
   cmd = { 'ty', 'server' },
-  filetypes = { 'python', 'pyproject.toml' },
+  filetypes = { 'python' },
   root_markers = { '.git', 'pyproject.toml', },
   capabilities = no_snippets,
 }
@@ -114,7 +111,7 @@ vim.lsp.enable('ty')
 
 vim.lsp.config('ruff', {
   cmd = { 'ruff', 'server' },
-  filetypes = { 'python', 'pyproject.toml' },
+  filetypes = { 'python' },
   root_markers = { '.git', 'pyproject.toml', },
 })
 vim.lsp.enable('ruff')
@@ -128,10 +125,8 @@ vim.lsp.config['tsserver'] = {
   filetypes = {
     'javascript',
     'javascriptreact',
-    'javascript.jsx',
     'typescript',
     'typescriptreact',
-    'typescript.tsx',
   },
   root_markers = {
     'vim.package.json',
@@ -215,10 +210,12 @@ vim.pack.add({
     version = 'main',
   },
 })
+
 require('nvim-treesitter').setup {
   install_dir = vim.fn.stdpath('data') .. '/site',
 }
 require('nvim-treesitter').install(ts_filetypes)
+
 vim.api.nvim_create_autocmd('FileType', {
   pattern = ts_filetypes,
   callback = function()
@@ -227,6 +224,7 @@ vim.api.nvim_create_autocmd('FileType', {
   end,
 })
 vim.g.no_plugin_maps = true
+
 local ts = require("nvim-treesitter-textobjects")
 ts.setup {
   select = {
@@ -251,6 +249,7 @@ ts.setup {
   },
   move = { set_jumps = true },
 }
+
 local select  = require("nvim-treesitter-textobjects.select")
 local move    = require("nvim-treesitter-textobjects.move")
 local swap    = require("nvim-treesitter-textobjects.swap")
@@ -263,6 +262,7 @@ local objects = {
   l = "loop",
   ["/"] = "comment",
 }
+
 for key, obj in pairs(objects) do
   -- Selection
   vim.keymap.set({ "x", "o" }, "a" .. key, function()
@@ -271,6 +271,7 @@ for key, obj in pairs(objects) do
   vim.keymap.set({ "x", "o" }, "i" .. key, function()
     select.select_textobject("@" .. obj .. ".inner", "textobjects")
   end)
+
   -- Goto
   local goto_variant = (obj == "parameter") and ".inner" or ".outer"
   vim.keymap.set({ "n", "x", "o" }, "]" .. key, function()
@@ -286,6 +287,7 @@ for key, obj in pairs(objects) do
     move.goto_previous_end("@" .. obj .. ".outer", "textobjects")
   end)
 end
+
 -- Swap
 vim.keymap.set("n", "<leader>a", function()
   swap.swap_next("@parameter.inner")
@@ -315,6 +317,7 @@ require('oil').setup({
         vim.fn.setreg('+', vim.fn.getreg(vim.v.register))
       end,
     },
+
     -- Copy relative path
     ['<leader>or'] = {
       callback = function()
@@ -327,6 +330,7 @@ require('oil').setup({
         vim.fn.setreg('+', relpath .. entry.name)
       end,
     },
+
     -- Discard all filesystem changes
     ['<leader>oc'] = require('oil').discard_all_changes,
   },
@@ -338,6 +342,9 @@ require('oil').setup({
 
 vim.pack.add({ 'https://github.com/ibhagwan/fzf-lua' })
 require('fzf-lua').setup({
+  grep = {
+    cmd = 'rg --vimgrep --no-heading --smart-case',
+  },
   files = {
     cmd = 'fd --type f --hidden --follow --exclude .git',
     actions = {
@@ -427,6 +434,7 @@ vim.api.nvim_create_autocmd('VimResized', {
 
 -- {{{ Oil
 
+-- Open Oil in a vertical split
 local function open_oil_vsplit(path)
   vim.cmd('vsplit')
   if path then
@@ -455,6 +463,17 @@ end
 
 -- }}}
 
+-- {{{ Fzf functions
+
+local function open_fzf_buffers() require('fzf-lua').buffers() end
+local function open_fzf_files() require('fzf-lua').files() end
+local function open_fzf_grep() require('fzf-lua').live_grep() end
+local function open_fzf_lines() require('fzf-lua').blines() end
+local function open_fzf_zoxide() require('fzf-lua').zoxide() end
+local function resume_fzf_window() require('fzf-lua').resume() end
+
+-- }}}
+
 -- }}}
 
 -- {{{ Keymaps
@@ -462,9 +481,15 @@ end
 local opts = { noremap = true, silent = false }
 local silent_opts = { noremap = true, silent = true }
 
-vim.keymap.set('n', '-', '<cmd>Oil<CR>', silent_opts)
+vim.keymap.set('n', '-', '<cmd>Oil<cr>', silent_opts)
 vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, silent_opts)
 vim.keymap.set('n', '<leader>cd', vim.diagnostic.open_float, silent_opts)
+vim.keymap.set('n', '<leader>fb', open_fzf_buffers, silent_opts)
+vim.keymap.set('n', '<leader>ff', open_fzf_files, silent_opts)
+vim.keymap.set('n', '<leader>fg', open_fzf_grep, silent_opts)
+vim.keymap.set('n', '<leader>fl', open_fzf_lines, silent_opts)
+vim.keymap.set('n', '<leader>fz', open_fzf_zoxide, silent_opts)
+vim.keymap.set('n', '<leader>fr', resume_fzf_window, silent_opts)
 vim.keymap.set('n', '<leader>gd', vim.lsp.buf.definition, silent_opts)
 vim.keymap.set('n', '<leader>gf', vim.diagnostic.setqflist, silent_opts)
 vim.keymap.set('n', '<leader>gg', ':<C-u>!git ', opts)
@@ -474,36 +499,11 @@ vim.keymap.set('n', '<leader>gr', vim.lsp.buf.references, silent_opts)
 vim.keymap.set('n', '<leader>od', open_oil_downloads_split, silent_opts)
 vim.keymap.set('n', '<leader>oh', open_oil_split, silent_opts)
 vim.keymap.set('n', '<leader>ov', open_oil_vsplit, silent_opts)
-vim.keymap.set('n', '<leader>q', '<cmd>q!<CR>', silent_opts)
-vim.keymap.set('n', '<leader>rm', '<cmd>RmTerms<CR>', silent_opts)
+vim.keymap.set('n', '<leader>q', '<cmd>q!<cr>', silent_opts)
+vim.keymap.set('n', '<leader>rm', '<cmd>RmTerms<cr>', silent_opts)
 vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, silent_opts)
 vim.keymap.set('n', '<leader>t', ':<C-u>te ', opts)
-vim.keymap.set('n', '<leader>w', '<cmd>w<CR>', silent_opts)
-vim.keymap.set({ 't' }, '<Esc>', '<C-\\><C-n>', silent_opts)
-
-
-vim.keymap.set('n', '<leader>ff', function()
-  require('fzf-lua').files()
-end, silent_opts)
-
-vim.keymap.set('n', '<leader>fg', function()
-  require('fzf-lua').live_grep()
-end, silent_opts)
-
-vim.keymap.set('n', '<leader>fb', function()
-  require('fzf-lua').buffers()
-end, silent_opts)
-
-vim.keymap.set('n', '<leader>fl', function()
-  require('fzf-lua').blines()
-end, silent_opts)
-
-vim.keymap.set('n', '<leader>fr', function()
-  require('fzf-lua').resume()
-end, silent_opts)
-
-vim.keymap.set('n', '<leader>sd', function()
-  require('fzf-lua').vim.lsp_document_symbols()
-end, silent_opts)
+vim.keymap.set('n', '<leader>w', '<cmd>w<cr>', silent_opts)
+vim.keymap.set({ 't' }, '<esc>', '<C-\\><C-n>', silent_opts)
 
 -- }}}
