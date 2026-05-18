@@ -10,7 +10,7 @@ _echo "Updating apt"
 sudo apt update -y
 
 _echo "Installing apt packages"
-sudo apt install -y git gcc g++ zsh zoxide fd-find bpytop clangd npm nodejs libclang-19-dev fastfetch
+sudo apt install -y git gcc g++ zsh zoxide fd-find bpytop clangd npm nodejs libclang-19-dev fastfetch fzf ripgrep xclip
 
 # files & directories
 _echo "Creating base directories"
@@ -54,6 +54,7 @@ _echo "Configuring Python toolchain"
 uv python pin --global 3.14.4
 uv tool list | grep -q "^ruff" || uv tool install ruff@latest
 uv tool list | grep -q "^ty"   || uv tool install ty@latest
+uv tool list | grep -q "^pynvim" || uv tool install pynvim@latest
 
 # Go
 GO_VERSION="1.26.3"
@@ -64,6 +65,7 @@ if [ ! -x "$(command -v go)" ] || ! go version | grep -q "$GO_VERSION"; then
   wget -c "https://go.dev/dl/$GO_TARBALL"
   sudo rm -rf /usr/local/go
   sudo tar -C /usr/local -xzf "$GO_TARBALL"
+  go install golang.org/x/tools/gopls@latest
 else
   _echo "Go already installed, skipping"
 fi
@@ -91,7 +93,7 @@ if [ ! -d "$LUA_DIR" ]; then
   _echo "Installing lua-language-server"
   LUA_TAR="lua-language-server.tar.gz"
   wget -O "$LUA_TAR" \
-    https://github.com/LuaLS/lua-language-server/releases/latest/download/lua-language-server-3.18.2-linux-arm64.tar.gz
+    https://github.com/LuaLS/lua-language-server/releases/latest/download/lua-language-server-3.18.2-linux-x64.tar.gz
 
   sudo mkdir -p "$LUA_DIR"
   sudo tar -C "$LUA_DIR" -xzf "$LUA_TAR"
