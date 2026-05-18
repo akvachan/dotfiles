@@ -2,54 +2,43 @@
 
 -- {{{ Basic settings
 
-vim.loader.enable()
-
+if vim.env.SSH_TTY then vim.g.clipboard = 'osc52' end
+vim.api.nvim_set_hl(0, "ColorColumn", { bg = "#1a1a1a", })
 vim.g.loaded_perl_provider      = 0
 vim.g.loaded_ruby_provider      = 0
 vim.g.mapleader                 = ' '
 vim.g.maplocalleader            = ' '
 vim.g.matchparen_insert_timeout = 20
 vim.g.matchparen_timeout        = 20
-vim.opt.autocomplete            = true
-vim.opt.background              = 'dark'
-vim.opt.backup                  = false
-vim.opt.clipboard               = 'unnamedplus'
-vim.opt.colorcolumn             = '80'
-vim.opt.completeopt             = { "menuone", "noselect", "noinsert" }
-vim.opt.confirm                 = true
-vim.opt.equalalways             = true
-vim.opt.expandtab               = true
-vim.opt.foldenable              = true
-vim.opt.grepformat              = '%f:%l:%c:%m,%f:%l:%m'
-vim.opt.grepprg                 = 'rg --vimgrep --no-heading --smart-case'
-vim.opt.ignorecase              = true
-vim.opt.number                  = true
-vim.opt.pumheight               = 10
-vim.opt.relativenumber          = true
-vim.opt.scrolloff               = 20
-vim.opt.shiftwidth              = 2
-vim.opt.signcolumn              = 'yes'
-vim.opt.smartcase               = true
-vim.opt.smartindent             = true
-vim.opt.splitbelow              = true
-vim.opt.splitright              = true
-vim.opt.swapfile                = false
-vim.opt.tabstop                 = 2
-vim.opt.winborder               = "rounded"
-vim.opt.wrap                    = false
-vim.opt.writebackup             = false
-vim.api.nvim_set_hl(0, "ColorColumn", { bg = "#1a1a1a", })
-vim.g.clipboard          = {
-  name = 'OSC 52',
-  copy = {
-    ['+'] = require('vim.ui.clipboard.osc52').copy('+'),
-    ['*'] = require('vim.ui.clipboard.osc52').copy('*'),
-  },
-  paste = {
-    ['+'] = function() return { vim.fn.split(vim.fn.getreg(""), "\n"), vim.fn.getregtype("") } end,
-    ['*'] = function() return { vim.fn.split(vim.fn.getreg(""), "\n"), vim.fn.getregtype("") } end,
-  },
-}
+vim.loader.enable()
+vim.opt.autocomplete     = true
+vim.opt.background       = 'dark'
+vim.opt.backup           = false
+vim.opt.clipboard        = 'unnamedplus'
+vim.opt.colorcolumn      = '80'
+vim.opt.completeopt      = { "menuone", "noselect", "noinsert" }
+vim.opt.confirm          = true
+vim.opt.equalalways      = true
+vim.opt.expandtab        = true
+vim.opt.foldenable       = true
+vim.opt.grepformat       = '%f:%l:%c:%m,%f:%l:%m'
+vim.opt.grepprg          = 'rg --vimgrep --no-heading --smart-case'
+vim.opt.ignorecase       = true
+vim.opt.number           = true
+vim.opt.pumheight        = 10
+vim.opt.relativenumber   = true
+vim.opt.scrolloff        = 20
+vim.opt.shiftwidth       = 2
+vim.opt.signcolumn       = 'yes'
+vim.opt.smartcase        = true
+vim.opt.smartindent      = true
+vim.opt.splitbelow       = true
+vim.opt.splitright       = true
+vim.opt.swapfile         = false
+vim.opt.tabstop          = 2
+vim.opt.winborder        = "rounded"
+vim.opt.wrap             = false
+vim.opt.writebackup      = false
 
 -- }}}
 
