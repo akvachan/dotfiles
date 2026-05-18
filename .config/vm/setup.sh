@@ -10,7 +10,7 @@ _echo "Updating apt"
 sudo apt update -y
 
 _echo "Installing apt packages"
-sudo apt install -y git gcc g++ zsh zoxide fd-find bpytop clangd npm nodejs libclang-19-dev fastfetch fzf ripgrep xclip
+sudo apt install -y git gcc g++ zsh zoxide fd-find bpytop clangd npm nodejs libclang-19-dev fastfetch fzf ripgrep
 
 # files & directories
 _echo "Creating base directories"

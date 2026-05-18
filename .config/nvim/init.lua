@@ -4,13 +4,13 @@
 
 vim.loader.enable()
 
-vim.api.nvim_set_hl(0, "ColorColumn", { bg = "#1a1a1a", })
 vim.g.loaded_perl_provider      = 0
 vim.g.loaded_ruby_provider      = 0
 vim.g.mapleader                 = ' '
 vim.g.maplocalleader            = ' '
 vim.g.matchparen_insert_timeout = 20
 vim.g.matchparen_timeout        = 20
+vim.opt.autocomplete            = true
 vim.opt.background              = 'dark'
 vim.opt.backup                  = false
 vim.opt.clipboard               = 'unnamedplus'
@@ -27,7 +27,6 @@ vim.opt.number                  = true
 vim.opt.pumheight               = 10
 vim.opt.relativenumber          = true
 vim.opt.scrolloff               = 20
-vim.opt.autocomplete            = true
 vim.opt.shiftwidth              = 2
 vim.opt.signcolumn              = 'yes'
 vim.opt.smartcase               = true
@@ -39,6 +38,18 @@ vim.opt.tabstop                 = 2
 vim.opt.winborder               = "rounded"
 vim.opt.wrap                    = false
 vim.opt.writebackup             = false
+vim.api.nvim_set_hl(0, "ColorColumn", { bg = "#1a1a1a", })
+vim.g.clipboard          = {
+  name = 'OSC 52',
+  copy = {
+    ['+'] = require('vim.ui.clipboard.osc52').copy('+'),
+    ['*'] = require('vim.ui.clipboard.osc52').copy('*'),
+  },
+  paste = {
+    ['+'] = function() return { vim.fn.split(vim.fn.getreg(""), "\n"), vim.fn.getregtype("") } end,
+    ['*'] = function() return { vim.fn.split(vim.fn.getreg(""), "\n"), vim.fn.getregtype("") } end,
+  },
+}
 
 -- }}}
 
@@ -46,7 +57,7 @@ vim.opt.writebackup             = false
 
 -- {{{ Lua
 
-local no_snippets               = {
+local no_snippets        = {
   textDocument = {
     completion = {
       completionItem = {
@@ -56,7 +67,7 @@ local no_snippets               = {
   }
 }
 
-vim.lsp.config['lua_ls']        = {
+vim.lsp.config['lua_ls'] = {
   cmd = { 'lua-language-server' },
   filetypes = { 'lua' },
   root_markers = { { '.luarc.json', '.luarc.jsonc' }, '.git' },
