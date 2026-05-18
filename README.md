@@ -2,7 +2,7 @@
 
 ## Debian
 
-```sh
+```
          _,met$$$$$gg.         user@server
      ,g$$$$$$$$$$$$$$$P.       ---------------
    ,g$$P""       """Y$$.".     OS: Debian GNU/Linux 13 (trixie) x86_64
@@ -42,7 +42,7 @@ sh setup.sh
 
 ## macOS
   
-```sh
+```
                      ..'          user@personal
                  ,xNMM.           -----------------
                .OMMMMo            OS: macOS Tahoe 26.5 (25F71) arm64
