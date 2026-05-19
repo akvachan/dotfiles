@@ -2,47 +2,57 @@
 
 -- {{{ Basic settings
 
+vim.loader.enable()
+
 if vim.env.SSH_TTY then vim.g.clipboard = 'osc52' end
-vim.api.nvim_set_hl(0, "ColorColumn", { bg = "#1a1a1a", })
+vim.api.nvim_set_hl(0, 'ColorColumn', { bg = '#1a1a1a', })
 vim.g.loaded_perl_provider      = 0
 vim.g.loaded_ruby_provider      = 0
 vim.g.mapleader                 = ' '
 vim.g.maplocalleader            = ' '
 vim.g.matchparen_insert_timeout = 20
 vim.g.matchparen_timeout        = 20
-vim.loader.enable()
-vim.opt.autocomplete     = true
-vim.opt.background       = 'dark'
-vim.opt.backup           = false
-vim.opt.clipboard        = 'unnamedplus'
-vim.opt.colorcolumn      = '80'
-vim.opt.completeopt      = { "menuone", "noselect", "noinsert" }
-vim.opt.confirm          = true
-vim.opt.equalalways      = true
-vim.opt.expandtab        = true
-vim.opt.foldenable       = true
-vim.opt.grepformat       = '%f:%l:%c:%m,%f:%l:%m'
-vim.opt.grepprg          = 'rg --vimgrep --no-heading --smart-case'
-vim.opt.ignorecase       = true
-vim.opt.number           = true
-vim.opt.pumheight        = 10
-vim.opt.relativenumber   = true
-vim.opt.scrolloff        = 20
-vim.opt.shiftwidth       = 2
-vim.opt.signcolumn       = 'yes'
-vim.opt.smartcase        = true
-vim.opt.smartindent      = true
-vim.opt.splitbelow       = true
-vim.opt.splitright       = true
-vim.opt.swapfile         = false
-vim.opt.tabstop          = 2
-vim.opt.winborder        = "rounded"
-vim.opt.wrap             = false
-vim.opt.writebackup      = false
+vim.g.no_plugin_maps            = true
+vim.opt.autocomplete            = true
+vim.opt.background              = 'dark'
+vim.opt.backup                  = false
+vim.opt.clipboard               = 'unnamedplus'
+vim.opt.colorcolumn             = '80'
+vim.opt.completeopt             = { 'menuone', 'noselect', 'noinsert' }
+vim.opt.confirm                 = true
+vim.opt.equalalways             = true
+vim.opt.expandtab               = true
+vim.opt.foldenable              = true
+vim.opt.grepformat              = '%f:%l:%c:%m,%f:%l:%m'
+vim.opt.grepprg                 = 'rg --vimgrep --no-heading --smart-case'
+vim.opt.ignorecase              = true
+vim.opt.number                  = true
+vim.opt.pumheight               = 10
+vim.opt.relativenumber          = true
+vim.opt.scrolloff               = 20
+vim.opt.shiftwidth              = 2
+vim.opt.signcolumn              = 'yes'
+vim.opt.smartcase               = true
+vim.opt.smartindent             = true
+vim.opt.splitbelow              = true
+vim.opt.splitright              = true
+vim.opt.swapfile                = false
+vim.opt.tabstop                 = 2
+vim.opt.winborder               = 'rounded'
+vim.opt.wrap                    = false
+vim.opt.writebackup             = false
 
 -- }}}
 
 -- {{{ LSP
+
+vim.diagnostic.config(
+  {
+    virtual_text = false,
+    severity_sort = true,
+    float = { border = 'rounded' }
+  }
+)
 
 -- {{{ Lua
 
@@ -59,7 +69,7 @@ local no_snippets        = {
 vim.lsp.config['lua_ls'] = {
   cmd = { 'lua-language-server' },
   filetypes = { 'lua' },
-  root_markers = { { '.luarc.json', '.luarc.jsonc' }, '.git' },
+  root_markers = { '.luarc.json', '.luarc.jsonc', '.git' },
   capabilities = no_snippets,
   settings = {
     Lua = {
@@ -130,7 +140,8 @@ vim.lsp.config['tsserver'] = {
     'typescriptreact',
   },
   root_markers = {
-    'vim.package.json',
+    'package.json',
+    'package-lock.json',
     'tsconfig.json',
     'jsconfig.json',
     '.git',
@@ -187,6 +198,7 @@ vim.api.nvim_create_autocmd('InsertEnter', {
 -- }}}
 
 -- {{{ Treesitter
+
 local ts_filetypes = {
   'lua',
   'python',
@@ -221,80 +233,79 @@ vim.api.nvim_create_autocmd('FileType', {
   pattern = ts_filetypes,
   callback = function()
     vim.treesitter.start()
-    vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+    vim.bo.indentexpr = 'v:lua.require"nvim-treesitter".indentexpr()'
   end,
 })
-vim.g.no_plugin_maps = true
 
-local ts = require("nvim-treesitter-textobjects")
+local ts = require('nvim-treesitter-textobjects')
 ts.setup {
   select = {
     lookahead = true,
     selection_modes = {
-      ["@parameter.outer"]   = "v",
-      ["@parameter.inner"]   = "v",
-      ["@assignment.inner"]  = "v",
-      ["@conditional.inner"] = "v",
-      ["@comment.inner"]     = "v",
-      ["@function.outer"]    = "v",
-      ["@function.inner"]    = "v",
-      ["@class.outer"]       = "v",
-      ["@class.inner"]       = "v",
-      ["@assignment.outer"]  = "v",
-      ["@conditional.outer"] = "v",
-      ["@loop.outer"]        = "v",
-      ["@loop.inner"]        = "v",
-      ["@comment.outer"]     = "v",
+      ['@parameter.outer']   = 'v',
+      ['@parameter.inner']   = 'v',
+      ['@assignment.inner']  = 'v',
+      ['@conditional.inner'] = 'v',
+      ['@comment.inner']     = 'v',
+      ['@function.outer']    = 'v',
+      ['@function.inner']    = 'v',
+      ['@class.outer']       = 'v',
+      ['@class.inner']       = 'v',
+      ['@assignment.outer']  = 'v',
+      ['@conditional.outer'] = 'v',
+      ['@loop.outer']        = 'v',
+      ['@loop.inner']        = 'v',
+      ['@comment.outer']     = 'v',
     },
     include_surrounding_whitespace = false,
   },
   move = { set_jumps = true },
 }
 
-local select  = require("nvim-treesitter-textobjects.select")
-local move    = require("nvim-treesitter-textobjects.move")
-local swap    = require("nvim-treesitter-textobjects.swap")
+local select  = require('nvim-treesitter-textobjects.select')
+local move    = require('nvim-treesitter-textobjects.move')
+local swap    = require('nvim-treesitter-textobjects.swap')
 local objects = {
-  f = "function",
-  c = "class",
-  a = "parameter",
-  v = "assignment",
-  i = "conditional",
-  l = "loop",
-  ["/"] = "comment",
+  f = 'function',
+  c = 'class',
+  a = 'parameter',
+  v = 'assignment',
+  i = 'conditional',
+  l = 'loop',
+  ['/'] = 'comment',
 }
 
 for key, obj in pairs(objects) do
   -- Selection
-  vim.keymap.set({ "x", "o" }, "a" .. key, function()
-    select.select_textobject("@" .. obj .. ".outer", "textobjects")
+  vim.keymap.set({ 'x', 'o' }, 'a' .. key, function()
+    select.select_textobject('@' .. obj .. '.outer', 'textobjects')
   end)
-  vim.keymap.set({ "x", "o" }, "i" .. key, function()
-    select.select_textobject("@" .. obj .. ".inner", "textobjects")
+  vim.keymap.set({ 'x', 'o' }, 'i' .. key, function()
+    select.select_textobject('@' .. obj .. '.inner', 'textobjects')
   end)
 
   -- Goto
-  local goto_variant = (obj == "parameter") and ".inner" or ".outer"
-  vim.keymap.set({ "n", "x", "o" }, "]" .. key, function()
-    move.goto_next_start("@" .. obj .. goto_variant, "textobjects")
+  local goto_variant = (obj == 'parameter') and '.inner' or '.outer'
+  vim.keymap.set({ 'n', 'x', 'o' }, ']' .. key, function()
+    move.goto_next_start('@' .. obj .. goto_variant, 'textobjects')
   end)
-  vim.keymap.set({ "n", "x", "o" }, "[" .. key, function()
-    move.goto_previous_start("@" .. obj .. goto_variant, "textobjects")
+  vim.keymap.set({ 'n', 'x', 'o' }, '[' .. key, function()
+    move.goto_previous_start('@' .. obj .. goto_variant, 'textobjects')
   end)
-  vim.keymap.set({ "n", "x", "o" }, "]" .. key:upper(), function()
-    move.goto_next_end("@" .. obj .. ".outer", "textobjects")
+  vim.keymap.set({ 'n', 'x', 'o' }, ']' .. key:upper(), function()
+    move.goto_next_end('@' .. obj .. '.outer', 'textobjects')
   end)
-  vim.keymap.set({ "n", "x", "o" }, "[" .. key:upper(), function()
-    move.goto_previous_end("@" .. obj .. ".outer", "textobjects")
+  vim.keymap.set({ 'n', 'x', 'o' }, '[' .. key:upper(), function()
+    move.goto_previous_end('@' .. obj .. '.outer', 'textobjects')
   end)
 end
 
 -- Swap
-vim.keymap.set("n", "<leader>a", function()
-  swap.swap_next("@parameter.inner")
+vim.keymap.set('n', '<leader>a', function()
+  swap.swap_next('@parameter.inner')
 end)
-vim.keymap.set("n", "<leader>A", function()
-  swap.swap_previous("@parameter.inner")
+vim.keymap.set('n', '<leader>A', function()
+  swap.swap_previous('@parameter.inner')
 end)
 
 -- }}}
@@ -344,16 +355,17 @@ require('oil').setup({
 vim.pack.add({ 'https://github.com/ibhagwan/fzf-lua' })
 require('fzf-lua').setup({
   grep = {
-    cmd = 'rg --vimgrep --no-heading --smart-case',
+    cmd = 'rg --vimgrep --line-number --column --hidden',
+    silent = true,
   },
   files = {
     cmd = 'fd --type f --hidden --follow --exclude .git',
     actions = {
       -- Copy file path
-      ["ctrl-y"] = function(selected)
+      ['ctrl-y'] = function(selected)
         local path = selected[1]
-        vim.fn.setreg("+", path)
-        print("Copied: " .. path)
+        vim.fn.setreg('+', path)
+        print('Copied: ' .. path)
       end,
     },
   },
@@ -394,7 +406,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
     if not client:supports_method('textDocument/willSaveWaitUntil')
         and client:supports_method('textDocument/formatting') then
       vim.api.nvim_create_autocmd('BufWritePre', {
-        group = vim.api.nvim_create_augroup('my.vim.lsp', { clear = false }),
         buffer = args.buf,
         callback = function()
           vim.lsp.buf.format({

@@ -34,6 +34,9 @@ path=(
   # Go (Linux)
   "/usr/local/go/bin"
 
+  # llama.cpp (linux)
+  "/projects/llama.cpp/build/bin/"
+
   # PGSQL
   "/opt/homebrew/opt/postgresql@18/bin"
 
