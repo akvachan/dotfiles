@@ -2,10 +2,9 @@
 
 -- {{{ Basic settings
 
-vim.loader.enable()
-
 if vim.env.SSH_TTY then vim.g.clipboard = 'osc52' end
 vim.api.nvim_set_hl(0, 'ColorColumn', { bg = '#1a1a1a', })
+vim.loader.enable()
 vim.g.loaded_perl_provider      = 0
 vim.g.loaded_ruby_provider      = 0
 vim.g.mapleader                 = ' '
@@ -38,9 +37,12 @@ vim.opt.splitbelow              = true
 vim.opt.splitright              = true
 vim.opt.swapfile                = false
 vim.opt.tabstop                 = 2
+vim.opt.wildmenu                = true
+vim.opt.wildoptions             = 'fuzzy'
 vim.opt.winborder               = 'rounded'
 vim.opt.wrap                    = false
 vim.opt.writebackup             = false
+vim.opt.path:append("**")
 
 -- }}}
 
@@ -98,6 +100,14 @@ vim.lsp.config['gopls'] = {
   capabilities = no_snippets,
   settings = {
     gopls = {
+      hints = {
+        assignVariableTypes = true,
+        compositeLiteralFields = true,
+        compositeLiteralTypes = true,
+        constantValues = true,
+        parameterNames = true,
+        rangeVariableTypes = true,
+      },
       gofumpt = true,
       analyses = {
         unusedparams = true,
@@ -185,17 +195,16 @@ vim.lsp.enable('clangd')
 
 -- {{{ Plugins
 
--- {{{ Autopair
-
-vim.pack.add({ 'https://github.com/windwp/nvim-autopairs' })
-vim.api.nvim_create_autocmd('InsertEnter', {
-  once = true,
-  callback = function()
-    require('nvim-autopairs').setup()
-  end,
+vim.pack.add({
+  'https://github.com/windwp/nvim-autopairs',
+  'https://github.com/stevearc/oil.nvim',
+  'https://github.com/ibhagwan/fzf-lua',
+  'https://github.com/kylechui/nvim-surround',
+  {
+    src = 'https://github.com/nvim-treesitter/nvim-treesitter-textobjects',
+    version = 'main',
+  },
 })
-
--- }}}
 
 -- {{{ Treesitter
 
@@ -212,28 +221,14 @@ local ts_filetypes = {
   'yaml',
   'dockerfile'
 }
-
-vim.pack.add({
-  {
-    src = 'https://github.com/nvim-treesitter/nvim-treesitter',
-    version = 'main',
-  },
-  {
-    src = 'https://github.com/nvim-treesitter/nvim-treesitter-textobjects',
-    version = 'main',
-  },
-})
-
-require('nvim-treesitter').setup {
-  install_dir = vim.fn.stdpath('data') .. '/site',
-}
-require('nvim-treesitter').install(ts_filetypes)
+for _, ft in ipairs(ts_filetypes) do
+  vim.treesitter.language.add(ft)
+end
 
 vim.api.nvim_create_autocmd('FileType', {
   pattern = ts_filetypes,
   callback = function()
     vim.treesitter.start()
-    vim.bo.indentexpr = 'v:lua.require"nvim-treesitter".indentexpr()'
   end,
 })
 
@@ -310,9 +305,19 @@ end)
 
 -- }}}
 
+-- {{{ Autopairs
+
+vim.api.nvim_create_autocmd('InsertEnter', {
+  once = true,
+  callback = function()
+    require('nvim-autopairs').setup()
+  end,
+})
+
+-- }}}
+
 -- {{{ File explorer
 
-vim.pack.add({ 'https://github.com/stevearc/oil.nvim' })
 require('oil').setup({
   columns = {
     'permissions',
@@ -352,7 +357,6 @@ require('oil').setup({
 
 -- {{{ Fuzzy finder
 
-vim.pack.add({ 'https://github.com/ibhagwan/fzf-lua' })
 require('fzf-lua').setup({
   grep = {
     cmd = 'rg --vimgrep --line-number --column --hidden',
@@ -381,7 +385,6 @@ require('fzf-lua').setup({
 
 -- {{{ Surround editing
 
-vim.pack.add({ 'https://github.com/kylechui/nvim-surround' })
 require('nvim-surround').setup()
 
 -- }}}
@@ -475,13 +478,12 @@ end
 
 -- }}}
 
--- {{{ Fzf functions
+-- {{{ Fzf
 
 local function open_fzf_buffers() require('fzf-lua').buffers() end
 local function open_fzf_files() require('fzf-lua').files() end
 local function open_fzf_grep() require('fzf-lua').live_grep() end
 local function open_fzf_lines() require('fzf-lua').blines() end
-local function open_fzf_zoxide() require('fzf-lua').zoxide() end
 local function resume_fzf_window() require('fzf-lua').resume() end
 
 -- }}}
@@ -493,6 +495,7 @@ local function resume_fzf_window() require('fzf-lua').resume() end
 local opts = { noremap = true, silent = false }
 local silent_opts = { noremap = true, silent = true }
 
+vim.keymap.set("i", "<C-k>", function() vim.lsp.buf.signature_help() end, opts)
 vim.keymap.set('n', '-', '<cmd>Oil<cr>', silent_opts)
 vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, silent_opts)
 vim.keymap.set('n', '<leader>cd', vim.diagnostic.open_float, silent_opts)
@@ -500,7 +503,6 @@ vim.keymap.set('n', '<leader>fb', open_fzf_buffers, silent_opts)
 vim.keymap.set('n', '<leader>ff', open_fzf_files, silent_opts)
 vim.keymap.set('n', '<leader>fg', open_fzf_grep, silent_opts)
 vim.keymap.set('n', '<leader>fl', open_fzf_lines, silent_opts)
-vim.keymap.set('n', '<leader>fz', open_fzf_zoxide, silent_opts)
 vim.keymap.set('n', '<leader>fr', resume_fzf_window, silent_opts)
 vim.keymap.set('n', '<leader>gd', vim.lsp.buf.definition, silent_opts)
 vim.keymap.set('n', '<leader>gf', vim.diagnostic.setqflist, silent_opts)

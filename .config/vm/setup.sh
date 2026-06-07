@@ -10,7 +10,11 @@ _echo "Updating apt"
 sudo apt update -y
 
 _echo "Installing apt packages"
-sudo apt install -y git gcc g++ zsh zoxide fd-find bpytop clangd npm nodejs libclang-19-dev fastfetch fzf ripgrep build-essential cmake libopenblas-dev pkg-config
+sudo apt install -y git gcc g++ zsh zoxide fd-find bpytop clangd npm nodejs libclang-19-dev fastfetch fzf ripgrep build-essential cmake libopenblas-dev pkg-config caddy dnsutils
+
+# starting Nginx
+_echo "Starting Nginx"
+sudo systemctl enable --now nginx
 
 # files & directories
 _echo "Creating base directories"

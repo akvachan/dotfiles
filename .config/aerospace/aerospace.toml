@@ -18,6 +18,7 @@ on-focus-changed = ['move-mouse window-lazy-center']
     cmd-alt-ctrl-b = 'balance-sizes'
     cmd-alt-ctrl-c = 'reload-config'
     cmd-alt-ctrl-comma = 'layout accordion horizontal vertical'
+    cmd-alt-ctrl-shift-m = 'macos-native-fullscreen'
     cmd-alt-ctrl-m = 'fullscreen'
     cmd-alt-ctrl-s = 'exec-and-forget open -a "Screenshot"'
     cmd-alt-ctrl-semicolon = 'layout tiles horizontal vertical'
@@ -116,8 +117,8 @@ on-focus-changed = ['move-mouse window-lazy-center']
 # {{{ Apps mode 
 
 [mode.apps.binding]
-    b = ['exec-and-forget open -a "Brave Browser"', 'mode main']
-    shift-b = ['exec-and-forget open -na "Brave Browser" --args --new-window', 'mode main']
+    b = ['exec-and-forget open -a "Brave Browser Nightly"', 'mode main']
+    shift-b = ['exec-and-forget open -na "Brave Browser Nightly" --args --new-window', 'mode main']
     t = ['exec-and-forget open -a "kitty"', 'mode main']
     s = ['exec-and-forget open -a "System Settings"', 'mode main']
     esc = 'mode main'
@@ -129,7 +130,6 @@ on-focus-changed = ['move-mouse window-lazy-center']
 
 [mode.raycast.binding]
     c = ['exec-and-forget open "raycast://extensions/raycast/clipboard-history/clipboard-history"', 'mode main']
-    l = ['exec-and-forget open "raycast://extensions/raycast/system/sleep"', 'mode main']
     k = ['exec-and-forget open "raycast://extensions/rolandleth/kill-process/index"', 'mode main']
     p = ['exec-and-forget open "raycast://extensions/raycast/screenshots/search-screenshots"', 'mode main']
     f = ['exec-and-forget open "raycast://extensions/raycast/file-search/search-files"', 'mode main']
