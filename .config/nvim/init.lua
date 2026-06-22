@@ -202,8 +202,8 @@ vim.pack.add({
   'https://github.com/kylechui/nvim-surround',
   -- 'https://codeberg.org/mfussenegger/nvim-dap.git',
   -- 'https://github.com/rcarriga/nvim-dap-ui',
-  'https://github.com/nvim-neotest/nvim-nio',
-  'https://github.com/nvim-treesitter/nvim-treesitter-context',
+  -- 'https://github.com/nvim-neotest/nvim-nio',
+  -- 'https://github.com/nvim-treesitter/nvim-treesitter-context',
   {
     src = 'https://github.com/nvim-treesitter/nvim-treesitter-textobjects',
     version = 'main',
