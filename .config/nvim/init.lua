@@ -16,7 +16,7 @@ vim.opt.autocomplete            = true
 vim.opt.background              = 'dark'
 vim.opt.backup                  = false
 vim.opt.clipboard               = 'unnamedplus'
-vim.opt.colorcolumn             = '80'
+vim.opt.colorcolumn             = '100'
 vim.opt.completeopt             = { 'menuone', 'noselect', 'noinsert' }
 vim.opt.confirm                 = true
 vim.opt.equalalways             = true
@@ -99,6 +99,7 @@ vim.lsp.config['gopls'] = {
   root_markers = { 'go.work', 'go.mod', '.git' },
   capabilities = no_snippets,
   settings = {
+    cmd_env = { GOFUMPT_SPLIT_LONG_LINES = "on" },
     gopls = {
       hints = {
         assignVariableTypes = true,
@@ -444,7 +445,7 @@ require('oil').setup({
 
 require('fzf-lua').setup({
   grep = {
-    cmd = 'rg --vimgrep --line-number --column --hidden',
+    cmd = 'rg --vimgrep --line-number --column --hidden --glob "!.git/*"',
     silent = true,
   },
   files = {
