@@ -201,96 +201,11 @@ vim.pack.add({
   'https://github.com/stevearc/oil.nvim',
   'https://github.com/ibhagwan/fzf-lua',
   'https://github.com/kylechui/nvim-surround',
-  -- 'https://codeberg.org/mfussenegger/nvim-dap.git',
-  -- 'https://github.com/rcarriga/nvim-dap-ui',
-  -- 'https://github.com/nvim-neotest/nvim-nio',
-  -- 'https://github.com/nvim-treesitter/nvim-treesitter-context',
   {
     src = 'https://github.com/nvim-treesitter/nvim-treesitter-textobjects',
     version = 'main',
   },
 })
-
--- -- {{{ Debugger
---
--- local dap_loaded = false
---
--- local function load_dap()
---   if dap_loaded then
---     return
---   end
---   dap_loaded = true
---
---   local dap = require("dap")
---   local dapui = require("dapui")
---
---   dapui.setup()
---
---   dap.listeners.before.attach.dapui_config = function()
---     dapui.open()
---   end
---   dap.listeners.before.launch.dapui_config = function()
---     dapui.open()
---   end
---   dap.listeners.before.event_terminated.dapui_config = function()
---     dapui.close()
---   end
---   dap.listeners.before.event_exited.dapui_config = function()
---     dapui.close()
---   end
---
---   -- Go adapter
---   dap.adapters.delve = function(callback, config)
---     if config.mode == 'remote' and config.request == 'attach' then
---       callback({
---         type = 'server',
---         host = config.host or '127.0.0.1',
---         port = config.port or '38697',
---       })
---     else
---       callback({
---         type = 'server',
---         port = '${port}',
---         executable = {
---           command = 'dlv',
---           args = {
---             'dap',
---             '-l',
---             '127.0.0.1:${port}',
---             '--log',
---             '--log-output=dap',
---           },
---           detached = vim.fn.has("win32") == 0,
---         },
---       })
---     end
---   end
---
---   dap.configurations.go = {
---     {
---       type = "delve",
---       name = "Debug",
---       request = "launch",
---       program = "${file}",
---     },
---     {
---       type = "delve",
---       name = "Debug test",
---       request = "launch",
---       mode = "test",
---       program = "${file}",
---     },
---     {
---       type = "delve",
---       name = "Debug test (go.mod)",
---       request = "launch",
---       mode = "test",
---       program = "./${relativeFileDirname}",
---     },
---   }
--- end
---
--- -- }}}
 
 -- {{{ Treesitter
 
@@ -574,40 +489,6 @@ local function resume_fzf_window() require('fzf-lua').resume() end
 
 -- }}}
 
--- -- {{{ DAP
---
--- local function dap_continue()
---   load_dap()
---   require('dap').continue()
--- end
---
--- local function dap_step_over()
---   load_dap()
---   require('dap').step_over()
--- end
---
--- local function dap_step_into()
---   load_dap()
---   require('dap').step_into()
--- end
---
--- local function dap_step_out()
---   load_dap()
---   require('dap').step_out()
--- end
---
--- local function dap_toggle_breakpoint()
---   load_dap()
---   require('dap').toggle_breakpoint()
--- end
---
--- local function dap_ui_toggle()
---   load_dap()
---   require("dapui").toggle()
--- end
---
--- -- }}}
-
 -- }}}
 
 -- {{{ Keymaps
@@ -640,11 +521,5 @@ vim.keymap.set('n', '<leader>t', ':<C-u>te ', opts)
 vim.keymap.set('n', '<leader>w', '<cmd>w<cr>', silent_opts)
 vim.keymap.set({ 't' }, '<esc>', '<C-\\><C-n>', silent_opts)
 vim.keymap.set({ 'n' }, '<leader>gm', '<cmd>:%!prettier --stdin-filepath %<cr>', opts)
--- vim.keymap.set('n', '<leader>dc', dap_continue)
--- vim.keymap.set('n', '<leader>dv', dap_step_over)
--- vim.keymap.set('n', '<leader>di', dap_step_into)
--- vim.keymap.set('n', '<leader>do', dap_step_out)
--- vim.keymap.set('n', '<leader>db', dap_toggle_breakpoint)
--- vim.keymap.set("n", "<leader>du", dap_ui_toggle)
 
 -- }}}
