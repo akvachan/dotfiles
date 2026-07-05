@@ -425,19 +425,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
 -- }}}
 
--- {{{ Better terminal buffers
-
-vim.api.nvim_create_user_command('RmTerms',
-  function()
-    for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-      if vim.bo[buf].buftype == 'terminal' then
-        vim.api.nvim_buf_delete(buf, { force = true })
-      end
-    end
-  end, {})
-
--- }}}
-
 -- {{{ Resize vim automatically
 
 vim.api.nvim_create_autocmd('VimResized', {
@@ -489,6 +476,35 @@ local function resume_fzf_window() require('fzf-lua').resume() end
 
 -- }}}
 
+-- {{{ Git status
+
+local git_group = vim.api.nvim_create_augroup("GitBranchStatus", { clear = true })
+
+vim.api.nvim_create_autocmd({ "BufEnter", "FocusGained", "BufWritePost" }, {
+  group = git_group,
+  pattern = "*",
+  callback = function()
+    if vim.bo.buftype ~= "" then return end
+    vim.fn.jobstart({ "git", "branch", "--show-current" }, {
+      stdout_buffered = true,
+      on_stdout = function(_, data)
+        if data and data[1] and data[1] ~= "" then
+          vim.b.git_branch = "  " .. data[1] .. " "
+        else
+          vim.b.git_branch = ""
+        end
+        vim.schedule(function()
+          vim.cmd("redrawstatus")
+        end)
+      end,
+    })
+  end,
+})
+
+vim.opt.statusline:append("%{get(b:, 'git_branch', '')}")
+
+-- }}}
+
 -- }}}
 
 -- {{{ Keymaps
@@ -515,7 +531,6 @@ vim.keymap.set('n', '<leader>od', open_oil_downloads_split, silent_opts)
 vim.keymap.set('n', '<leader>oh', open_oil_split, silent_opts)
 vim.keymap.set('n', '<leader>ov', open_oil_vsplit, silent_opts)
 vim.keymap.set('n', '<leader>q', '<cmd>q!<cr>', silent_opts)
-vim.keymap.set('n', '<leader>rm', '<cmd>RmTerms<cr>', silent_opts)
 vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, silent_opts)
 vim.keymap.set('n', '<leader>t', ':<C-u>te ', opts)
 vim.keymap.set('n', '<leader>w', '<cmd>w<cr>', silent_opts)
