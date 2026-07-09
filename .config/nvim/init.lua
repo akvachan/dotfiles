@@ -197,6 +197,7 @@ vim.lsp.enable('clangd')
 -- {{{ Plugins
 
 vim.pack.add({
+  'https://github.com/nvim-treesitter/nvim-treesitter-context',
   'https://github.com/windwp/nvim-autopairs',
   'https://github.com/stevearc/oil.nvim',
   'https://github.com/ibhagwan/fzf-lua',
@@ -478,30 +479,75 @@ local function resume_fzf_window() require('fzf-lua').resume() end
 
 -- {{{ Git status
 
-local git_group = vim.api.nvim_create_augroup("GitBranchStatus", { clear = true })
+local branch_cache = ""
+local watch_handle = nil
+local current_watch_path = nil
 
-vim.api.nvim_create_autocmd({ "BufEnter", "FocusGained", "BufWritePost" }, {
-  group = git_group,
-  pattern = "*",
-  callback = function()
-    if vim.bo.buftype ~= "" then return end
-    vim.fn.jobstart({ "git", "branch", "--show-current" }, {
-      stdout_buffered = true,
-      on_stdout = function(_, data)
-        if data and data[1] and data[1] ~= "" then
-          vim.b.git_branch = "  " .. data[1] .. " "
-        else
-          vim.b.git_branch = ""
-        end
-        vim.schedule(function()
-          vim.cmd("redrawstatus")
-        end)
-      end,
-    })
-  end,
+local function read_head(path)
+  local f = io.open(path, "r")
+  if not f then return "" end
+  local head = f:read("*l")
+  f:close()
+  return head and (head:match("ref: refs/heads/(.+)") or head:sub(1, 7)) or ""
+end
+
+local function watch_git_dir()
+  local root = vim.fs.root(0, ".git")
+  if not root then
+    branch_cache = ""
+    if watch_handle then
+      watch_handle:stop()
+      watch_handle:close()
+      watch_handle = nil
+      current_watch_path = nil
+    end
+    return
+  end
+
+  local git_dir = root .. "/.git"
+  local stat = vim.loop.fs_stat(git_dir)
+
+  if stat and stat.type == "file" then
+    local f = io.open(git_dir, "r")
+    if f then
+      local content = f:read("*l") or ""
+      f:close()
+      local gitdir_path = content:match("gitdir: (.+)")
+      if gitdir_path then
+        git_dir = vim.fs.normalize(root .. "/" .. gitdir_path)
+      end
+    end
+  end
+
+  local head_path = git_dir .. "/HEAD"
+  if current_watch_path == git_dir then return end
+
+  if watch_handle then
+    watch_handle:stop()
+    watch_handle:close()
+  end
+
+  current_watch_path = git_dir
+  branch_cache = read_head(head_path)
+
+  watch_handle = vim.loop.new_fs_event()
+  watch_handle:start(git_dir, {}, vim.schedule_wrap(function(err, filename)
+    if not err and filename == "HEAD" then
+      branch_cache = read_head(head_path)
+      vim.cmd("redrawstatus")
+    end
+  end))
+end
+
+vim.api.nvim_create_autocmd({ "VimEnter", "DirChanged", "BufEnter" }, {
+  callback = watch_git_dir,
 })
 
-vim.opt.statusline:append("%{get(b:, 'git_branch', '')}")
+_G.get_git_branch = function()
+  return branch_cache ~= "" and branch_cache or ""
+end
+
+vim.opt.statusline:append(" %{v:lua.get_git_branch()}")
 
 -- }}}
 
@@ -530,6 +576,7 @@ vim.keymap.set('n', '<leader>gr', vim.lsp.buf.references, silent_opts)
 vim.keymap.set('n', '<leader>od', open_oil_downloads_split, silent_opts)
 vim.keymap.set('n', '<leader>oh', open_oil_split, silent_opts)
 vim.keymap.set('n', '<leader>ov', open_oil_vsplit, silent_opts)
+vim.keymap.set('n', '<leader>ct', '<cmd>TSContext toggle<cr>', silent_opts)
 vim.keymap.set('n', '<leader>q', '<cmd>q!<cr>', silent_opts)
 vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, silent_opts)
 vim.keymap.set('n', '<leader>t', ':<C-u>te ', opts)
