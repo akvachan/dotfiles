@@ -12,6 +12,7 @@ vim.g.maplocalleader            = ' '
 vim.g.matchparen_insert_timeout = 20
 vim.g.matchparen_timeout        = 20
 vim.g.no_plugin_maps            = true
+vim.opt.autoread                = true
 vim.opt.autocomplete            = true
 vim.opt.background              = 'dark'
 vim.opt.backup                  = false
@@ -197,11 +198,12 @@ vim.lsp.enable('clangd')
 -- {{{ Plugins
 
 vim.pack.add({
-  'https://github.com/nvim-treesitter/nvim-treesitter-context',
-  'https://github.com/windwp/nvim-autopairs',
-  'https://github.com/stevearc/oil.nvim',
   'https://github.com/ibhagwan/fzf-lua',
   'https://github.com/kylechui/nvim-surround',
+  'https://github.com/nvim-treesitter/nvim-treesitter',
+  'https://github.com/nvim-treesitter/nvim-treesitter-context',
+  'https://github.com/stevearc/oil.nvim',
+  'https://github.com/windwp/nvim-autopairs',
   {
     src = 'https://github.com/nvim-treesitter/nvim-treesitter-textobjects',
     version = 'main',
@@ -223,7 +225,10 @@ local ts_filetypes = {
   'yaml',
   'dockerfile'
 }
+
+local installer = require('nvim-treesitter')
 for _, ft in ipairs(ts_filetypes) do
+  installer.install(ft)
   vim.treesitter.language.add(ft)
 end
 
@@ -582,6 +587,8 @@ vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, silent_opts)
 vim.keymap.set('n', '<leader>t', ':<C-u>te ', opts)
 vim.keymap.set('n', '<leader>w', '<cmd>w<cr>', silent_opts)
 vim.keymap.set({ 't' }, '<esc>', '<C-\\><C-n>', silent_opts)
-vim.keymap.set({ 'n' }, '<leader>gm', '<cmd>:%!prettier --stdin-filepath %<cr>', opts)
+vim.keymap.set('n', '<leader>gm', function()
+  vim.cmd('%!prettier --stdin-filepath ' .. vim.fn.shellescape(vim.fn.expand('%:p')))
+end, opts)
 
 -- }}}
