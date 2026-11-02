@@ -1,3 +1,4 @@
+tap "anomalyco/tap"
 tap "nikitabobko/tap"
 # Cryptography and SSL/TLS Toolkit
 brew "openssl@3"
@@ -31,6 +32,10 @@ brew "imagemagick"
 brew "jq"
 # LLM inference in C/C++
 brew "llama.cpp"
+# Next-gen compiler infrastructure
+brew "llvm"
+# Count lines of code quickly
+brew "loc"
 # Language Server for the Lua language
 brew "lua-language-server"
 # Package manager for the Lua programming language
@@ -41,14 +46,8 @@ brew "tree-sitter"
 brew "neovim"
 # Open-source, cross-platform JavaScript runtime environment
 brew "node"
-# Create, run, and share large language models (LLMs)
-brew "ollama"
 # Open-source vector similarity search for Postgres
-brew "pgvector", link: false
-# Execute binaries from Python packages in isolated environments
-brew "pipx"
-# Package compiler and linker metadata toolkit
-brew "pkgconf"
+brew "pgvector"
 # Object-relational database system
 brew "postgresql@18", restart_service: :changed
 # Persistent key-value database, with built-in net interface
@@ -56,7 +55,7 @@ brew "redis", restart_service: :changed
 # Search tool like grep and The Silver Searcher
 brew "ripgrep"
 # Powerful, clean, object-oriented scripting language
-brew "ruby", link: false
+brew "ruby"
 # Extremely fast Python linter, written in Rust
 brew "ruff"
 # Safe, concurrent, practical language
@@ -75,12 +74,15 @@ brew "uv"
 brew "zig"
 # Shell extension to navigate your filesystem faster
 brew "zoxide"
-# AeroSpace is an i3-like tiling window manager for macOS
-cask "nikitabobko/tap/aerospace"
+# OpenCode V2 - the AI coding agent for the terminal
+brew "anomalyco/tap/opencode-v2", trusted: true
+cask "aerospace"
 # Display management tool
 cask "betterdisplay"
 # Web browser focusing on privacy
 cask "brave-browser"
+# Open source IDE for exploring and testing APIs
+cask "bruno"
 # Voice and text chat software
 cask "discord"
 # Screen annotation tool
@@ -119,8 +121,8 @@ go "github.com/go-delve/delve/cmd/dlv"
 go "mvdan.cc/gofumpt"
 go "github.com/golangci/golangci-lint/v2/cmd/golangci-lint"
 go "golang.org/x/tools/gopls"
-cargo "tdf-viewer"
-cargo "tokei"
+go "golang.org/x/vuln/cmd/govulncheck"
+cargo "tdf-viewer", source: "https://github.com/itsjunetime/tdf.git"
 uv "ty"
 npm "prettier"
 npm "tree-sitter-cli"

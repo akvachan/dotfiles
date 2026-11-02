@@ -128,14 +128,9 @@ sudo reboot
 ```
 
 
-## Goodies
+## Misc
 
 Dump all currently installed packages with description into a Brewfile:
 ```
 brew bundle dump --file .config/brew/Brewfile --force
-```
-
-Install only packages that are in Brewfile, and remove everything else:
-```
-brew bundle --cleanup --file .config/brew/Brewfile --force
 ```
