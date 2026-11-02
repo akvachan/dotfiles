@@ -199,17 +199,14 @@ vim.lsp.enable('clangd')
 
 vim.pack.add({
   'https://github.com/ibhagwan/fzf-lua',
+  'https://github.com/igorlfs/nvim-dap-view',
   'https://github.com/kylechui/nvim-surround',
+  'https://github.com/mfussenegger/nvim-dap',
   'https://github.com/nvim-treesitter/nvim-treesitter',
   'https://github.com/nvim-treesitter/nvim-treesitter-context',
+  'https://github.com/nvim-treesitter/nvim-treesitter-textobjects',
   'https://github.com/stevearc/oil.nvim',
   'https://github.com/windwp/nvim-autopairs',
-  'https://github.com/mfussenegger/nvim-dap',
-  'https://github.com/igorlfs/nvim-dap-view',
-  {
-    src = 'https://github.com/nvim-treesitter/nvim-treesitter-textobjects',
-    version = 'main',
-  },
 })
 
 -- {{{ Treesitter
