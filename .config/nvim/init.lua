@@ -204,6 +204,8 @@ vim.pack.add({
   'https://github.com/nvim-treesitter/nvim-treesitter-context',
   'https://github.com/stevearc/oil.nvim',
   'https://github.com/windwp/nvim-autopairs',
+  'https://github.com/mfussenegger/nvim-dap',
+  'https://github.com/igorlfs/nvim-dap-view',
   {
     src = 'https://github.com/nvim-treesitter/nvim-treesitter-textobjects',
     version = 'main',
@@ -443,13 +445,15 @@ vim.api.nvim_create_autocmd('VimResized', {
 
 -- {{{ Oil
 
+local oil = require('oil')
+
 -- Open Oil in a vertical split
 local function open_oil_vsplit(path)
   vim.cmd('vsplit')
   if path then
-    require('oil').open(path)
+    oil.open(path)
   else
-    require('oil').open(vim.fn.getcwd())
+    oil.open(vim.fn.getcwd())
   end
 end
 
@@ -457,9 +461,9 @@ end
 local function open_oil_split(path)
   vim.cmd('split')
   if path then
-    require('oil').open(path)
+    oil.open(path)
   else
-    require('oil').open(vim.fn.getcwd())
+    oil.open(vim.fn.getcwd())
   end
 end
 
@@ -469,6 +473,30 @@ local function open_oil_downloads_split()
   local downloads = home .. '/Downloads'
   open_oil_split(downloads)
 end
+
+-- Open PDF files in a new kitty windown via tdf
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "oil",
+  callback = function()
+    vim.keymap.set("n", "<CR>", function()
+      local entry = oil.get_cursor_entry()
+
+      if entry and entry.name:match("%.pdf$") then
+        local dir = oil.get_current_dir()
+        local file = dir .. entry.name
+
+        vim.fn.jobstart({
+          "kitty",
+          "--detach",
+          "tdf",
+          file,
+        }, { detach = true })
+      else
+        oil.select()
+      end
+    end, { buffer = true, desc = "Open file or PDF in Kitty" })
+  end,
+})
 
 -- }}}
 
@@ -556,6 +584,91 @@ vim.opt.statusline:append(" %{v:lua.get_git_branch()}")
 
 -- }}}
 
+-- {{{ Markdown formatter
+
+local function md_format() vim.cmd('%!prettier --stdin-filepath ' .. vim.fn.shellescape(vim.fn.expand('%:p'))) end
+
+-- }}}
+
+-- {{{ Debugging
+
+local dap = require('dap')
+local dap_view = require('dap-view')
+
+-- {{{ DAP View
+
+dap_view.setup({
+  auto_toggle = true,
+  follow_tab = true,
+
+  winbar = {
+    show = true,
+    default_section = 'scopes',
+    sections = {
+      'scopes',
+      'watches',
+      'breakpoints',
+      'threads',
+      'repl',
+      'sessions',
+    },
+    controls = {
+      enabled = true,
+    },
+  },
+})
+
+-- }}}
+
+-- {{{ Delve
+
+dap.adapters.delve = {
+  type = 'server',
+  port = '${port}',
+  executable = {
+    command = 'dlv',
+    args = {
+      'dap',
+      '-l',
+      '127.0.0.1:${port}',
+    },
+    detached = vim.fn.has('win32') == 0,
+  },
+}
+
+dap.configurations.go = {
+  {
+    type = 'delve',
+    name = 'Debug current file',
+    request = 'launch',
+    program = '${file}',
+  },
+  {
+    type = 'delve',
+    name = 'Debug package',
+    request = 'launch',
+    program = '${workspaceFolder}',
+  },
+  {
+    type = 'delve',
+    name = 'Debug tests (current file)',
+    request = 'launch',
+    mode = 'test',
+    program = '${file}',
+  },
+  {
+    type = 'delve',
+    name = 'Debug tests (package)',
+    request = 'launch',
+    mode = 'test',
+    program = '${workspaceFolder}',
+  },
+}
+
+-- }}}
+
+-- }}}
+
 -- }}}
 
 -- {{{ Keymaps
@@ -567,6 +680,18 @@ vim.keymap.set("i", "<C-k>", function() vim.lsp.buf.signature_help() end, opts)
 vim.keymap.set('n', '-', '<cmd>Oil<cr>', silent_opts)
 vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, silent_opts)
 vim.keymap.set('n', '<leader>cd', vim.diagnostic.open_float, silent_opts)
+vim.keymap.set('n', '<leader>ct', '<cmd>TSContext toggle<cr>', silent_opts)
+vim.keymap.set('n', '<leader>dO', dap.step_out, { desc = 'Debug: Step out' })
+vim.keymap.set('n', '<leader>dQ', dap.disconnect, { desc = 'Debug: Disconnect' })
+vim.keymap.set('n', '<leader>db', dap.toggle_breakpoint, { desc = 'Debug: Toggle breakpoint' })
+vim.keymap.set('n', '<leader>dc', dap.continue, { desc = 'Debug: Continue' })
+vim.keymap.set('n', '<leader>dh', '<cmd>DapViewHover<cr>', { desc = 'Debug: Inspect variable' })
+vim.keymap.set('n', '<leader>di', dap.step_into, { desc = 'Debug: Step into' })
+vim.keymap.set('n', '<leader>do', dap.step_over, { desc = 'Debug: Step over' })
+vim.keymap.set('n', '<leader>dp', dap.pause, { desc = 'Debug: Pause', })
+vim.keymap.set('n', '<leader>dq', dap.terminate, { desc = 'Debug: Terminate' })
+vim.keymap.set('n', '<leader>dr', dap.restart, { desc = 'Debug: Restart' })
+vim.keymap.set('n', '<leader>du', '<cmd>DapViewToggle<cr>', { desc = 'Debug: Toggle UI' })
 vim.keymap.set('n', '<leader>fb', open_fzf_buffers, silent_opts)
 vim.keymap.set('n', '<leader>ff', open_fzf_files, silent_opts)
 vim.keymap.set('n', '<leader>fg', open_fzf_grep, silent_opts)
@@ -576,19 +701,18 @@ vim.keymap.set('n', '<leader>gd', vim.lsp.buf.definition, silent_opts)
 vim.keymap.set('n', '<leader>gf', vim.diagnostic.setqflist, silent_opts)
 vim.keymap.set('n', '<leader>gg', ':<C-u>!git ', opts)
 vim.keymap.set('n', '<leader>gl', vim.lsp.buf.declaration, silent_opts)
+vim.keymap.set('n', '<leader>gm', md_format, opts)
 vim.keymap.set('n', '<leader>go', vim.lsp.buf.document_symbol, silent_opts)
 vim.keymap.set('n', '<leader>gr', vim.lsp.buf.references, silent_opts)
 vim.keymap.set('n', '<leader>od', open_oil_downloads_split, silent_opts)
 vim.keymap.set('n', '<leader>oh', open_oil_split, silent_opts)
 vim.keymap.set('n', '<leader>ov', open_oil_vsplit, silent_opts)
-vim.keymap.set('n', '<leader>ct', '<cmd>TSContext toggle<cr>', silent_opts)
 vim.keymap.set('n', '<leader>q', '<cmd>q!<cr>', silent_opts)
 vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, silent_opts)
 vim.keymap.set('n', '<leader>t', ':<C-u>te ', opts)
 vim.keymap.set('n', '<leader>w', '<cmd>w<cr>', silent_opts)
-vim.keymap.set({ 't' }, '<esc>', '<C-\\><C-n>', silent_opts)
-vim.keymap.set('n', '<leader>gm', function()
-  vim.cmd('%!prettier --stdin-filepath ' .. vim.fn.shellescape(vim.fn.expand('%:p')))
-end, opts)
+vim.keymap.set('t', '<esc>', '<C-\\><C-n>', silent_opts)
+
+-- }}}
 
 -- }}}
