@@ -43,7 +43,6 @@ vim.opt.wildoptions             = 'fuzzy'
 vim.opt.winborder               = 'rounded'
 vim.opt.wrap                    = false
 vim.opt.writebackup             = false
-vim.opt.path:append("**")
 
 -- }}}
 
@@ -331,6 +330,8 @@ require('oil').setup({
     { 'mtime', highlight = 'Comment', format = '%Y-%m-%d %H:%M' },
   },
   view_options = { show_hidden = true },
+  watch_for_changes = false,
+  constrain_cursor = "name",
   keymaps = {
     -- Copy absolute path
     ['<leader>oy'] = {
@@ -592,8 +593,6 @@ local function md_format() vim.cmd('%!prettier --stdin-filepath ' .. vim.fn.shel
 local dap = require('dap')
 local dap_view = require('dap-view')
 
--- {{{ DAP View
-
 dap_view.setup({
   auto_toggle = true,
   follow_tab = true,
@@ -614,10 +613,6 @@ dap_view.setup({
     },
   },
 })
-
--- }}}
-
--- {{{ Delve
 
 dap.adapters.delve = {
   type = 'server',
@@ -666,8 +661,6 @@ dap.configurations.go = {
 
 -- }}}
 
--- }}}
-
 -- {{{ Keymaps
 
 local opts = { noremap = true, silent = false }
@@ -678,17 +671,6 @@ vim.keymap.set('n', '-', '<cmd>Oil<cr>', silent_opts)
 vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, silent_opts)
 vim.keymap.set('n', '<leader>cd', vim.diagnostic.open_float, silent_opts)
 vim.keymap.set('n', '<leader>ct', '<cmd>TSContext toggle<cr>', silent_opts)
-vim.keymap.set('n', '<leader>dO', dap.step_out, { desc = 'Debug: Step out' })
-vim.keymap.set('n', '<leader>dQ', dap.disconnect, { desc = 'Debug: Disconnect' })
-vim.keymap.set('n', '<leader>db', dap.toggle_breakpoint, { desc = 'Debug: Toggle breakpoint' })
-vim.keymap.set('n', '<leader>dc', dap.continue, { desc = 'Debug: Continue' })
-vim.keymap.set('n', '<leader>dh', '<cmd>DapViewHover<cr>', { desc = 'Debug: Inspect variable' })
-vim.keymap.set('n', '<leader>di', dap.step_into, { desc = 'Debug: Step into' })
-vim.keymap.set('n', '<leader>do', dap.step_over, { desc = 'Debug: Step over' })
-vim.keymap.set('n', '<leader>dp', dap.pause, { desc = 'Debug: Pause', })
-vim.keymap.set('n', '<leader>dq', dap.terminate, { desc = 'Debug: Terminate' })
-vim.keymap.set('n', '<leader>dr', dap.restart, { desc = 'Debug: Restart' })
-vim.keymap.set('n', '<leader>du', '<cmd>DapViewToggle<cr>', { desc = 'Debug: Toggle UI' })
 vim.keymap.set('n', '<leader>fb', open_fzf_buffers, silent_opts)
 vim.keymap.set('n', '<leader>ff', open_fzf_files, silent_opts)
 vim.keymap.set('n', '<leader>fg', open_fzf_grep, silent_opts)
@@ -697,7 +679,10 @@ vim.keymap.set('n', '<leader>fr', resume_fzf_window, silent_opts)
 vim.keymap.set('n', '<leader>gd', vim.lsp.buf.definition, silent_opts)
 vim.keymap.set('n', '<leader>gf', vim.diagnostic.setqflist, silent_opts)
 vim.keymap.set('n', '<leader>gg', ':<C-u>!git ', opts)
-vim.keymap.set('n', '<leader>gl', vim.lsp.buf.declaration, silent_opts)
+vim.keymap.set('n', '<leader>gs', ':<C-u>!git status<cr>', opts)
+vim.keymap.set('n', '<leader>ga', ':<C-u>!git add .<cr>', opts)
+vim.keymap.set('n', '<leader>ga', ':<C-u>!git add .<cr>', opts)
+vim.keymap.set('n', '<leader>gl', ':<C-u>!git log<cr>', opts)
 vim.keymap.set('n', '<leader>gm', md_format, opts)
 vim.keymap.set('n', '<leader>go', vim.lsp.buf.document_symbol, silent_opts)
 vim.keymap.set('n', '<leader>gr', vim.lsp.buf.references, silent_opts)
@@ -709,6 +694,17 @@ vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, silent_opts)
 vim.keymap.set('n', '<leader>t', ':<C-u>te ', opts)
 vim.keymap.set('n', '<leader>w', '<cmd>w<cr>', silent_opts)
 vim.keymap.set('t', '<esc>', '<C-\\><C-n>', silent_opts)
+vim.keymap.set('n', '<leader>dO', dap.step_out, opts)
+vim.keymap.set('n', '<leader>dQ', dap.disconnect, opts)
+vim.keymap.set('n', '<leader>db', dap.toggle_breakpoint, opts)
+vim.keymap.set('n', '<leader>dc', dap.continue, opts)
+vim.keymap.set('n', '<leader>di', dap.step_into, opts)
+vim.keymap.set('n', '<leader>do', dap.step_over, opts)
+vim.keymap.set('n', '<leader>dp', dap.pause, opts)
+vim.keymap.set('n', '<leader>dq', dap.terminate, opts)
+vim.keymap.set('n', '<leader>dr', dap.restart, opts)
+vim.keymap.set('n', '<leader>dh', vim.cmd.DapViewHover, opts)
+vim.keymap.set('n', '<leader>du', vim.cmd.DapViewToggle, opts)
 
 -- }}}
 
