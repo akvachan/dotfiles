@@ -659,6 +659,13 @@ dap.configurations.go = {
 
 -- }}}
 
+-- {{{ Copying stuff
+
+local function copy_absolute_path() vim.fn.setreg("+", vim.fn.expand("%:p")) end
+local function copy_relative_path() vim.fn.setreg("+", vim.fn.expand("%")) end
+
+-- }}}
+
 -- }}}
 
 -- {{{ Keymaps
@@ -681,7 +688,8 @@ vim.keymap.set('n', '<leader>gf', vim.diagnostic.setqflist, silent_opts)
 vim.keymap.set('n', '<leader>gg', ':<C-u>!git ', opts)
 vim.keymap.set('n', '<leader>gs', ':<C-u>!git status<cr>', opts)
 vim.keymap.set('n', '<leader>ga', ':<C-u>!git add .<cr>', opts)
-vim.keymap.set('n', '<leader>ga', ':<C-u>!git add .<cr>', opts)
+vim.keymap.set("n", "<leader>cp", copy_absolute_path, silent_opts)
+vim.keymap.set("n", "<leader>cr", copy_relative_path, silent_opts)
 vim.keymap.set('n', '<leader>gl', ':<C-u>!git log<cr>', opts)
 vim.keymap.set('n', '<leader>gm', md_format, opts)
 vim.keymap.set('n', '<leader>go', vim.lsp.buf.document_symbol, silent_opts)
