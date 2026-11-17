@@ -333,17 +333,16 @@ require('oil').setup({
   watch_for_changes = false,
   constrain_cursor = "name",
   keymaps = {
-    -- Copy absolute path
     ['<leader>oy'] = {
-      desc = 'Copy filepath to system clipboard',
+      desc = 'Copy absolute filepath to system clipboard',
       callback = function()
         require('oil.actions').copy_entry_path.callback()
         vim.fn.setreg('+', vim.fn.getreg(vim.v.register))
       end,
     },
 
-    -- Copy relative path
     ['<leader>or'] = {
+      desc = 'Copy relative filepath to system clipboard',
       callback = function()
         local entry = require('oil').get_cursor_entry()
         local dir = require('oil').get_current_dir()
@@ -355,8 +354,10 @@ require('oil').setup({
       end,
     },
 
-    -- Discard all filesystem changes
-    ['<leader>oc'] = require('oil').discard_all_changes,
+    ['<leader>oc'] = {
+      desc = 'Discard all filesystem changes',
+      require('oil').discard_all_changes,
+    }
   },
 })
 
@@ -470,6 +471,13 @@ local function open_oil_downloads_split()
   local home = vim.fn.expand('~')
   local downloads = home .. '/Downloads'
   open_oil_split(downloads)
+end
+
+-- Open Oil in Downloads directory in current split
+local function open_oil_downloads()
+  local home = vim.fn.expand('~')
+  local downloads = home .. '/Downloads'
+  oil.open(downloads)
 end
 
 -- Open PDF files in a new kitty windown via tdf
@@ -688,13 +696,14 @@ vim.keymap.set('n', '<leader>gf', vim.diagnostic.setqflist, silent_opts)
 vim.keymap.set('n', '<leader>gg', ':<C-u>!git ', opts)
 vim.keymap.set('n', '<leader>gs', ':<C-u>!git status<cr>', opts)
 vim.keymap.set('n', '<leader>ga', ':<C-u>!git add .<cr>', opts)
-vim.keymap.set("n", "<leader>cp", copy_absolute_path, silent_opts)
+vim.keymap.set("n", "<leader>cy", copy_absolute_path, silent_opts)
 vim.keymap.set("n", "<leader>cr", copy_relative_path, silent_opts)
 vim.keymap.set('n', '<leader>gl', ':<C-u>!git log<cr>', opts)
 vim.keymap.set('n', '<leader>gm', md_format, opts)
 vim.keymap.set('n', '<leader>go', vim.lsp.buf.document_symbol, silent_opts)
 vim.keymap.set('n', '<leader>gr', vim.lsp.buf.references, silent_opts)
-vim.keymap.set('n', '<leader>od', open_oil_downloads_split, silent_opts)
+vim.keymap.set('n', '<leader>oD', open_oil_downloads_split, silent_opts)
+vim.keymap.set('n', '<leader>od', open_oil_downloads, silent_opts)
 vim.keymap.set('n', '<leader>oh', open_oil_split, silent_opts)
 vim.keymap.set('n', '<leader>ov', open_oil_vsplit, silent_opts)
 vim.keymap.set('n', '<leader>q', '<cmd>q!<cr>', silent_opts)
